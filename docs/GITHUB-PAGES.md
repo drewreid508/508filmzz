@@ -143,6 +143,30 @@ Then in **Settings → Pages → Custom domain**, enter `www.508filmzz.com` and 
 
 ---
 
+---
+
+## Preview vs custom domain
+
+The repo variable `NEXT_PUBLIC_BASE_PATH` decides where the build expects to be
+served from. These two modes are mutually exclusive:
+
+| Mode | `NEXT_PUBLIC_BASE_PATH` | Serves at |
+|---|---|---|
+| **Preview** *(current)* | `/508filmzz` | `https://drewreid508.github.io/508filmzz/` |
+| **Custom domain** | *(delete the variable)* | `https://www.508filmzz.com` |
+
+In preview mode the workflow removes `CNAME` from the build, because a CNAME
+forces Pages to serve at the domain root and the two cannot coexist.
+
+**To go live on your domain:** add the DNS records above, delete the
+`NEXT_PUBLIC_BASE_PATH` variable (Settings → Secrets and variables → Actions →
+Variables), then re-run the workflow.
+
+Why this matters: with the wrong prefix every page still returns 200 while every
+stylesheet and script 404s — the site loads as unstyled HTML. A status-code check
+cannot see it, so the workflow asserts the prefix in `index.html` matches the
+deploy target and fails the build if it does not.
+
 ## Going live in search
 
 The site ships **noindex on purpose**, so you can share the link before Google
