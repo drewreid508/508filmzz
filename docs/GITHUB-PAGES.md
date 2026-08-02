@@ -143,8 +143,6 @@ Then in **Settings → Pages → Custom domain**, enter `www.508filmzz.com` and 
 
 ---
 
----
-
 ## Preview vs custom domain
 
 The repo variable `NEXT_PUBLIC_BASE_PATH` decides where the build expects to be
@@ -166,6 +164,8 @@ Why this matters: with the wrong prefix every page still returns 200 while every
 stylesheet and script 404s — the site loads as unstyled HTML. A status-code check
 cannot see it, so the workflow asserts the prefix in `index.html` matches the
 deploy target and fails the build if it does not.
+
+---
 
 ## Going live in search
 
