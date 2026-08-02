@@ -43,6 +43,9 @@ jobs:
           NEXT_PUBLIC_FORM_ENDPOINT: ${{ vars.NEXT_PUBLIC_FORM_ENDPOINT }}
           # "true" makes the site indexable. Anything else keeps it noindex.
           NEXT_PUBLIC_SITE_INDEXABLE: ${{ vars.NEXT_PUBLIC_SITE_INDEXABLE }}
+          # Set to "/<repo>" to preview at <user>.github.io/<repo>. Leave unset
+          # for the custom domain, where the site serves from the root.
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH }}
         run: npm run build
 
       # A CNAME makes Pages serve the site at the custom domain, at the root.
@@ -61,7 +64,15 @@ jobs:
           test -f out/.nojekyll          || { echo "::error::missing .nojekyll — Jekyll will strip _next/ and every asset will 404"; exit 1; }
           test -d out/_next              || { echo "::error::no _next/ bundle"; exit 1; }
           test -d out/media/portfolio    || { echo "::error::portfolio images missing"; exit 1; }
-          echo "pages: $(find out -name '*.html' | wc -l), size: $(du -sh out | cut -f1)"
+
+          # The asset prefix must match where the site will actually be served,
+          # or every stylesheet and script 404s while the pages still return 200
+          # — a failure that looks like success until you load it in a browser.
+          want="${{ vars.NEXT_PUBLIC_BASE_PATH }}/_next/"
+          grep -q "\"${want}" out/index.html \
+            || { echo "::error::assets reference the wrong prefix; expected ${want}"; exit 1; }
+
+          echo "pages: $(find out -name '*.html' | wc -l), size: $(du -sh out | cut -f1), prefix: ${want}"
 
       - uses: actions/configure-pages@v5
 
