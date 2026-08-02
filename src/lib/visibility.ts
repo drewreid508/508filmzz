@@ -12,7 +12,7 @@
  * impression you cannot take back.
  *
  * To go fully public:
- *   1. Set NEXT_PUBLIC_SITE_INDEXABLE=true in Vercel → Settings → Env Variables
+ *   1. Set NEXT_PUBLIC_SITE_INDEXABLE=true as a GitHub repository variable
  *   2. Redeploy (the value is read at build time, so a redeploy is required)
  *   3. Verify: curl -s https://www.508filmzz.com/robots.txt
  *      — should read "Allow: /" rather than "Disallow: /"

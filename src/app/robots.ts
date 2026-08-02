@@ -15,3 +15,6 @@ export default function robots(): MetadataRoute.Robots {
     host: site.url,
   };
 }
+
+/** Static export: no server exists to generate this per-request. */
+export const dynamic = "force-static";

@@ -33,3 +33,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticRoutes, ...projectRoutes];
 }
+
+/** Static export: no server exists to generate this per-request. */
+export const dynamic = "force-static";

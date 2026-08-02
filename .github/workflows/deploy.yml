@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Lets you re-deploy from the Actions tab without pushing a commit — useful
+  # after changing a variable or secret, which alone does not trigger a build.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. In-progress runs finish so a half-published
+# site is not left live.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build static export
+        env:
+          # Where the booking form posts. Set as a repository *variable*, not a
+          # secret: it is baked into the client bundle and is public either way.
+          # Settings → Secrets and variables → Actions → Variables.
+          NEXT_PUBLIC_FORM_ENDPOINT: ${{ vars.NEXT_PUBLIC_FORM_ENDPOINT }}
+          # "true" makes the site indexable. Anything else keeps it noindex.
+          NEXT_PUBLIC_SITE_INDEXABLE: ${{ vars.NEXT_PUBLIC_SITE_INDEXABLE }}
+        run: npm run build
+
+      - name: Verify the export is publishable
+        run: |
+          test -f out/index.html         || { echo "::error::no index.html"; exit 1; }
+          test -f out/.nojekyll          || { echo "::error::missing .nojekyll — Jekyll will strip _next/ and every asset will 404"; exit 1; }
+          test -d out/_next              || { echo "::error::no _next/ bundle"; exit 1; }
+          test -d out/media/portfolio    || { echo "::error::portfolio images missing"; exit 1; }
+          echo "pages: $(find out -name '*.html' | wc -l), size: $(du -sh out | cut -f1)"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

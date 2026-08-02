@@ -24,6 +24,14 @@ npm run dev
 
 ---
 
+## Hosting
+
+Deployed to **GitHub Pages** as a static export. Pages cannot run server code, so
+the booking form posts to a Google Apps Script endpoint rather than an API route.
+
+Full setup — Pages, the form backend, and DNS — is in
+[`docs/GITHUB-PAGES.md`](docs/GITHUB-PAGES.md).
+
 ## ⚠️ Before you launch
 
 Two things in this build are placeholders and must be replaced:
@@ -34,11 +42,10 @@ Two things in this build are placeholders and must be replaced:
    have permission to publish and set `placeholder: false`. `clientMarks` in the
    same file holds the trust-strip wordmarks — swap those for real client names
    once you have sign-off.
-2. **Booking notifications** — the SMS, email, and Google Sheet channels are all
-   built and tested, but none of them are configured. Until you add the keys in
-   `.env.example`, every booking is captured to `data/inquiries.jsonl` only, and
-   that file does **not** survive on serverless hosts. See
-   [Booking notifications](#booking-notifications) below.
+2. **Booking notifications** — the form has no backend until you deploy the
+   Apps Script and set `NEXT_PUBLIC_FORM_ENDPOINT`. Until then it tells visitors
+   to call or email instead of pretending to send. See
+   [`docs/GITHUB-PAGES.md`](docs/GITHUB-PAGES.md).
 
 Also double-check `src/data/site.ts`. You gave two TikTok links — I used
 `@508_filmzz` (the one listed under Contact Information and in the footer);
@@ -117,40 +124,37 @@ when it scrolls away.
 
 ## Booking notifications
 
-`POST /api/contact` validates with Zod, rate-limits per IP (5 per 10 minutes),
-runs a honeypot, accepts up to 5 attachments (8 MB each, 20 MB total), and then
-fans the lead out to four destinations:
+GitHub Pages cannot run server code, so the form posts to a **Google Apps
+Script** web app (`apps-script/Code.gs`) rather than an API route. That script
+fans each lead out to four places:
 
-| Channel               | What it does                                     | Needs                                                        |
-| --------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| **SMS**               | Texts the booking to your phone                  | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` |
-| **Studio email**      | Full brief to `info@508filmzz.com`, reply-to client | `RESEND_API_KEY`, `CONTACT_TO`                              |
-| **Client email**      | Branded confirmation to the customer             | `RESEND_API_KEY`                                              |
-| **Google Sheet**      | Appends a row per lead                           | `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY`, `GOOGLE_SHEET_ID` |
+| Channel | What it does | Needs |
+| --- | --- | --- |
+| **Google Sheet** | Appends a row per lead | `SHEET_ID` |
+| **Studio email** | Full brief to you, reply-to the client | `NOTIFY_EMAIL` |
+| **Client email** | Branded confirmation to the customer | *(nothing extra)* |
+| **SMS** | Texts the booking to your phone | `TWILIO_SID`, `TWILIO_TOKEN`, `TWILIO_FROM`, `SMS_TO` |
 
-**They are deliberately independent.** All four run concurrently, none can
-throw, and each failure is logged on its own. If Twilio is down or out of
-balance, both emails still send and the row still lands in the sheet. If
-everything fails, the lead is still appended to `data/inquiries.jsonl` and the
-customer still gets a success page — you never lose a booking to an outage.
+**They are deliberately independent.** Each is attempted on its own and none can
+throw, so a dead Twilio balance or a renamed tab cannot cost you a booking. The
+script only reports failure to the visitor when the Sheet, the studio email, *and*
+the SMS have all failed.
 
-Setup instructions for each are inline in `.env.example`:
+Credentials live in Apps Script's Script Properties — inside Google, never in
+this repo. That is what makes a public repository safe here.
 
-```bash
-cp .env.example .env.local
-```
+Validation runs in the browser for instant field errors, then again in the
+script, because the endpoint is public and the client is never trusted.
 
-Two things that catch people out:
-
-- **Share the Google Sheet with the service-account email as an Editor.**
-  Creating the key is not enough; without sharing, every append returns 403.
-- **Serverless filesystems are ephemeral.** `data/inquiries.jsonl` is a local
-  safety net for development, not production storage. Configure at least the
-  Sheet or Resend before you launch.
+Attachments are capped at **3 files, 5 MB each**: they travel base64-encoded
+inside the request body, which inflates them by about a third, and Apps Script is
+stricter about payload size than a Node server.
 
 After a successful submission the form redirects to `/contact/success`, a real
-page (noindexed) rather than an inline state — so it can be shared, bookmarked,
-and used as a conversion goal in analytics.
+page (noindexed) rather than an inline state — so it can be bookmarked and used
+as a conversion goal in analytics.
+
+Full setup: [`docs/GITHUB-PAGES.md`](docs/GITHUB-PAGES.md).
 
 ---
 
@@ -158,7 +162,7 @@ and used as a conversion goal in analytics.
 
 ```
 src/
-  app/                    routes, metadata, sitemap, robots, OG image, API
+  app/                    routes, metadata, sitemap, robots, OG image
   components/
     chrome/               header, footer, logo, preloader, cursor, transitions
     home/                 hero, marquee, services, reel panel
@@ -170,6 +174,8 @@ src/
   data/                   site config, projects, reviews, generated manifest
   lib/                    media helpers, form schema, utils
 scripts/                  media + poster build pipeline
+apps-script/              Google Apps Script booking backend
+docs/                     hosting + deployment guides
 ```
 
 ### Design system
@@ -194,7 +200,7 @@ states, and single accent marks.
   an inlined LQIP — no runtime image optimisation, no layout shift.
 - Everything below the fold lazy-loads; the hero plate is `priority`.
 - The reel loop only fetches once it scrolls into view (`preload="none"`).
-- 26 routes prerender as static HTML; only `/api/contact` is dynamic.
+- Every route is prerendered to static HTML — there is no server at runtime.
 - Every animation is gated behind `prefers-reduced-motion`, including Lenis,
   which is not initialised at all when reduced motion is requested.
 - Skip link, focus-visible rings, `aria-pressed` filters, `aria-live` result

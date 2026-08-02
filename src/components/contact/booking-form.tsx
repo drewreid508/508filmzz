@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Upload, X, Loader2 } from "lucide-react";
 
 import { PROJECT_TYPES, BUDGETS, MAX_FILES, MAX_FILE_BYTES } from "@/lib/inquiry";
+import { submitLead } from "@/lib/submit-lead";
 import { site } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
 
@@ -72,29 +73,24 @@ export function BookingForm() {
     setFormError(null);
 
     const data = new FormData(event.currentTarget);
-    data.delete("files");
-    files.forEach((file) => data.append("files", file));
 
     try {
-      const res = await fetch("/api/contact", { method: "POST", body: data });
-      const json = await res.json();
+      const result = await submitLead(data, files);
 
-      if (!res.ok) {
-        if (json.fieldErrors) setErrors(json.fieldErrors);
-        if (json.error) setFormError(json.error);
+      if (!result.ok) {
+        if (result.fieldErrors) setErrors(result.fieldErrors);
+        if (result.error) setFormError(result.error);
         setStatus("error");
         // Move focus to the first problem so keyboard users aren't stranded.
-        const firstKey = json.fieldErrors && Object.keys(json.fieldErrors)[0];
-        if (firstKey) {
-          document.getElementById(firstKey)?.focus();
-        }
+        const firstKey = result.fieldErrors && Object.keys(result.fieldErrors)[0];
+        if (firstKey) document.getElementById(firstKey)?.focus();
         return;
       }
 
       const name = String(data.get("name") ?? "").trim();
       const params = new URLSearchParams();
       if (name) params.set("name", name.split(" ")[0]);
-      if (json.confirmationEmailed) params.set("email", "1");
+      if (result.confirmationEmailed) params.set("email", "1");
       router.push(`/contact/success?${params.toString()}`);
     } catch {
       setFormError(
@@ -309,7 +305,7 @@ export function BookingForm() {
               <span className="text-accent underline underline-offset-4">browse</span>
             </span>
             <span className="text-[0.66rem] tracking-[0.16em] text-faint uppercase">
-              Up to {MAX_FILES} files — 8 MB each
+              Up to {MAX_FILES} files — 5 MB each
             </span>
           </label>
         </div>

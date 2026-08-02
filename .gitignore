@@ -48,3 +48,6 @@ next-env.d.ts
 
 # build report artifact
 scripts/.portfolio-report.json
+
+# static export output
+/out/

@@ -23,9 +23,16 @@ export const BUDGETS = [
   "Not sure yet",
 ] as const;
 
-export const MAX_FILES = 5;
-export const MAX_FILE_BYTES = 8 * 1024 * 1024; // 8 MB each
-export const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+/*
+ * Attachment limits.
+ *
+ * Sized for the Google Apps Script endpoint rather than a Node server: files
+ * travel base64-encoded inside the JSON body, which inflates them by about a
+ * third, and Apps Script is far less forgiving about large payloads.
+ */
+export const MAX_FILES = 3;
+export const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB each
+export const MAX_TOTAL_BYTES = 10 * 1024 * 1024;
 
 export const inquirySchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(120),

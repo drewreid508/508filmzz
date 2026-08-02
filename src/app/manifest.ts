@@ -28,3 +28,6 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
   };
 }
+
+/** Static export: no server exists to generate this per-request. */
+export const dynamic = "force-static";

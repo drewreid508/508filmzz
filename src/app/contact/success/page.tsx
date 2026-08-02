@@ -6,6 +6,7 @@ import { site } from "@/data/site";
 import { Magnetic } from "@/components/ui/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { pad } from "@/lib/utils";
+import { SuccessGreeting } from "./greeting";
 
 export const metadata: Metadata = {
   title: "Request Received",
@@ -28,15 +29,7 @@ const NEXT_STEPS = [
   },
 ];
 
-export default async function BookingSuccessPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ name?: string; email?: string }>;
-}) {
-  const { name, email } = await searchParams;
-  // Only ever a first name, and only what the browser round-tripped back.
-  const firstName = (name ?? "").replace(/[^\p{L}\p{M}'-]/gu, "").slice(0, 40);
-  const confirmationSent = email === "1";
+export default function BookingSuccessPage() {
 
   return (
     <section className="shell flex min-h-[86svh] flex-col justify-center py-36 md:py-44">
@@ -54,21 +47,7 @@ export default async function BookingSuccessPage({
         </p>
       </Reveal>
 
-      <h1 className="display text-[14vw] leading-[0.84] sm:text-[11vw] md:text-[7vw]">
-        {firstName ? `Thanks, ${firstName}.` : "Thanks."}
-        <br />
-        Message received.
-      </h1>
-
-      <Reveal delay={0.12}>
-        <p className="body-lg mt-8 max-w-2xl text-pretty">
-          I&apos;ve got your project details and I&apos;ll get back to you as soon as
-          possible with availability and a straight answer on what it takes.
-          {confirmationSent
-            ? " A confirmation is on its way to your inbox."
-            : " If you need me sooner, call or text — that's the fastest way to reach me."}
-        </p>
-      </Reveal>
+      <SuccessGreeting />
 
       <Reveal delay={0.18}>
         <div className="mt-10 flex flex-wrap gap-4">

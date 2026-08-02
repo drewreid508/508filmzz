@@ -101,3 +101,6 @@ export default async function Image() {
     size
   );
 }
+
+/** Static export: no server exists to generate this per-request. */
+export const dynamic = "force-static";
