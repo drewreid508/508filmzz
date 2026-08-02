@@ -1,65 +1,229 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
-export default function Home() {
+import { Hero } from "@/components/home/hero";
+import { Marquee } from "@/components/home/marquee";
+import { Services } from "@/components/home/services";
+import { ReelPanel } from "@/components/home/reel-panel";
+import { ProjectCard } from "@/components/portfolio/project-card";
+import { SectionHeader } from "@/components/ui/section";
+import { Reveal, TextReveal } from "@/components/motion/reveal";
+import { Parallax } from "@/components/motion/parallax";
+import { Counter } from "@/components/ui/counter";
+import { Magnetic } from "@/components/ui/magnetic";
+import { Frame } from "@/components/ui/frame";
+import { ReviewsMarquee } from "@/components/reviews/reviews-marquee";
+import { projects, categories } from "@/data/projects";
+import { publicReviews } from "@/data/reviews";
+import { stats, process } from "@/data/site";
+import { pad } from "@/lib/utils";
+
+export default function HomePage() {
+  const featured = projects.filter((p) => p.featured).slice(0, 6);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      <Hero />
+      <Marquee />
+
+      {/* ── About ─────────────────────────────────────────────────────────── */}
+      <section className="shell py-24 md:py-36" aria-labelledby="about-heading">
+        <div className="grid gap-14 md:grid-cols-12 md:gap-16">
+          <div className="md:col-span-5">
+            <Reveal>
+              <p className="eyebrow mb-6 flex items-center gap-3">
+                <span className="text-accent">01</span>
+                <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
+                The Studio
+              </p>
+            </Reveal>
+            <h2
+              id="about-heading"
+              className="display text-[14vw] leading-[0.86] sm:text-[10vw] md:text-[5vw]"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <TextReveal text="One Man." />
+              <br />
+              <TextReveal text="Every Step." delay={0.12} />
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-7 md:col-span-6 md:col-start-7">
+            <Reveal delay={0.08}>
+              <p className="body-lg text-pretty">
+                508 Filmzz is built on one vision. Every shoot is personally planned,
+                filmed, edited, and delivered by me.
+              </p>
+            </Reveal>
+            <Reveal delay={0.16}>
+              <p className="text-sm leading-relaxed text-mute md:text-base">
+                No outsourcing. No shortcuts. Just premium storytelling and attention to
+                detail — the kind that makes a local business look like it has a national
+                budget behind it.
+              </p>
+            </Reveal>
+            <Reveal delay={0.24}>
+              <div className="mt-2">
+                <Magnetic href="/about" variant="outline">
+                  More about the work
+                </Magnetic>
+              </div>
+            </Reveal>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Counters */}
+        <div className="mt-20 grid grid-cols-2 gap-px border-t border-l border-line bg-line md:mt-28 md:grid-cols-4">
+          {stats.map((stat, i) => (
+            <div key={stat.label} className="bg-ink p-7 md:p-9">
+              <p className="eyebrow mb-5">{pad(i + 1)}</p>
+              <p className="display text-6xl leading-none text-bone md:text-7xl">
+                <Counter value={stat.value} suffix={stat.suffix} />
+              </p>
+              <p className="mt-3 text-[0.7rem] tracking-[0.16em] text-faint uppercase">
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ── Selected work ─────────────────────────────────────────────────── */}
+      <section className="shell py-10 md:py-16" aria-labelledby="work-heading">
+        <h2 id="work-heading" className="sr-only">
+          Selected work
+        </h2>
+
+        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+          <SectionHeader index="03" eyebrow="Selected Work" title="The Portfolio" />
+          <Reveal delay={0.1}>
+            <Magnetic href="/portfolio" variant="outline">
+              All projects
+            </Magnetic>
+          </Reveal>
+        </div>
+
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Verticals ─────────────────────────────────────────────────────── */}
+      <section className="mt-24 md:mt-36" aria-labelledby="verticals-heading">
+        <h2 id="verticals-heading" className="sr-only">
+          Verticals
+        </h2>
+        <div className="grid border-t border-line md:grid-cols-3">
+          {categories.map((cat, i) => {
+            const cover = projects.find((p) => p.category === cat.id)!;
+            return (
+              <Reveal
+                key={cat.id}
+                delay={i * 0.08}
+                className="border-b border-line md:border-r"
+              >
+                <Link href={cat.href} className="group relative block overflow-hidden">
+                  <Parallax distance={54} className="h-[62vh] min-h-[420px]">
+                    <div className="h-[calc(100%+54px)] -translate-y-[27px] transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]">
+                      <Frame
+                        id={cover.hero}
+                        alt={cat.headline}
+                        ratio={0.62}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="h-full w-full"
+                      />
+                    </div>
+                  </Parallax>
+
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-ink/20 transition-all duration-700 group-hover:from-ink"
+                  />
+
+                  <div className="absolute inset-x-7 bottom-7">
+                    <p className="eyebrow mb-3">{cat.eyebrow}</p>
+                    <h3 className="display flex items-center gap-3 text-4xl leading-none md:text-5xl">
+                      {cat.headline}
+                      <ArrowUpRight
+                        size={22}
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                        className="translate-y-0.5 opacity-0 transition-all duration-600 group-hover:translate-x-1 group-hover:text-accent group-hover:opacity-100"
+                      />
+                    </h3>
+                    <p className="mt-3 max-w-xs text-sm leading-relaxed text-mute">
+                      {cat.blurb}
+                    </p>
+                  </div>
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
+
+      <ReelPanel />
+
+      {/* ── Services ──────────────────────────────────────────────────────── */}
+      <section className="pb-24 md:pb-36" aria-labelledby="services-heading">
+        <div className="shell mb-14">
+          <h2 id="services-heading" className="sr-only">
+            Services
+          </h2>
+          <SectionHeader
+            index="04"
+            eyebrow="What I Do"
+            title="Services"
+            lead="Eight deliverables, one operator, one consistent look across everything you publish."
+          />
+        </div>
+        <Services />
+      </section>
+
+      {/* ── Process ───────────────────────────────────────────────────────── */}
+      <section className="shell pb-24 md:pb-36" aria-labelledby="process-heading">
+        <h2 id="process-heading" className="sr-only">
+          Process
+        </h2>
+        <SectionHeader index="05" eyebrow="How It Works" title="The Process" />
+
+        <ol className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-4">
+          {process.map((item, i) => (
+            <li key={item.step} className="bg-ink p-8 md:p-10">
+              <span className="display mb-7 block text-5xl text-accent md:text-6xl">
+                {pad(i + 1)}
+              </span>
+              <h3 className="display text-2xl md:text-3xl">{item.step}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-mute">{item.body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/*
+        ── Reviews ──────────────────────────────────────────────────────────
+        Hidden entirely until a real testimonial exists. An empty "Client
+        Feedback" heading over a blank marquee looks broken and quietly signals
+        that nobody has hired you — worse than not having the section at all.
+        It returns automatically on the first entry in src/data/reviews.ts.
+      */}
+      {publicReviews.length > 0 && (
+        <section className="pb-24 md:pb-36" aria-labelledby="reviews-heading">
+          <div className="shell mb-14">
+            <h2 id="reviews-heading" className="sr-only">
+              Reviews
+            </h2>
+            <SectionHeader index="06" eyebrow="Client Feedback" title="Reviews" />
+          </div>
+          <ReviewsMarquee />
+          <div className="shell mt-12 flex justify-center">
+            <Magnetic href="/reviews" variant="outline">
+              Read all reviews
+            </Magnetic>
+          </div>
+        </section>
+      )}
+    </>
   );
 }

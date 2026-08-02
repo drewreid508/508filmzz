@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "508filmzz",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "3210"],
+      "port": 3210
+    },
+    {
+      "name": "508filmzz-qa",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "3211"],
+      "port": 3211
+    }
+  ]
+}
