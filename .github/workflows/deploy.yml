@@ -45,6 +45,16 @@ jobs:
           NEXT_PUBLIC_SITE_INDEXABLE: ${{ vars.NEXT_PUBLIC_SITE_INDEXABLE }}
         run: npm run build
 
+      # A CNAME makes Pages serve the site at the custom domain, at the root.
+      # That is incompatible with a basePath preview at <user>.github.io/<repo>,
+      # so the two are mutually exclusive: setting NEXT_PUBLIC_BASE_PATH means
+      # "I want the preview", and the CNAME has to go for that build only.
+      - name: Drop CNAME when building a subpath preview
+        if: vars.NEXT_PUBLIC_BASE_PATH != ''
+        run: |
+          rm -f out/CNAME
+          echo "preview mode: serving under ${{ vars.NEXT_PUBLIC_BASE_PATH }}, CNAME removed"
+
       - name: Verify the export is publishable
         run: |
           test -f out/index.html         || { echo "::error::no index.html"; exit 1; }
