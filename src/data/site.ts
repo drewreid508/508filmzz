@@ -1,13 +1,13 @@
 export const site = {
   name: "508 Filmzz",
   legalName: "508 Filmzz",
-  tagline: "One Vision. Every Detail.",
-  positioning: "Building Brands Through Cinematic Storytelling.",
+  tagline: "Cinematic Media. Built To Move.",
+  positioning: "Cinematic media for automotive brands, businesses, and the people who build them.",
   url: "https://www.508filmzz.com",
   description:
-    "Premium cinematic films for automotive, businesses, and outdoor brands. Planned, filmed, edited, and delivered by one director serving Greenville and Upstate South Carolina.",
+    "508 Filmzz creates cinematic automotive, commercial, social media, photography, and drone content for brands and businesses.",
   owner: "Drew Reid",
-  email: "drew@508filmzz.com",
+  email: "508filmz@gmail.com",
   phone: "(864) 915-4071",
   /** E.164 for tel: links and SMS. */
   phoneE164: "+18649154071",
@@ -89,14 +89,17 @@ export const hours = [
 /** Sunday is intentionally absent above — closed days are simply not listed. */
 export const closedDays = ["Sunday"] as const;
 
+/**
+ * Primary navigation. The header shows everything between Home and Contact;
+ * Contact is rendered separately as the "Book a Shoot" button.
+ */
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Automotive", href: "/automotive" },
-  { label: "Business Ads", href: "/business-ads" },
-  { label: "Hunting & Outdoor", href: "/hunting-outdoor" },
+  { label: "Work", href: "/portfolio" },
+  { label: "Services", href: "/services" },
+  { label: "Drone", href: "/drone" },
   { label: "About", href: "/about" },
-  { label: "Reviews", href: "/reviews" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -104,64 +107,211 @@ export type Service = {
   id: string;
   title: string;
   blurb: string;
+  /** Everything included. Shown as a checklist on the services page. */
   points: string[];
+  /** Optional: the media id used as the card's backdrop. */
+  image?: string;
 };
 
+/**
+ * ── EDIT ME ────────────────────────────────────────────────────────────────
+ * The service catalogue. Drives the home page grid, the /services page, the
+ * footer list, and the JSON-LD offer catalogue — change it here only.
+ *
+ * `image` is a key from src/data/portfolio.generated.json (run `npm run
+ * portfolio` after dropping new photos in) or media.generated.json.
+ */
 export const services: Service[] = [
   {
     id: "automotive",
-    title: "Automotive Films",
+    title: "Automotive Cinematography",
     blurb:
-      "Rolling shots, static hero sequences, and detail macro work cut to feel like a factory launch film.",
-    points: ["Rolling & tracking", "Detail macro", "Launch-grade colour"],
-  },
-  {
-    id: "business",
-    title: "Business Advertisements",
-    blurb:
-      "Brand films and paid-social ads built around a hook, a promise, and a call to action that actually converts.",
-    points: ["Brand films", "Paid social ads", "Scripting & story"],
-  },
-  {
-    id: "outdoor",
-    title: "Hunting & Outdoor",
-    blurb:
-      "First light to last light. Field-tested coverage for outdoor brands, guides, and boat builders.",
-    points: ["Field coverage", "Product in situ", "Golden-hour work"],
-  },
-  {
-    id: "photography",
-    title: "Photography",
-    blurb:
-      "Commercial stills delivered alongside every film — the same lighting, the same grade, one consistent look.",
-    points: ["Commercial stills", "Detail sets", "Retouch & grade"],
+      "Rolling shots, tracking work, and detail macro cut to feel like a factory launch film rather than a walkaround.",
+    points: [
+      "Cinematic car photography",
+      "Rolling shots",
+      "Tracking shots",
+      "Detail shots",
+      "Build videos",
+      "Dealership content",
+      "Automotive commercials",
+    ],
+    image: "pf_img_5850",
   },
   {
     id: "social",
     title: "Social Media Content",
     blurb:
-      "Vertical-first content packages: reels, shorts, and cutdowns built for retention, not for a festival.",
-    points: ["Reels & shorts", "Cutdown packages", "Hook-first edits"],
+      "Vertical-first packages built for retention — hook in the first two seconds, cut for the screen people actually watch on.",
+    points: [
+      "TikTok",
+      "Instagram Reels",
+      "YouTube Shorts",
+      "Vertical 9:16 content",
+      "Social media packages",
+      "Short-form advertising",
+    ],
+    image: "poster-showreel",
+  },
+  {
+    id: "commercial",
+    title: "Commercial Production",
+    blurb:
+      "Brand films and advertisements built around a promise and a call to action, not just pretty footage.",
+    points: [
+      "Business commercials",
+      "Product videos",
+      "Promotional videos",
+      "Brand campaigns",
+      "Professional advertisements",
+    ],
+    image: "pf_img_5834",
   },
   {
     id: "drone",
-    title: "Drone Content",
+    title: "Drone Services",
     blurb:
-      "Aerial reveals and top-down movement that give a build, a shop, or a shoreline real scale.",
-    points: ["Aerial reveals", "Top-down motion", "Location scale"],
+      "Aerial reveals, top-down movement, and establishing shots that give a build, a property, or a shop real scale.",
+    points: [
+      "Cinematic aerial footage",
+      "Automotive aerial shots",
+      "Property & business aerial footage",
+      "Real estate aerial footage",
+      "Event aerial coverage",
+      "Establishing shots",
+      "Top-down shots",
+      "Tracking & follow shots",
+      "Drone photos",
+      "Commercial drone production",
+    ],
+  },
+  {
+    id: "photography",
+    title: "Photography",
+    blurb:
+      "Commercial stills delivered alongside every film — same lighting, same grade, one consistent look across the campaign.",
+    points: [
+      "Automotive photography",
+      "Product photography",
+      "Business photography",
+      "Social media photography",
+    ],
+    image: "pf_img_5829",
+  },
+  {
+    id: "editing",
+    title: "Video Editing",
+    blurb:
+      "The look is built in the timeline, not bought as a preset. Edit-only work welcome if you already have footage.",
+    points: [
+      "Professional color grading",
+      "Cinematic editing",
+      "Sound design",
+      "Motion graphics",
+      "Speed ramps",
+      "Visual effects",
+      "Social media edits",
+    ],
+    image: "pf_img_5860",
   },
 ];
 
 export const capabilities = [
-  "Automotive Films",
-  "Business Advertisements",
-  "Hunting & Outdoor Content",
-  "Commercial Photography",
+  "Automotive Cinematography",
   "Social Media Content",
-  "Reels",
-  "Short Form Content",
-  "Promotional Videos",
+  "Commercial Production",
+  "Drone Services",
+  "Photography",
+  "Video Editing",
 ];
+
+/**
+ * ── EDIT ME: PRICING ───────────────────────────────────────────────────────
+ * Every price is a starting point, so raising them later is a one-line change
+ * and never makes a published number wrong.
+ *
+ *   price     the headline figure, e.g. "$300+"
+ *   featured  highlights one card — keep it to a single tier
+ *
+ * Nothing else in the codebase hardcodes a price.
+ */
+export type Package = {
+  id: string;
+  name: string;
+  price: string;
+  summary: string;
+  includes: string[];
+  featured?: boolean;
+};
+
+export const packages: Package[] = [
+  {
+    id: "social",
+    name: "Social Content",
+    price: "$200+",
+    summary: "Vertical-first content built to run on Reels, TikTok, and Shorts.",
+    includes: [
+      "Half-day shoot",
+      "Vertical 9:16 cutdowns",
+      "Colour grade & sound design",
+      "Ready to post",
+    ],
+  },
+  {
+    id: "automotive",
+    name: "Automotive Production",
+    price: "$300+",
+    summary: "Rolling, static, and detail coverage for a build, a car, or a shop.",
+    includes: [
+      "Rolling & tracking shots",
+      "Detail and hero frames",
+      "Full edit and grade",
+      "Stills set included",
+    ],
+    featured: true,
+  },
+  {
+    id: "commercial",
+    name: "Commercial Production",
+    price: "$500+",
+    summary: "A full brand film for a business, product, or campaign.",
+    includes: [
+      "Concept and shot list",
+      "Full production day",
+      "Motion graphics",
+      "Master plus social cutdowns",
+    ],
+  },
+  {
+    id: "drone",
+    name: "Drone Production",
+    price: "$200+",
+    summary: "Aerial coverage on its own or added to any other package.",
+    includes: [
+      "Cinematic aerial footage",
+      "Establishing & top-down shots",
+      "Tracking and follow work",
+      "Aerial stills",
+    ],
+  },
+  {
+    id: "full",
+    name: "Full Content Package",
+    price: "$750+",
+    summary: "Ground, air, stills, and social — one shoot, everything delivered.",
+    includes: [
+      "Full production day",
+      "Drone coverage included",
+      "Photography included",
+      "Master film plus social cutdowns",
+    ],
+  },
+];
+
+/** Shown under the pricing grid so the numbers are never mistaken for quotes. */
+export const pricingNote =
+  "Every project is custom quoted on shoot time, location, and deliverables. These are starting points — tell me what you have in mind and I'll give you a real number.";
+
 
 export const process = [
   {

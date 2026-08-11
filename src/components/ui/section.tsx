@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 
 export function SectionHeader({
+  id,
   index,
   eyebrow,
   title,
@@ -9,6 +10,12 @@ export function SectionHeader({
   align = "left",
   className,
 }: {
+  /**
+   * Put the section's `aria-labelledby` target on this heading rather than
+   * adding a second sr-only one — two headings per section makes a screen
+   * reader announce the name twice, with different wording each time.
+   */
+  id?: string;
   index?: string;
   eyebrow: string;
   title: string;
@@ -32,7 +39,10 @@ export function SectionHeader({
         </p>
       </Reveal>
 
-      <h2 className="display text-[13vw] leading-[0.86] sm:text-[9vw] md:text-[5.4vw]">
+      <h2
+        id={id}
+        className="display text-[13vw] leading-[0.86] sm:text-[9vw] md:text-[5.4vw]"
+      >
         <TextReveal text={title} />
       </h2>
 

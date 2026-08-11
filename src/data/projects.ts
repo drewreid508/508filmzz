@@ -8,7 +8,12 @@
  * this file.
  */
 
-export type CategoryId = "automotive" | "business" | "outdoor";
+export type CategoryId =
+  | "automotive"
+  | "commercial"
+  | "drone"
+  | "photography"
+  | "social";
 
 export type Project = {
   slug: string;
@@ -51,26 +56,66 @@ export const categories: {
       "Builds, exotics, and heavy metal — shot like a launch film and cut like a trailer.",
   },
   {
-    id: "business",
-    label: "Business",
-    href: "/business-ads",
+    id: "commercial",
+    label: "Commercial",
+    href: "/commercial",
     eyebrow: "Vertical 02",
-    headline: "Business Ads",
+    headline: "Commercial",
     blurb:
-      "Shop films, service ads, and brand stories that make a local business look national.",
+      "Brand films and service campaigns that make a working business look national.",
   },
   {
-    id: "outdoor",
-    label: "Outdoor",
-    href: "/hunting-outdoor",
+    id: "drone",
+    label: "Drone",
+    href: "/drone",
     eyebrow: "Vertical 03",
-    headline: "Hunting & Outdoor",
+    headline: "Drone",
     blurb:
-      "First light to last light. Field coverage for outdoor brands and boat builders.",
+      "Aerial reveals, establishing shots, and top-down movement that give a build real scale.",
+  },
+  {
+    id: "photography",
+    label: "Photography",
+    href: "/photography",
+    eyebrow: "Vertical 04",
+    headline: "Photography",
+    blurb:
+      "Commercial stills that carry the same lighting and grade as the film they ship with.",
+  },
+  {
+    id: "social",
+    label: "Social Media",
+    href: "/social-media",
+    eyebrow: "Vertical 05",
+    headline: "Social Media",
+    blurb:
+      "Vertical-first cutdowns built for retention on Reels, TikTok, and Shorts.",
   },
 ];
 
 export const projects: Project[] = [
+  {
+    slug: "vertical-cutdowns",
+    title: "Vertical Cutdowns",
+    subject: "Mobile Detail Campaign",
+    category: "social",
+    year: "2026",
+    featured: true,
+    summary: "A full detail film cut vertical for Reels, TikTok, and Shorts.",
+    description: [
+      "A complete detail shot as one continuous move — foam, contact, reveal — so the process reads as a single piece of craft rather than a list of steps.",
+      "Framed 9:16 from the start rather than cropped down afterwards, which is the difference between content that was made for the feed and content that was squeezed into it.",
+    ],
+    deliverables: ["Vertical hero film", "Reels & TikTok cutdowns", "Detail stills"],
+    hero: "poster-showreel",
+    gallery: ["poster-showreel", "poster-reel-loop"],
+    video: {
+      src: "/media/video/showreel.mp4",
+      poster: "poster-showreel",
+      aspect: 9 / 16,
+      label: "Full film",
+    },
+  },
   {
     slug: "super-duty",
     title: "Super Duty",
@@ -104,7 +149,7 @@ export const projects: Project[] = [
     slug: "deep-creek",
     title: "Deep Creek",
     subject: "Deep Creek Marine Customs",
-    category: "outdoor",
+    category: "commercial",
     year: "2026",
     featured: true,
     summary: "Product-in-water coverage for a custom boat builder.",
@@ -131,7 +176,7 @@ export const projects: Project[] = [
     slug: "season",
     title: "Season",
     subject: "Waterfowl & Wild Country",
-    category: "outdoor",
+    category: "photography",
     year: "2026",
     featured: true,
     summary: "A full season documented from blind to last light.",
@@ -156,7 +201,7 @@ export const projects: Project[] = [
     slug: "long-haul",
     title: "Long Haul",
     subject: "Owner-Operator Trucking",
-    category: "business",
+    category: "commercial",
     year: "2026",
     featured: true,
     summary: "Chrome under blue sky, then the same rigs lit only by their own lights.",
@@ -178,7 +223,7 @@ export const projects: Project[] = [
     slug: "shop-floor",
     title: "Shop Floor",
     subject: "Performance Fabrication",
-    category: "business",
+    category: "commercial",
     year: "2026",
     summary: "A working shop shot as texture, hardware, and one finished car.",
     description: [
@@ -193,7 +238,7 @@ export const projects: Project[] = [
     slug: "precision",
     title: "Precision",
     subject: "Machined Components",
-    category: "business",
+    category: "photography",
     year: "2026",
     summary: "Macro work on billet and coil, lit for material rather than product.",
     description: [

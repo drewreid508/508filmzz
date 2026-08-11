@@ -5,7 +5,7 @@ import { PortfolioBrowser } from "@/components/portfolio/portfolio-browser";
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
-    "Selected automotive films, business advertisements, and outdoor content by 508 Filmzz. Filter by vertical, search the archive, and open any frame full screen.",
+    "Automotive, commercial, photography, and social media work by 508 Filmzz. Filter by category, search the archive, and open any frame full screen.",
   alternates: { canonical: "/portfolio" },
 };
 

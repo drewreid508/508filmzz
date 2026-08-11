@@ -51,13 +51,18 @@ export const reviews: Review[] = [
  * every one corresponds to real work in the portfolio. Swap them for actual
  * client names only once you have written permission to use each brand.
  */
+/**
+ * Industries shot for — deliberately generic sector names, never client names
+ * or logos, so nothing here implies a customer who has not agreed to be named.
+ * Swap for real client wordmarks only once you have written permission.
+ */
 export const clientMarks = [
   "AUTOMOTIVE",
   "FABRICATION",
   "DETAILING",
-  "OUTDOOR",
   "TRUCKING",
   "MARINE",
+  "COMMERCIAL",
 ];
 
 export const hasRealReviews = reviews.some((r) => !r.placeholder);

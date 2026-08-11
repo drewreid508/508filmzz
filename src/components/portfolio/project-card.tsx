@@ -11,8 +11,10 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 const categoryLabel: Record<Project["category"], string> = {
   automotive: "Automotive",
-  business: "Business",
-  outdoor: "Outdoor",
+  commercial: "Commercial",
+  drone: "Drone",
+  photography: "Photography",
+  social: "Social Media",
 };
 
 export function ProjectCard({

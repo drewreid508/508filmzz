@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { site } from "@/data/site";
 
 const EASE = [0.83, 0, 0.17, 1] as const;
 const KEY = "508-intro";
@@ -84,7 +85,7 @@ export function Preloader() {
 
           <div className="flex items-end justify-between gap-6">
             <span className="eyebrow shrink-0 whitespace-nowrap">
-              One Vision. Every Detail.
+              {site.tagline}
             </span>
             <span className="display text-[18vw] leading-[0.78] md:text-[11vw]">
               {String(count).padStart(3, "0")}

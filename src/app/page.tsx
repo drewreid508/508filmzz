@@ -7,6 +7,8 @@ import { Services } from "@/components/home/services";
 import { ReelPanel } from "@/components/home/reel-panel";
 import { ProjectCard } from "@/components/portfolio/project-card";
 import { SectionHeader } from "@/components/ui/section";
+import { AerialGrid } from "@/components/drone/aerial-grid";
+import { Check } from "lucide-react";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Parallax } from "@/components/motion/parallax";
 import { Counter } from "@/components/ui/counter";
@@ -15,7 +17,7 @@ import { Frame } from "@/components/ui/frame";
 import { ReviewsMarquee } from "@/components/reviews/reviews-marquee";
 import { projects, categories } from "@/data/projects";
 import { publicReviews } from "@/data/reviews";
-import { stats, process } from "@/data/site";
+import { stats, process, packages, services } from "@/data/site";
 import { pad } from "@/lib/utils";
 
 export default function HomePage() {
@@ -89,12 +91,10 @@ export default function HomePage() {
 
       {/* ── Selected work ─────────────────────────────────────────────────── */}
       <section className="shell py-10 md:py-16" aria-labelledby="work-heading">
-        <h2 id="work-heading" className="sr-only">
-          Selected work
-        </h2>
 
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-          <SectionHeader index="03" eyebrow="Selected Work" title="The Portfolio" />
+          <SectionHeader
+          id="work-heading" index="03" eyebrow="Selected Work" title="The Portfolio" />
           <Reveal delay={0.1}>
             <Magnetic href="/portfolio" variant="outline">
               All projects
@@ -114,8 +114,15 @@ export default function HomePage() {
         <h2 id="verticals-heading" className="sr-only">
           Verticals
         </h2>
-        <div className="grid border-t border-line md:grid-cols-3">
-          {categories.map((cat, i) => {
+        {/*
+          Only verticals with work behind them. Drone has no portfolio yet, so
+          it gets the dedicated band below rather than an empty tile — and it
+          joins this grid on its own the moment a drone project is added.
+        */}
+        <div className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+          {categories
+            .filter((cat) => projects.some((p) => p.category === cat.id))
+            .map((cat, i) => {
             const cover = projects.find((p) => p.category === cat.id)!;
             return (
               <Reveal
@@ -124,7 +131,7 @@ export default function HomePage() {
                 className="border-b border-line md:border-r"
               >
                 <Link href={cat.href} className="group relative block overflow-hidden">
-                  <Parallax distance={54} className="h-[62vh] min-h-[420px]">
+                  <Parallax distance={54} className="h-[54vh] min-h-[380px]">
                     <div className="h-[calc(100%+54px)] -translate-y-[27px] transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]">
                       <Frame
                         id={cover.hero}
@@ -163,15 +170,86 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Drone — flagship new service ──────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden border-b border-line"
+        aria-labelledby="drone-heading"
+      >
+        <div
+          className="pointer-events-none absolute inset-0 flex items-center justify-end"
+          aria-hidden="true"
+        >
+          <AerialGrid className="h-[190%] w-auto opacity-60 md:h-[150%] md:translate-x-[12%]" />
+        </div>
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40"
+        />
+
+        <div className="shell relative grid gap-10 py-24 md:grid-cols-12 md:py-32">
+          <div className="md:col-span-7">
+            <Reveal>
+              <p className="eyebrow mb-6 flex items-center gap-3">
+                <span className="text-accent">New</span>
+                <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
+                Aerial Production
+              </p>
+            </Reveal>
+
+            <h2
+              id="drone-heading"
+              className="display text-[15vw] leading-[0.86] sm:text-[10vw] md:text-[6vw]"
+            >
+              <TextReveal text="Drone Services." />
+            </h2>
+
+            <Reveal delay={0.1}>
+              <p className="body-lg mt-7 max-w-xl">
+                Aerial reveals, establishing shots, and top-down movement — the
+                frames that give a build, a property, or a shop real scale. Book it
+                on its own or add it to any production.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.18}>
+              <div className="mt-9 flex flex-wrap gap-4">
+                <Magnetic href="/drone" variant="solid">
+                  Explore Drone
+                </Magnetic>
+                <Magnetic href="/contact" variant="outline">
+                  Book Aerial
+                </Magnetic>
+              </div>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.12} className="md:col-span-4 md:col-start-9">
+            <ul className="flex flex-col gap-3 border-t border-line pt-7">
+              {(services.find((sv) => sv.id === "drone")?.points ?? [])
+                .slice(0, 6)
+                .map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-sm text-mute">
+                    <Check
+                      size={12}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                      className="mt-1.5 shrink-0 text-accent"
+                    />
+                    {point}
+                  </li>
+                ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
       <ReelPanel />
 
       {/* ── Services ──────────────────────────────────────────────────────── */}
       <section className="pb-24 md:pb-36" aria-labelledby="services-heading">
         <div className="shell mb-14">
-          <h2 id="services-heading" className="sr-only">
-            Services
-          </h2>
           <SectionHeader
+          id="services-heading"
             index="04"
             eyebrow="What I Do"
             title="Services"
@@ -183,10 +261,8 @@ export default function HomePage() {
 
       {/* ── Process ───────────────────────────────────────────────────────── */}
       <section className="shell pb-24 md:pb-36" aria-labelledby="process-heading">
-        <h2 id="process-heading" className="sr-only">
-          Process
-        </h2>
-        <SectionHeader index="05" eyebrow="How It Works" title="The Process" />
+        <SectionHeader
+          id="process-heading" index="05" eyebrow="How It Works" title="The Process" />
 
         <ol className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-4">
           {process.map((item, i) => (
@@ -201,6 +277,34 @@ export default function HomePage() {
         </ol>
       </section>
 
+      {/* ── Pricing teaser ────────────────────────────────────────────────── */}
+      <section className="shell pb-24 md:pb-36" aria-labelledby="pricing-heading">
+        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+          <SectionHeader
+          id="pricing-heading" index="06" eyebrow="Investment" title="Packages" />
+          <Reveal delay={0.1}>
+            <Magnetic href="/pricing" variant="outline">
+              Full pricing
+            </Magnetic>
+          </Reveal>
+        </div>
+
+        <div className="mt-12 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-5">
+          {packages.map((pkg, i) => (
+            <Reveal key={pkg.id} delay={(i % 5) * 0.05} className="bg-ink p-7 md:p-8">
+              <p className="eyebrow mb-6">{pad(i + 1)}</p>
+              <h3 className="display text-2xl leading-tight">{pkg.name}</h3>
+              <p className="mt-4 text-[0.58rem] tracking-[0.22em] text-faint uppercase">
+                Starting at
+              </p>
+              <p className="display mt-1 text-4xl leading-none md:text-5xl">
+                {pkg.price}
+              </p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {/*
         ── Reviews ──────────────────────────────────────────────────────────
         Hidden entirely until a real testimonial exists. An empty "Client
@@ -211,10 +315,8 @@ export default function HomePage() {
       {publicReviews.length > 0 && (
         <section className="pb-24 md:pb-36" aria-labelledby="reviews-heading">
           <div className="shell mb-14">
-            <h2 id="reviews-heading" className="sr-only">
-              Reviews
-            </h2>
-            <SectionHeader index="06" eyebrow="Client Feedback" title="Reviews" />
+            <SectionHeader
+          id="reviews-heading" index="06" eyebrow="Client Feedback" title="Reviews" />
           </div>
           <ReviewsMarquee />
           <div className="shell mt-12 flex justify-center">
@@ -224,6 +326,32 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ── Book a shoot ──────────────────────────────────────────────────── */}
+      <section className="shell pb-28 md:pb-40" aria-labelledby="book-heading">
+        <div className="border-y border-line py-20 text-center md:py-28">
+          <Reveal>
+            <p className="eyebrow mb-7">Let&apos;s work</p>
+          </Reveal>
+          <h2
+            id="book-heading"
+            className="display mx-auto max-w-5xl text-[12vw] leading-[0.88] sm:text-[8vw] md:text-[5.2vw]"
+          >
+            <TextReveal text="Ready to create something different?" />
+          </h2>
+          <Reveal delay={0.12}>
+            <div className="mt-11 flex flex-wrap justify-center gap-4">
+              <Magnetic href="/contact" variant="solid">
+                Book a Shoot
+              </Magnetic>
+              <Magnetic href="/pricing" variant="outline">
+                Request a Quote
+              </Magnetic>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
     </>
   );
 }

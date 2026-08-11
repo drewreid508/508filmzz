@@ -9,11 +9,16 @@ import { pad } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-/** The three frames the hero cycles through, with their on-screen credit. */
+/**
+ * ── EDIT ME ────────────────────────────────────────────────────────────────
+ * The frames the hero cycles through. Any key from portfolio.generated.json or
+ * media.generated.json works — add or remove entries and the indicator on the
+ * right adjusts itself.
+ */
 const PLATES = [
   { id: "img_5638", label: "Porsche 911 GT2 RS", vertical: "Automotive" },
-  { id: "img_5618", label: "Cadillac Escalade-V", vertical: "Automotive" },
-  { id: "img_5643", label: "Owner-Operator Rig", vertical: "Business" },
+  { id: "pf_img_5850", label: "Lifted Super Duty", vertical: "Automotive" },
+  { id: "pf_img_5834", label: "Owner-Operator Rig", vertical: "Commercial" },
 ];
 
 const HOLD = 5200;
@@ -108,7 +113,7 @@ export function Hero() {
         </motion.p>
 
         <h1 className="display text-[17vw] leading-[0.82] sm:text-[15vw] md:text-[11.5vw] lg:text-[10.5vw]">
-          {["One Vision.", "Every Detail."].map((line, li) => (
+          {["Cinematic Media.", "Built To Move."].map((line, li) => (
             <span key={line} className="block overflow-hidden">
               <motion.span
                 className="block"
@@ -128,8 +133,9 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.72, duration: 1, ease: EASE }}
         >
-          <p className="body-lg max-w-md text-balance">
-            Premium cinematic films for automotive, businesses, and outdoor brands.
+          <p className="body-lg max-w-lg text-balance">
+            Automotive filmmaking, commercial content, photography, and aerial
+            production built to make your brand stand out.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
@@ -139,7 +145,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              View Portfolio
+              View Work
             </Magnetic>
             <Magnetic
               href="/contact"

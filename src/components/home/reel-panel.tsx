@@ -17,7 +17,7 @@ export function ReelPanel() {
             <p className="eyebrow mb-6 flex items-center gap-3">
               <span className="text-accent">02</span>
               <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-              Vertical First
+              Showreel
             </p>
           </Reveal>
 
@@ -25,21 +25,21 @@ export function ReelPanel() {
             id="reel-heading"
             className="display text-[13vw] leading-[0.86] sm:text-[9vw] md:text-[4.6vw]"
           >
-            <TextReveal text="Built for the feed." />
+            <TextReveal text="Watch the work." />
           </h2>
 
           <Reveal delay={0.1}>
             <p className="body-lg mt-7 max-w-md">
-              Every film is finished twice — once as a wide master, once cut vertical
-              for reels and shorts. Same colour, same sound design, framed for the
-              screen people actually watch on.
+              A full production cut down to the piece that matters. Every film is
+              finished twice — a wide master and a vertical cut for Reels, TikTok,
+              and Shorts — same colour, same sound design.
             </p>
           </Reveal>
 
           <Reveal delay={0.18}>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Magnetic href="/portfolio" variant="outline">
-                See the work
+                See All Work
               </Magnetic>
             </div>
           </Reveal>

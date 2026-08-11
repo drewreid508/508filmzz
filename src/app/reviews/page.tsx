@@ -27,6 +27,7 @@ export default function ReviewsPage() {
       {/* Trust strip */}
       <section className="shell pb-16" aria-label="Industries served">
         <Reveal>
+          <p className="eyebrow mb-5">Industries shot for</p>
           <div className="flex flex-wrap items-center gap-x-10 gap-y-5 border-y border-line py-7">
             {clientMarks.map((mark) => (
               <span

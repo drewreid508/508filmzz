@@ -2,12 +2,11 @@ import { z } from "zod";
 
 export const PROJECT_TYPES = [
   "Automotive",
-  "Business Advertisement",
   "Commercial",
   "Social Media Content",
-  "Drone",
+  "Drone / Aerial",
   "Photography",
-  "Hunting & Outdoor",
+  "Video Editing Only",
   "Product Launch",
   "Monthly Content",
   "Other",

@@ -30,15 +30,16 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
+    default: `${site.name} | Automotive & Commercial Video Production`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
   keywords: [
     "automotive videographer",
     "cinematic car films",
-    "business advertisement video",
-    "hunting and outdoor content",
+    "commercial video production",
+    "drone videographer",
+    "aerial videography",
     "commercial photography",
     "social media reels",
     "508 Filmzz",
@@ -48,14 +49,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name} | Automotive & Commercial Video Production`,
     description: site.description,
     url: site.url,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name} | Automotive & Commercial Video Production`,
     description: site.description,
   },
   robots: robotsMeta,

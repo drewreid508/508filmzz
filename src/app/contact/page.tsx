@@ -14,7 +14,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Book a Shoot",
   description:
-    "Let's build something worth watching. Book cinematic video and photography with 508 Filmzz — serving Greenville, Piedmont, and Upstate South Carolina.",
+    "Book cinematic automotive, commercial, drone, and social media production with 508 Filmzz — serving Greenville, Piedmont, and Upstate South Carolina.",
   alternates: { canonical: "/contact" },
 };
 
@@ -34,7 +34,7 @@ export default function ContactPage() {
       <PageHero
         index="01"
         eyebrow="Contact"
-        title="Let's Build Something Worth Watching."
+        title="Ready to create something different?"
         lead="Whether you're launching a business, showcasing a vehicle, or creating content for your brand, I'd love to hear about your project. Fill out the form below or reach out directly, and I'll get back to you as soon as possible."
       />
 
@@ -109,10 +109,8 @@ export default function ContactPage() {
         className="shell scroll-mt-28 pb-24 md:pb-36"
         aria-labelledby="book-heading"
       >
-        <h2 id="book-heading" className="sr-only">
-          Book a shoot
-        </h2>
         <SectionHeader
+          id="book-heading"
           index="02"
           eyebrow="Book a Shoot"
           title="Tell me about your project."
@@ -163,10 +161,8 @@ export default function ContactPage() {
 
       {/* ── Why work with 508 ─────────────────────────────────────────────── */}
       <section className="shell pb-24 md:pb-36" aria-labelledby="why-heading">
-        <h2 id="why-heading" className="sr-only">
-          Why work with 508 Filmzz
-        </h2>
-        <SectionHeader index="03" eyebrow="The Difference" title="Why Work With 508?" />
+        <SectionHeader
+          id="why-heading" index="03" eyebrow="The Difference" title="Why Work With 508?" />
 
         <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 lg:grid-cols-3">
           {advantages.map((item, i) => (
@@ -183,10 +179,8 @@ export default function ContactPage() {
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section className="shell pb-24 md:pb-36" aria-labelledby="faq-heading">
-        <h2 id="faq-heading" className="sr-only">
-          Frequently asked questions
-        </h2>
-        <SectionHeader index="04" eyebrow="Good to Know" title="FAQ" />
+        <SectionHeader
+          id="faq-heading" index="04" eyebrow="Good to Know" title="FAQ" />
 
         <dl className="mt-14 border-t border-line">
           {faqs.map((item, i) => (
@@ -205,6 +199,64 @@ export default function ContactPage() {
         </dl>
       </section>
 
+
+      {/* ── Social ────────────────────────────────────────────────────────── */}
+      {/*
+        EDIT ME: the handles and URLs live in src/data/site.ts under
+        `instagram`, `tiktok`, `instagramHandle`, and `tiktokHandle`.
+      */}
+      <section className="shell pb-24 md:pb-32" aria-labelledby="social-heading">
+        <div className="border-t border-line pt-14">
+          <h2 id="social-heading" className="display text-4xl md:text-5xl">
+            Follow the work
+          </h2>
+          <p className="body-lg mt-4 max-w-lg">
+            New builds, behind-the-scenes, and finished films go up first on
+            social.
+          </p>
+
+          <div className="mt-9 flex flex-wrap gap-4">
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="group flex items-center gap-4 border border-line-strong px-7 py-5 transition-colors duration-500 hover:border-accent"
+            >
+              <FaInstagram
+                aria-hidden="true"
+                size={20}
+                className="text-mute transition-colors duration-500 group-hover:text-accent"
+              />
+              <span className="flex flex-col">
+                <span className="text-[0.6rem] tracking-[0.22em] text-faint uppercase">
+                  Instagram
+                </span>
+                <span className="text-sm">{site.instagramHandle}</span>
+              </span>
+            </a>
+
+            <a
+              href={site.tiktok}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="group flex items-center gap-4 border border-line-strong px-7 py-5 transition-colors duration-500 hover:border-accent"
+            >
+              <FaTiktok
+                aria-hidden="true"
+                size={20}
+                className="text-mute transition-colors duration-500 group-hover:text-accent"
+              />
+              <span className="flex flex-col">
+                <span className="text-[0.6rem] tracking-[0.22em] text-faint uppercase">
+                  TikTok
+                </span>
+                <span className="text-sm">{site.tiktokHandle}</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ── Final CTA ─────────────────────────────────────────────────────── */}
       <section className="shell pb-28 md:pb-40">
         <div className="flex flex-col items-start justify-between gap-10 border-y border-line py-16 md:flex-row md:items-center md:py-20">
@@ -221,7 +273,10 @@ export default function ContactPage() {
           </div>
           <div className="flex flex-col gap-4">
             <Magnetic href="#book" variant="solid">
-              Book Your Shoot Today
+              Book a Shoot
+            </Magnetic>
+            <Magnetic href="/pricing" variant="outline">
+              Request a Quote
             </Magnetic>
             <a
               href={`tel:${site.phoneE164}`}

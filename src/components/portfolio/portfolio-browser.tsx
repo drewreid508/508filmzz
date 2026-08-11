@@ -13,9 +13,19 @@ import { cn, pad } from "@/lib/utils";
 type Filter = "all" | CategoryId;
 type View = "projects" | "gallery";
 
+/**
+ * Only offer a filter that has work behind it.
+ *
+ * A category with nothing in it reads as a broken site rather than a service
+ * you have not shot yet — Drone is exactly that until the first aerial job
+ * lands. Add a drone project in src/data/projects.ts and the filter appears on
+ * its own, no change needed here.
+ */
 const FILTERS: { id: Filter; label: string }[] = [
   { id: "all", label: "All" },
-  ...categories.map((c) => ({ id: c.id as Filter, label: c.label })),
+  ...categories
+    .filter((c) => projects.some((p) => p.category === c.id))
+    .map((c) => ({ id: c.id as Filter, label: c.label })),
 ];
 
 export function PortfolioBrowser() {
