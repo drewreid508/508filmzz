@@ -1,9 +1,23 @@
+import { SITE_URL } from "@/lib/site-url";
+
 export const site = {
   name: "508 Filmzz",
   legalName: "508 Filmzz",
   tagline: "Cinematic Media. Built To Move.",
   positioning: "Cinematic media for automotive brands, businesses, and the people who build them.",
-  url: "https://www.508filmzz.com",
+  /**
+   * The canonical origin — where the site actually answers.
+   *
+   * Every canonical tag, the sitemap, robots.txt, and the JSON-LD are built
+   * from this. It must match reality: a canonical pointing at a domain that
+   * does not resolve tells Google the real page lives somewhere it cannot
+   * fetch, and the pages that do exist go unindexed.
+   *
+   * Set NEXT_PUBLIC_SITE_URL to the live origin. Once DNS is pointed at
+   * www.508filmzz.com, change that one variable (and drop
+   * NEXT_PUBLIC_BASE_PATH) and everything follows.
+   */
+  url: SITE_URL,
   description:
     "508 Filmzz creates cinematic automotive, commercial, social media, photography, and drone content for brands and businesses.",
   owner: "Drew Reid",
