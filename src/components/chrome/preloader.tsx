@@ -64,8 +64,27 @@ export function Preloader() {
     };
 
     frame = requestAnimationFrame(tick);
+
+    /*
+     * Safety net. The counter is driven by requestAnimationFrame, which some
+     * browsers throttle to a standstill — a backgrounded tab, iOS low-power
+     * mode, a heavily loaded device. If that happens the curtain never lifts
+     * and the visitor is left staring at a black screen with the site behind
+     * it. This guarantees it always clears, whatever the frame loop does.
+     */
+    const failsafe = window.setTimeout(() => {
+      try {
+        sessionStorage.setItem(KEY, "seen");
+      } catch {
+        /* private mode */
+      }
+      setCount(100);
+      setFinished(true);
+    }, DURATION + 2000);
+
     return () => {
       cancelAnimationFrame(frame);
+      window.clearTimeout(failsafe);
       document.body.style.overflow = "";
     };
   }, [showing]);

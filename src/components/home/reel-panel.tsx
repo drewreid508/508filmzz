@@ -1,6 +1,7 @@
 "use client";
 
 import { ReelPlayer } from "@/components/ui/reel-player";
+import { asset } from "@/lib/asset";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/ui/magnetic";
 
@@ -48,7 +49,7 @@ export function ReelPanel() {
         <div className="md:col-span-6 md:col-start-7">
           <Reveal blur={16} y={40}>
             <ReelPlayer
-              src="/media/video/showreel.mp4"
+              src={asset("/media/video/showreel.mp4")}
               poster="poster-showreel"
               title="508 Filmzz showreel"
             />

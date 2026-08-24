@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Frame } from "@/components/ui/frame";
+import { asset } from "@/lib/asset";
 import { Magnetic } from "@/components/ui/magnetic";
 import { VideoModal, PlayButton } from "@/components/ui/video-modal";
 import { pad } from "@/lib/utils";
@@ -199,7 +200,7 @@ export function Hero() {
         transition={{ delay: 1.15, duration: 1 }}
       >
         <VideoModal
-          src="/media/video/showreel.mp4"
+          src={asset("/media/video/showreel.mp4")}
           title="508 Filmzz showreel"
           aspect={9 / 16}
           trigger={<PlayButton label="Play Showreel" />}

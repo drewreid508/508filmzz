@@ -1,5 +1,6 @@
 import manifest from "@/data/media.generated.json";
 import portfolioManifest from "@/data/portfolio.generated.json";
+import { asset } from "@/lib/asset";
 
 export type MediaSize = {
   w: number;
@@ -26,19 +27,41 @@ export type MediaAsset = {
  * built by a separate pipeline on their own cadence. Portfolio ids are
  * `pf_`-prefixed, so the namespaces cannot collide.
  */
-const assets = {
+const rawAssets = {
   ...(manifest as Record<string, MediaAsset>),
   ...(portfolioManifest as Record<string, MediaAsset>),
 };
 
+/**
+ * Rewrite every rendition URL for the current base path, once, at module load.
+ *
+ * The manifests store site-root paths (`/media/photos/...`). Doing the prefix
+ * here means `srcSet`, `largest`, `atLeast`, and anything else reading a size
+ * are all correct by construction, rather than each call site having to
+ * remember. `lqip` is a data URI and is deliberately left alone.
+ */
+const assets: Record<string, MediaAsset> = Object.fromEntries(
+  Object.entries(rawAssets).map(([id, a]) => [
+    id,
+    {
+      ...a,
+      sizes: a.sizes.map((s) => ({
+        ...s,
+        avif: asset(s.avif),
+        webp: asset(s.webp),
+      })),
+    },
+  ])
+);
+
 export function getMedia(id: string): MediaAsset {
-  const asset = assets[id];
-  if (!asset) {
+  const found = assets[id];
+  if (!found) {
     throw new Error(
       `Unknown media id "${id}". Run \`npm run media\` after adding files to the source folder.`
     );
   }
-  return asset;
+  return found;
 }
 
 export function hasMedia(id: string) {

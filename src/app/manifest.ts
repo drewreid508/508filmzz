@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { site } from "@/data/site";
+import { asset } from "@/lib/asset";
 
 /**
  * PWA manifest. Not an install target — it exists so Android/Chrome pick the
@@ -17,10 +18,10 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#0a0a0a",
     theme_color: "#0a0a0a",
     icons: [
-      { src: "/favicon-192.png", sizes: "192x192", type: "image/png" },
-      { src: "/favicon-512.png", sizes: "512x512", type: "image/png" },
+      { src: asset("/favicon-192.png"), sizes: "192x192", type: "image/png" },
+      { src: asset("/favicon-512.png"), sizes: "512x512", type: "image/png" },
       {
-        src: "/favicon-512.png",
+        src: asset("/favicon-512.png"),
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

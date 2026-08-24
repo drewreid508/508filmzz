@@ -710,6 +710,18 @@
         "h": 2146,
         "avif": "/media/photos/img_5638-1206.avif",
         "webp": "/media/photos/img_5638-1206.webp"
+      },
+      {
+        "w": 1620,
+        "h": 2883,
+        "avif": "/media/photos/img_5638-1620.avif",
+        "webp": "/media/photos/img_5638-1620.webp"
+      },
+      {
+        "w": 2160,
+        "h": 3844,
+        "avif": "/media/photos/img_5638-2160.avif",
+        "webp": "/media/photos/img_5638-2160.webp"
       }
     ]
   },
@@ -1282,6 +1294,18 @@
         "h": 1600,
         "avif": "/media/photos/poster-showreel-900.avif",
         "webp": "/media/photos/poster-showreel-900.webp"
+      },
+      {
+        "w": 1620,
+        "h": 2880,
+        "avif": "/media/photos/poster-showreel-1620.avif",
+        "webp": "/media/photos/poster-showreel-1620.webp"
+      },
+      {
+        "w": 2160,
+        "h": 3840,
+        "avif": "/media/photos/poster-showreel-2160.avif",
+        "webp": "/media/photos/poster-showreel-2160.webp"
       }
     ]
   },

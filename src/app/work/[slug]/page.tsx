@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { projects, getProject, relatedProjects, categories } from "@/data/projects";
 import { site } from "@/data/site";
 import { getMedia, largest } from "@/lib/media";
+import { asset } from "@/lib/asset";
 import { Frame } from "@/components/ui/frame";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/ui/magnetic";
@@ -146,7 +147,7 @@ export default async function ProjectPage({
               <Reveal delay={0.2}>
                 <div className="mt-12 border-t border-line pt-10">
                   <VideoModal
-                    src={project.video.src}
+                    src={asset(project.video.src)}
                     title={`${project.title} — ${project.video.label}`}
                     aspect={project.video.aspect}
                     trigger={<PlayButton label={`Play ${project.video.label}`} />}

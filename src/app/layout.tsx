@@ -13,6 +13,7 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { Analytics, AnalyticsNoScript } from "@/components/analytics/analytics";
 import { robotsMeta } from "@/lib/visibility";
 import { site } from "@/data/site";
+import { asset } from "@/lib/asset";
 
 const bebas = Bebas_Neue({
   weight: "400",
@@ -63,13 +64,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-192.png", type: "image/png", sizes: "192x192" },
-      { url: "/favicon-512.png", type: "image/png", sizes: "512x512" },
+      { url: asset("/favicon.ico"), sizes: "any" },
+      { url: asset("/favicon-192.png"), type: "image/png", sizes: "192x192" },
+      { url: asset("/favicon-512.png"), type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    apple: [{ url: asset("/apple-touch-icon.png"), sizes: "180x180" }],
   },
-  manifest: "/manifest.webmanifest",
+  manifest: asset("/manifest.webmanifest"),
   /**
    * Search Console verification. Fill NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION once
    * Drew has claimed the property — the meta tag is one of the two accepted
