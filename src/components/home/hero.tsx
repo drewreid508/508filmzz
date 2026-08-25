@@ -200,10 +200,10 @@ export function Hero() {
         transition={{ delay: 1.15, duration: 1 }}
       >
         <VideoModal
-          src={asset("/media/video/showreel.mp4")}
-          title="508 Filmzz showreel"
+          src={asset("/media/video/hds-revuelto.mp4")}
+          title="Revuelto — HDS commercial"
           aspect={9 / 16}
-          trigger={<PlayButton label="Play Showreel" />}
+          trigger={<PlayButton label="Watch The Film" />}
         />
       </motion.div>
     </section>

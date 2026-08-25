@@ -1,6 +1,6 @@
 # 508 Filmzz
 
-Premium cinematic portfolio site — **One Vision. Every Detail.**
+Premium cinematic portfolio site — **Cinematic Media. Built To Move.**
 
 Next.js 16 (App Router) · TypeScript · Tailwind v4 · Framer Motion · GSAP · Lenis · Radix
 
@@ -36,12 +36,9 @@ Full setup — Pages, the form backend, and DNS — is in
 
 Two things in this build are placeholders and must be replaced:
 
-1. **Reviews** — `src/data/reviews.ts` ships sample testimonials marked
-   `placeholder: true`, attributed to generic roles ("Client Name — Performance
-   Shop"). They are **not real quotes**. Replace each with a real testimonial you
-   have permission to publish and set `placeholder: false`. `clientMarks` in the
-   same file holds the trust-strip wordmarks — swap those for real client names
-   once you have sign-off.
+1. **Reviews** — there are none yet, and the section is hidden site-wide until
+   there are. Add real quotes to `src/data/reviews.ts` with `placeholder: false`
+   and it returns on its own. Only publish quotes you have permission to use.
 2. **Booking notifications** — the form has no backend until you deploy the
    Apps Script and set `NEXT_PUBLIC_FORM_ENDPOINT`. Until then it tells visitors
    to call or email instead of pretending to send. See
@@ -87,7 +84,7 @@ project, or extend an existing `gallery` array:
   slug: "new-build",
   title: "New Build",
   subject: "Client / Vehicle",
-  category: "automotive",       // "automotive" | "business" | "outdoor"
+  category: "automotive",       // automotive | commercial | drone | photography | social
   year: "2026",
   featured: true,               // surfaces it on the home page
   summary: "One line for cards and search.",
@@ -109,8 +106,8 @@ Encode into `public/media/video/`, then add a poster frame in
 
 ```ts
 video: {
-  src: "/media/video/showreel.mp4",
-  poster: "poster-showreel",
+  src: "/media/video/hds-revuelto.mp4",
+  poster: "poster-revuelto",
   aspect: 9 / 16,
   label: "Full film",
 }

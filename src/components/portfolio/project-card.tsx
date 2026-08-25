@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Play } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { Frame } from "@/components/ui/frame";
 import { cn, pad } from "@/lib/utils";
@@ -65,8 +65,17 @@ export function ProjectCard({
             {pad(index + 1)}
           </span>
 
-          <span className="absolute top-5 right-5 border border-line-strong bg-ink/40 px-3 py-1.5 text-[0.6rem] font-medium tracking-[0.18em] text-bone/80 uppercase backdrop-blur-sm">
-            {categoryLabel[project.category]}
+          <span className="absolute top-5 right-5 flex items-center gap-2">
+            {/* Signals a finished film rather than a stills set. */}
+            {project.video && (
+              <span className="flex items-center gap-1.5 border border-accent bg-accent/15 px-2.5 py-1.5 text-[0.6rem] font-medium tracking-[0.18em] text-accent uppercase backdrop-blur-sm">
+                <Play size={9} className="fill-current" strokeWidth={0} aria-hidden="true" />
+                Film
+              </span>
+            )}
+            <span className="border border-line-strong bg-ink/40 px-3 py-1.5 text-[0.6rem] font-medium tracking-[0.18em] text-bone/80 uppercase backdrop-blur-sm">
+              {categoryLabel[project.category]}
+            </span>
           </span>
 
           <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4">

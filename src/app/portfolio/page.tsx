@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/page-hero";
 import { PortfolioBrowser } from "@/components/portfolio/portfolio-browser";
+import { FilmStrip } from "@/components/portfolio/film-strip";
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -15,9 +16,11 @@ export default function PortfolioPage() {
       <PageHero
         index="01"
         eyebrow="The Archive"
-        title="Portfolio"
-        lead="Every project, every frame. Filter by vertical or search the archive — switch to gallery view to browse the stills on their own."
+        title="The Work"
+        lead="Finished commercials up top, then every project and every frame. Filter by category or search the archive — switch to gallery view to browse the stills on their own."
       />
+
+      <FilmStrip />
 
       <div className="shell pb-28 md:pb-40">
         <PortfolioBrowser />

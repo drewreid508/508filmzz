@@ -15,9 +15,14 @@ const OUT_DIR = path.resolve("public/media/photos");
 const MANIFEST = path.resolve("src/data/media.generated.json");
 const TMP = path.resolve(".poster-tmp");
 
+/**
+ * ── EDIT ME ────────────────────────────────────────────────────────────────
+ * One entry per film. `at` is the timestamp to grab, in seconds — pick a frame
+ * that reads as a thumbnail, not a title card or a fade.
+ */
 const POSTERS = [
-  { id: "poster-showreel", video: "public/media/video/showreel.mp4", at: "30" },
-  { id: "poster-reel-loop", video: "public/media/video/reel-loop.mp4", at: "0.6" },
+  { id: "poster-bratchers", video: "public/media/video/bratchers-power-washing.mp4", at: "3.2" },
+  { id: "poster-revuelto", video: "public/media/video/hds-revuelto.mp4", at: "24" },
 ];
 
 const WIDTHS = [420, 720, 1080];

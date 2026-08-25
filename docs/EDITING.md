@@ -135,11 +135,34 @@ ffmpeg -i input.mp4 -c:v libx264 -crf 28 -maxrate 2400k -bufsize 4800k \
   -movflags +faststart public/media/video/gtr-film.mp4
 ```
 
-### Replacing the homepage showreel
+### The films on the Work page
 
-Overwrite `public/media/video/showreel.mp4` with your new film, keeping the same
-filename — nothing else needs to change. To use a different filename, update
-`src/components/home/reel-panel.tsx`.
+`/portfolio` leads with a **Films** band that renders every project carrying a
+`video` block — add one to a project and it appears there automatically, with a
+FILM badge on its card in the grid below. Nothing else to wire up.
+
+Current films:
+
+| File | Project |
+| --- | --- |
+| `hds-revuelto.mp4` | Revuelto — HDS / Hannah's Detailing |
+| `bratchers-power-washing.mp4` | Bratchers Power Washing |
+
+The homepage showreel and the hero play button both point at
+`hds-revuelto.mp4`. To feature a different film, change the `src` and `poster`
+in `src/components/home/reel-panel.tsx` and `src/components/home/hero.tsx`.
+
+### Poster frames
+
+After adding a video, add it to `POSTERS` in
+`scripts/build-video-posters.mjs` and run:
+
+```bash
+node scripts/build-video-posters.mjs
+```
+
+Pick an `at` timestamp that reads as a thumbnail — a strong frame, not a title
+card or a fade.
 
 ---
 
