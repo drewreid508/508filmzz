@@ -97,7 +97,7 @@ export default function HomePage() {
           id="work-heading" index="03" eyebrow="Selected Work" title="The Portfolio" />
           <Reveal delay={0.1}>
             <Magnetic href="/portfolio" variant="outline">
-              All projects
+              See every frame
             </Magnetic>
           </Reveal>
         </div>

@@ -8,10 +8,10 @@
       "port": 3210
     },
     {
-      "name": "508filmzz-qa",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "3211"],
-      "port": 3211
+      "name": "508filmzz-export",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve@latest", "out", "-p", "3213", "-L"],
+      "port": 3213
     }
   ]
 }
