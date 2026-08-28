@@ -141,9 +141,29 @@ Then in **Settings → Pages → Custom domain**, enter `www.508filmzz.com` and 
 
 `public/CNAME` already carries this domain, so the setting survives every deploy.
 
-### Status: done
+### Status: parked, on purpose
 
-The `www` CNAME is in place and the site serves from `www.508filmzz.com`.
+DNS is correct and finished — `www` CNAMEs to GitHub, the apex has the four A
+records, and both resolve from every public resolver. But **GitHub never issued
+the TLS certificate.** Over two hours, three provisioning restarts and a
+redeploy, the API kept answering *"The certificate does not exist yet"*, so
+`https://www.508filmzz.com` refused every connection while `http://` worked.
+
+Rather than leave a live site that browsers flag as **Not Secure**, the custom
+domain is currently **detached** and the site serves at
+`https://drewreid508.github.io/508filmzz/`, which has a valid certificate. The
+domain itself is untouched — only GitHub's Pages setting was cleared.
+
+**To go back**, once the certificate can be issued: set
+`NEXT_PUBLIC_BASE_PATH` = `/508filmzz`'s opposite (delete it), set
+`NEXT_PUBLIC_SITE_URL` = `https://www.508filmzz.com`, and re-enter
+`www.508filmzz.com` under Settings → Pages → Custom domain. `public/CNAME`
+still carries the domain, so the deploy re-asserts it.
+
+If it stalls again, verify the domain at the account level first —
+[github.com/settings/pages](https://github.com/settings/pages) → **Add a
+domain** → add the TXT record it gives you in Squarespace → **Verify**. That is
+GitHub's own documented fix for a certificate that will not provision.
 
 **Still outstanding:** the bare `508filmzz.com` has *no* A records, so it does
 not resolve at all — someone typing it without the `www` gets nothing. Add the
@@ -158,8 +178,12 @@ served from. These two modes are mutually exclusive:
 
 | Mode | `NEXT_PUBLIC_BASE_PATH` | `NEXT_PUBLIC_SITE_URL` | Serves at |
 |---|---|---|---|
-| Preview | `/508filmzz` | `https://drewreid508.github.io/508filmzz` | `drewreid508.github.io/508filmzz/` |
-| **Custom domain** *(current)* | *(not set)* | `https://www.508filmzz.com` | `www.508filmzz.com` |
+| **Subpath** *(current)* | `/508filmzz` | `https://drewreid508.github.io/508filmzz` | `drewreid508.github.io/508filmzz/` |
+| Custom domain | *(delete it)* | `https://www.508filmzz.com` | `www.508filmzz.com` |
+
+Clearing the Pages **Custom domain** setting is part of the switch. Removing
+`CNAME` from the build artifact alone does *not* clear it — GitHub remembers the
+domain, and `github.io/508filmzz` keeps 301-redirecting to it.
 
 In preview mode the workflow removes `CNAME` from the build, because a CNAME
 forces Pages to serve at the domain root and the two cannot coexist.

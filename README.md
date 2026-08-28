@@ -26,8 +26,13 @@ npm run dev
 
 ## Hosting
 
-Live at **[www.508filmzz.com](http://www.508filmzz.com)**, deployed to GitHub
-Pages as a static export. Pages cannot run server code, so the booking form
+Live at **<https://drewreid508.github.io/508filmzz/>**, deployed to GitHub Pages
+as a static export.
+
+The custom domain `www.508filmzz.com` is temporarily detached: DNS is correct,
+but GitHub would not issue a TLS certificate for it, and an `http`-only site
+gets flagged **Not Secure** in every browser. See
+[`docs/GITHUB-PAGES.md`](docs/GITHUB-PAGES.md) for how to switch back. Pages cannot run server code, so the booking form
 posts to a Google Apps Script endpoint rather than an API route.
 
 Two repository variables control where the build thinks it lives, and they must
