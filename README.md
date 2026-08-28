@@ -53,9 +53,10 @@ Two things in this build are placeholders and must be replaced:
    Add real quotes to `src/data/reviews.ts` with `placeholder: false` and the
    home-page band returns on its own; the parked file's header comment covers
    restoring the full page. Only publish quotes you have permission to use.
-2. **Booking notifications** — the form has no backend until you deploy the
-   Apps Script and set `NEXT_PUBLIC_FORM_ENDPOINT`. Until then it tells visitors
-   to call or email instead of pretending to send. See
+2. **Booking notifications** — connected. Bookings post into a Google Form and
+   land in its linked Sheet. Turn on Responses → ⋮ → *Get email notifications*
+   or they arrive silently. The site cannot detect a rejected submission, so
+   `submit-lead.ts` never sends an empty field — see
    [`docs/GITHUB-PAGES.md`](docs/GITHUB-PAGES.md).
 
 Also double-check `src/data/site.ts`. You gave two TikTok links — I used

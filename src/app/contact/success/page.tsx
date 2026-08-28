@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 const NEXT_STEPS = [
   {
     title: "I read it personally",
-    body: "Your request goes straight to my phone — there's no inbox it sits in waiting for someone else to triage.",
+    body: "It lands with me directly — there's no inbox it sits in waiting for someone else to triage.",
   },
   {
     title: "You get a straight answer",

@@ -1,60 +1,20 @@
-import {
-  inquirySchema,
-  MAX_FILES,
-  MAX_FILE_BYTES,
-  MAX_TOTAL_BYTES,
-  type Inquiry,
-} from "@/lib/inquiry";
+import { inquirySchema } from "@/lib/inquiry";
+import { FORM_ENDPOINT, FIELD_IDS, BLANK_PLACEHOLDERS } from "@/lib/google-form";
 
-/**
- * Where the booking form posts.
- *
- * GitHub Pages serves static files only, so there is no API route. A Google
- * Apps Script web app receives the lead instead and fans it out to the Sheet,
- * both emails, and Twilio. Set NEXT_PUBLIC_FORM_ENDPOINT to the script's
- * deployment URL — see docs/GITHUB-PAGES.md.
- *
- * The endpoint is public by necessity: any browser-submitted form exposes its
- * destination. All credentials live inside the script, never here.
- */
-export const FORM_ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "";
+export { FORM_ENDPOINT };
 
 export type SubmitResult =
   | { ok: true; confirmationEmailed: boolean }
   | { ok: false; fieldErrors?: Record<string, string>; error?: string };
 
-export type LeadFile = { name: string; type: string; size: number; data: string };
-
-/** Reads a File into the base64 payload the script expects. */
-function readFile(file: File): Promise<LeadFile> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error(`Could not read ${file.name}`));
-    reader.onload = () => {
-      const result = String(reader.result);
-      // Strip the "data:<mime>;base64," prefix — the script wants raw base64.
-      resolve({
-        name: file.name,
-        type: file.type || "application/octet-stream",
-        size: file.size,
-        data: result.slice(result.indexOf(",") + 1),
-      });
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
 /**
  * Validates and submits a booking.
  *
- * Validation runs here because a static site has no server to do it. The script
- * validates again — never trust the client — but doing it first means the user
- * sees field errors instantly instead of after a round trip.
+ * Validation runs here because a static site has no server to do it, and it is
+ * the *only* validation there is — see the delivery note below. Everything the
+ * studio needs must be right before the request leaves the browser.
  */
-export async function submitLead(
-  form: FormData,
-  files: File[]
-): Promise<SubmitResult> {
+export async function submitLead(form: FormData): Promise<SubmitResult> {
   const raw = {
     name: String(form.get("name") ?? ""),
     businessName: String(form.get("businessName") ?? ""),
@@ -89,48 +49,69 @@ export async function submitLead(
     };
   }
 
-  // Re-check attachments here too; the picker enforces these, but a paste or a
-  // drop can slip past it.
-  if (files.length > MAX_FILES) {
-    return { ok: false, error: `Please attach no more than ${MAX_FILES} files.` };
-  }
-  const oversized = files.find((f) => f.size > MAX_FILE_BYTES);
-  if (oversized) {
-    return { ok: false, error: `"${oversized.name}" is larger than 5 MB.` };
-  }
-  if (files.reduce((sum, f) => sum + f.size, 0) > MAX_TOTAL_BYTES) {
-    return { ok: false, error: "Attachments total more than 10 MB." };
-  }
-
-  const payload: Inquiry & { files: LeadFile[] } = {
-    ...parsed.data,
-    files: await Promise.all(files.map(readFile)),
-  };
+  const lead = parsed.data;
 
   /*
-   * `text/plain` keeps this a CORS "simple request", so the browser skips the
-   * preflight OPTIONS call. Apps Script cannot answer a preflight, so a JSON
-   * content-type here would fail before the request ever left the browser.
-   * The script reads the raw body and parses it as JSON.
+   * Never send an empty string. A Required question that arrives blank rejects
+   * the entire submission, and that rejection is invisible here — see
+   * BLANK_PLACEHOLDERS in google-form.ts for why this is a data-loss guard
+   * rather than a formatting choice.
    */
-  const res = await fetch(FORM_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload),
-    redirect: "follow",
+  const body = new URLSearchParams({
+    [FIELD_IDS.name]: lead.name,
+    [FIELD_IDS.businessName]: lead.businessName || BLANK_PLACEHOLDERS.businessName,
+    [FIELD_IDS.email]: lead.email,
+    [FIELD_IDS.phone]: lead.phone,
+    [FIELD_IDS.projectType]: lead.projectType,
+    [FIELD_IDS.budget]: lead.budget,
+    [FIELD_IDS.shootDate]: formatShootDateForSheet(lead.shootDate),
+    [FIELD_IDS.location]: lead.location || BLANK_PLACEHOLDERS.location,
+    [FIELD_IDS.message]: lead.message,
   });
 
-  if (!res.ok) {
-    return { ok: false, error: `The server responded with ${res.status}.` };
+  /*
+   * ── Why this is fire-and-forget ────────────────────────────────────────────
+   * Google Forms sends no CORS headers, so the browser refuses to hand us the
+   * response. `no-cors` lets the request through and returns an opaque result:
+   * `res.status` is always 0 and `res.ok` always false, whether Google recorded
+   * the booking or rejected it.
+   *
+   * So there is nothing to check. `fetch` still rejects when the request never
+   * left the machine — offline, DNS failure, connection refused — and that is
+   * the one real failure we can report. Anything past that is reported as sent,
+   * which is why the payload above is built so it cannot be rejected.
+   *
+   * URLSearchParams sets `application/x-www-form-urlencoded`, one of the three
+   * content types that skip the CORS preflight. A JSON content type would fail
+   * before leaving the browser.
+   */
+  try {
+    await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      body,
+    });
+  } catch {
+    return {
+      ok: false,
+      error:
+        "Couldn't reach the server — check your connection, or call (864) 915-4071.",
+    };
   }
 
-  const json = (await res.json().catch(() => null)) as
-    | { ok?: boolean; error?: string; confirmationEmailed?: boolean }
-    | null;
+  // No confirmation email exists on this path: Google notifies the studio, not
+  // the customer. The success page says so rather than promising one.
+  return { ok: true, confirmationEmailed: false };
+}
 
-  if (!json?.ok) {
-    return { ok: false, error: json?.error ?? "Something went wrong on my end." };
-  }
-
-  return { ok: true, confirmationEmailed: Boolean(json.confirmationEmailed) };
+/** A shoot date the Sheet can be read at a glance, not an ISO string. */
+function formatShootDateForSheet(iso: string | undefined): string {
+  if (!iso) return BLANK_PLACEHOLDERS.shootDate;
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }

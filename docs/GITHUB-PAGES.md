@@ -28,92 +28,53 @@ so a broken deploy never goes live.
 
 ---
 
-## 2. Wire up the booking form
+## 2. The booking form
 
-Without this the form still validates and still looks right, but it shows
-*"The booking form isn't connected yet"* rather than pretending to send. Phone
-and email links keep working throughout.
+**Connected and live.** Bookings post straight into a Google Form; Google
+records each one in the linked Sheet and emails you.
 
-### a. Create the script
-
-Go to **[script.new](https://script.new)** and name it `508 Filmzz Booking`.
-Select all the placeholder code and paste the entire contents of
-[`apps-script/Code.gs`](../apps-script/Code.gs) over it. Save.
-
-There is no Sheet to make first. The script creates **508 Filmzz Leads** in your
-Drive on the first submission and remembers where it put it — the setup step
-that used to exist here was two chances to paste the wrong id.
-
-### b. Settings (all optional)
-
-Nothing is required. Deploy it and it works: leads land in the Sheet it makes,
-and the studio brief goes to the Google account the script runs as.
-
-To override any of that: **Project Settings** (gear icon) **→ Script Properties
-→ Add script property.**
-
-| Property | Value |
+| Piece | Where |
 |---|---|
-| `SHEET_ID` | Use a Sheet you already have, instead of the one it creates |
-| `NOTIFY_EMAIL` | Send booking alerts somewhere other than your own account |
-| `SHEET_TAB` | Tab name. Defaults to `Leads` |
-| `DRIVE_FOLDER_ID` | A Drive folder id, to keep uploaded reference files |
-| `TWILIO_SID` | Twilio Account SID |
-| `TWILIO_TOKEN` | Twilio Auth Token |
-| `TWILIO_FROM` | Your Twilio number, `+18645551234` format |
-| `SMS_TO` | Your phone, `+18649154071` format |
+| The form | `docs.google.com/forms/d/e/1FAIpQLSd-G2A4.../viewform` |
+| Field ids + endpoint | [`src/lib/google-form.ts`](../src/lib/google-form.ts) |
+| Submit logic | [`src/lib/submit-lead.ts`](../src/lib/submit-lead.ts) |
+| Responses | The Sheet linked from the form's **Responses** tab |
 
-These live in Google, never in this repo. Safe with a public repository.
+### Two things this approach cannot do
 
-Twilio needs a paid account. Skip those four and everything still works — you
-get the Sheet row and both emails instead of a text.
+**It cannot tell you a booking failed.** Google Forms sends no CORS headers, so
+the browser hands back an *opaque* response — status always 0, whether Google
+recorded the lead or rejected it. The site reports success on anything short of
+a total network failure.
 
-### d. Test before deploying
+That makes the payload the only line of defence, which is why
+`submit-lead.ts` never sends an empty string for any field. A Google Form
+rejects the entire submission with a 400 if a question it marks **Required**
+arrives blank — and that 400 is invisible, so the visitor would be thanked while
+the booking was discarded. Business Name is Required on the form but optional on
+the site: exactly that trap, closed by sending `(not given)` instead of `""`.
 
-In the script editor pick **`testBooking`** from the function dropdown and press
-**Run**.
+> **If you edit the form, do not delete or reorder questions.** Field ids are
+> baked into the site. Adding a question is safe; removing one silently breaks
+> every booking. Marking more questions Required is also safe — nothing is ever
+> sent blank.
 
-Google will ask you to authorize it and will warn **"Google hasn't verified this
-app"**. That is expected — it is your own script, written by you, running in
-your account. Click **Advanced → Go to 508 Filmzz Booking (unsafe) → Allow**. It
-needs Sheets, Gmail, and Drive: one to record the lead, one to send the two
-emails, one to hold uploaded reference files.
+**There is no confirmation email to the customer**, and no file upload — a
+Google Form's file question forces the visitor to sign into Google, which would
+cost more bookings than reference images are worth. The message field asks for
+links instead.
 
-Check: a row in the Sheet, an email in your inbox, and a text if you configured
-Twilio. Fix anything broken now — it is much easier here than through the site.
+### Turn on your own notifications
 
-### e. Deploy it
+Form → **Responses** → **⋮** → **Get email notifications for new responses.**
+Without it, bookings land in the Sheet silently and you have to go looking.
 
-**Deploy → New deployment → Web app.**
+### If you want the richer version back
 
-| Field | Value |
-|---|---|
-| Execute as | **Me** |
-| Who has access | **Anyone** |
-
-"Anyone" is required — visitors are not signed into Google. It does not expose
-your Sheet; it only allows POSTs to this script.
-
-Copy the **Web app URL**. It looks like
-`https://script.google.com/macros/s/AKfy.../exec`.
-
-### f. Give the URL to the site
-
-In GitHub: **Settings → Secrets and variables → Actions → Variables → New
-repository variable.**
-
-| Name | Value |
-|---|---|
-| `NEXT_PUBLIC_FORM_ENDPOINT` | the Web app URL |
-
-A **variable**, not a secret — it is compiled into the browser bundle and is
-public either way. Your Twilio and Gmail credentials stay in Apps Script.
-
-Then **Actions → Deploy to GitHub Pages → Run workflow**. Changing a variable
-does not rebuild on its own.
-
-> **Whenever you edit the script**, deploy again as **Manage deployments → Edit →
-> New version**. Editing the code alone changes nothing that is live.
+[`apps-script/Code.gs`](../apps-script/Code.gs) is still in the repo, unused. It
+adds a confirmation email to the customer, file attachments, Twilio SMS, and a
+real success/failure answer the site can act on — at the cost of deploying an
+Apps Script web app. Setup is in that file's header.
 
 ---
 

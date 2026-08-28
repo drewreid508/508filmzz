@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Upload, X, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-import { PROJECT_TYPES, BUDGETS, MAX_FILES, MAX_FILE_BYTES } from "@/lib/inquiry";
+import { PROJECT_TYPES, BUDGETS } from "@/lib/inquiry";
 import { submitLead } from "@/lib/submit-lead";
 import { site } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
@@ -46,25 +45,8 @@ export function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
-  const [files, setFiles] = useState<File[]>([]);
-  const fileInput = useRef<HTMLInputElement>(null);
 
   const today = new Date().toISOString().slice(0, 10);
-
-  const addFiles = (list: FileList | null) => {
-    if (!list) return;
-    const incoming = Array.from(list);
-    const oversized = incoming.find((f) => f.size > MAX_FILE_BYTES);
-    if (oversized) {
-      setFormError(`"${oversized.name}" is larger than 8 MB.`);
-      return;
-    }
-    setFormError(null);
-    setFiles((prev) => [...prev, ...incoming].slice(0, MAX_FILES));
-  };
-
-  const removeFile = (index: number) =>
-    setFiles((prev) => prev.filter((_, i) => i !== index));
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,7 +57,7 @@ export function BookingForm() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const result = await submitLead(data, files);
+      const result = await submitLead(data);
 
       if (!result.ok) {
         if (result.fieldErrors) setErrors(result.fieldErrors);
@@ -271,78 +253,15 @@ export function BookingForm() {
         <FieldError message={errors.message} />
       </div>
 
-      {/* Uploads */}
-      <div className="flex flex-col">
-        <Label index={10} htmlFor="files">
-          Reference Files
-        </Label>
-        <div
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            addFiles(e.dataTransfer.files);
-          }}
-          className="group mt-2 border border-dashed border-line p-8 text-center transition-colors duration-500 hover:border-accent"
-        >
-          <input
-            ref={fileInput}
-            type="file"
-            multiple
-            className="sr-only"
-            id="files"
-            onChange={(e) => addFiles(e.target.files)}
-            accept="image/*,video/*,.pdf"
-          />
-          <label htmlFor="files" className="flex cursor-pointer flex-col items-center gap-3">
-            <Upload
-              size={20}
-              strokeWidth={1.4}
-              aria-hidden="true"
-              className="text-faint transition-colors duration-500 group-hover:text-accent"
-            />
-            <span className="text-sm text-mute">
-              Drop reference images or video here, or{" "}
-              <span className="text-accent underline underline-offset-4">browse</span>
-            </span>
-            <span className="text-[0.66rem] tracking-[0.16em] text-faint uppercase">
-              Up to {MAX_FILES} files — 5 MB each
-            </span>
-          </label>
-        </div>
-
-        <AnimatePresence>
-          {files.length > 0 && (
-            <motion.ul
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-4 flex flex-col gap-2 overflow-hidden"
-            >
-              {files.map((file, i) => (
-                <li
-                  key={`${file.name}-${i}`}
-                  className="flex items-center justify-between border border-line px-4 py-3"
-                >
-                  <span className="truncate text-[0.8rem] text-mute">{file.name}</span>
-                  <span className="ml-4 flex shrink-0 items-center gap-4">
-                    <span className="text-[0.66rem] tracking-wide text-faint">
-                      {(file.size / 1024 / 1024).toFixed(1)} MB
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => removeFile(i)}
-                      aria-label={`Remove ${file.name}`}
-                      className="text-faint transition-colors hover:text-accent"
-                    >
-                      <X size={14} aria-hidden="true" />
-                    </button>
-                  </span>
-                </li>
-              ))}
-            </motion.ul>
-          )}
-        </AnimatePresence>
-      </div>
+      {/*
+        No file upload.
+        ─────────────────────────────────────────────────────────────────────
+        Bookings post into a Google Form, and a Google Form's file question
+        forces the visitor to sign into a Google account before it will accept
+        anything. Putting that in front of a booking would cost more enquiries
+        than reference images are worth. The message field asks for links
+        instead, which anyone can paste.
+      */}
 
       {formError && (
         <p
