@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { projectsByCategory, type CategoryId } from "@/data/projects";
 import { Lightbox, type LightboxItem } from "./lightbox";
 import { Frame } from "@/components/ui/frame";
+import { Magnetic } from "@/components/ui/magnetic";
 import { pad } from "@/lib/utils";
 
 /**
@@ -31,6 +32,35 @@ export function CategoryView({ category }: { category: CategoryId }) {
     caption: project.subject,
     href: `/work/${project.slug}`,
   }));
+
+  /**
+   * A category with nothing in it yet.
+   *
+   * Social Media is exactly this: both finished films are filed under the
+   * subject they were shot for, so nothing carries the tag. "00 Frames" over an
+   * empty grid reads as a broken page — say plainly that the work is not up
+   * here yet and point at the work that is.
+   */
+  if (frames.length === 0) {
+    return (
+      <section className="shell pb-28 md:pb-40" aria-label="Gallery">
+        <div className="border-y border-line py-20 text-center">
+          <p className="display text-3xl md:text-4xl">
+            Nothing filed here yet<span className="text-accent">.</span>
+          </p>
+          <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-mute">
+            This work is shot but lives under the vertical it was made for. The
+            full archive is on the Work page.
+          </p>
+          <div className="mt-9 flex justify-center">
+            <Magnetic href="/portfolio" variant="outline">
+              See every frame
+            </Magnetic>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>

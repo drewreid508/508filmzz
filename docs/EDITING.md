@@ -108,8 +108,22 @@ the order on the site, so **put your strongest work first**:
 },
 ```
 
-The grid, filters, search, lightbox, related projects, and sitemap all pick it up
+The wall, filters, lightbox, related projects, and sitemap all pick it up
 automatically.
+
+### How the Work page works now
+
+`/portfolio` is **one wall of photographs**, not a set of albums. Every frame in
+every project's `gallery` is on the page at once, filterable by category in
+place, and clicking one opens it full screen. The tiles carry no caption on
+purpose — the project name is in the lightbox and in the screen-reader label.
+
+Adding a project therefore adds its frames straight to the wall. The
+`/work/<slug>` page still exists for the write-up, but nobody has to go through
+it to see the pictures.
+
+**Order matters.** Frames appear in project order, then gallery order — so the
+first few ids in your strongest project are the first thing anyone sees.
 
 ---
 
