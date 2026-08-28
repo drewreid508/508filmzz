@@ -26,8 +26,14 @@ npm run dev
 
 ## Hosting
 
-Deployed to **GitHub Pages** as a static export. Pages cannot run server code, so
-the booking form posts to a Google Apps Script endpoint rather than an API route.
+Live at **[www.508filmzz.com](http://www.508filmzz.com)**, deployed to GitHub
+Pages as a static export. Pages cannot run server code, so the booking form
+posts to a Google Apps Script endpoint rather than an API route.
+
+Two repository variables control where the build thinks it lives, and they must
+always change together — `NEXT_PUBLIC_SITE_URL` (canonicals, sitemap, robots)
+and `NEXT_PUBLIC_BASE_PATH` (asset paths, unset for the custom domain). The
+deploy workflow asserts both and fails rather than publishing a mismatch.
 
 Full setup — Pages, the form backend, and DNS — is in
 [`docs/GITHUB-PAGES.md`](docs/GITHUB-PAGES.md).

@@ -141,6 +141,14 @@ Then in **Settings → Pages → Custom domain**, enter `www.508filmzz.com` and 
 
 `public/CNAME` already carries this domain, so the setting survives every deploy.
 
+### Status: done
+
+The `www` CNAME is in place and the site serves from `www.508filmzz.com`.
+
+**Still outstanding:** the bare `508filmzz.com` has *no* A records, so it does
+not resolve at all — someone typing it without the `www` gets nothing. Add the
+four A records described above in Squarespace to fix it.
+
 ---
 
 ## Preview vs custom domain
@@ -148,17 +156,20 @@ Then in **Settings → Pages → Custom domain**, enter `www.508filmzz.com` and 
 The repo variable `NEXT_PUBLIC_BASE_PATH` decides where the build expects to be
 served from. These two modes are mutually exclusive:
 
-| Mode | `NEXT_PUBLIC_BASE_PATH` | Serves at |
-|---|---|---|
-| **Preview** *(current)* | `/508filmzz` | `https://drewreid508.github.io/508filmzz/` |
-| **Custom domain** | *(delete the variable)* | `https://www.508filmzz.com` |
+| Mode | `NEXT_PUBLIC_BASE_PATH` | `NEXT_PUBLIC_SITE_URL` | Serves at |
+|---|---|---|---|
+| Preview | `/508filmzz` | `https://drewreid508.github.io/508filmzz` | `drewreid508.github.io/508filmzz/` |
+| **Custom domain** *(current)* | *(not set)* | `https://www.508filmzz.com` | `www.508filmzz.com` |
 
 In preview mode the workflow removes `CNAME` from the build, because a CNAME
 forces Pages to serve at the domain root and the two cannot coexist.
 
-**To go live on your domain:** add the DNS records above, delete the
-`NEXT_PUBLIC_BASE_PATH` variable (Settings → Secrets and variables → Actions →
-Variables), then re-run the workflow.
+The two variables must always be changed **together**. `NEXT_PUBLIC_BASE_PATH`
+governs where assets are loaded from; `NEXT_PUBLIC_SITE_URL` governs what the
+canonical tags, sitemap, and `robots.txt` claim. Changing one without the other
+produces a site that either loads unstyled or tells Google it lives somewhere it
+does not — both fail silently. The workflow asserts both and fails the build
+rather than publishing the mismatch.
 
 Why this matters: with the wrong prefix every page still returns 200 while every
 stylesheet and script 404s — the site loads as unstyled HTML. A status-code check
@@ -169,16 +180,22 @@ deploy target and fails the build if it does not.
 
 ## Going live in search
 
-The site ships **noindex on purpose**, so you can share the link before Google
-can list it. Confirm with:
+`NEXT_PUBLIC_SITE_INDEXABLE` is set to `true`, so the site is **public and
+indexable**. Confirm with:
 
 ```bash
 curl -s https://www.508filmzz.com/robots.txt
 ```
 
-`Disallow: /` means private. To go public, add the repository variable
-`NEXT_PUBLIC_SITE_INDEXABLE` = `true` and re-run the workflow. It is read at
-build time, so a redeploy is required.
+`Allow: /` means public. Setting the variable to anything else and re-running
+the workflow puts `Disallow: /` back — it is read at build time, so a redeploy
+is always required either way.
+
+**Submit the sitemap** at [Google Search Console](https://search.google.com/search-console):
+add `www.508filmzz.com` as a property, then submit `sitemap.xml`. Do this only
+once HTTPS is working — every URL in the sitemap is an `https://` address, and
+submitting while the certificate is still pending just feeds Google 24 fetch
+errors.
 
 ---
 
