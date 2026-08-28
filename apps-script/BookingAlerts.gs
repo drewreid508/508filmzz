@@ -129,7 +129,7 @@ function onBookingSubmit(e) {
  */
 function sendText(lead) {
   try {
-    if (!SMS_TO) return;
+    if (!SMS_TO) return { ok: false, error: "SMS_TO is empty" };
 
     var lines = ["New booking — 508 Filmzz", ""];
     lines.push(lead.name || "(no name)");
@@ -141,8 +141,10 @@ function sendText(lead) {
     if (lead.shootDate) lines.push("Shoot: " + lead.shootDate);
 
     MailApp.sendEmail(SMS_TO, "New booking", lines.join("\n"));
+    return { ok: true, error: "" };
   } catch (err) {
     Logger.log("text failed: " + err);
+    return { ok: false, error: String(err) };
   }
 }
 
@@ -150,7 +152,7 @@ function sendText(lead) {
 function sendEmail(lead) {
   try {
     var to = inbox();
-    if (!to) return;
+    if (!to) return { ok: false, error: "no inbox address — set EMAIL_TO" };
 
     var rows = [
       ["Name", lead.name],
@@ -181,15 +183,59 @@ function sendEmail(lead) {
       body,
       options
     );
+    return { ok: true, error: "" };
   } catch (err) {
     Logger.log("email failed: " + err);
+    return { ok: false, error: String(err) };
   }
 }
 
 // ── Test ───────────────────────────────────────────────────────────────────
 
-/** Run this from the editor to check both alerts without filling the form. */
+/**
+ * Run this from the editor to check both alerts without filling the form.
+ *
+ * Unlike a real booking, this one is LOUD. During a booking a failed channel is
+ * swallowed so it cannot take the other down with it — but that same silence
+ * makes a test that quietly does nothing impossible to diagnose. Here, anything
+ * that fails is thrown, so the editor shows you the reason instead of you
+ * staring at a phone that never buzzes.
+ */
 function testAlert() {
+  var lead = {
+    name: "Mike Sanders",
+    business: "Sanders Diesel",
+    email: "mike@example.com",
+    phone: "(864) 555-0142",
+    projectType: "Automotive",
+    budget: "$1,000 – $2,500",
+    shootDate: "Fri, Sep 11, 2026",
+    location: "Greenville, SC",
+    message: "TEST alert. If this reached your phone and inbox, alerts work.",
+  };
+
+  Logger.log("Texting:  " + SMS_TO);
+  Logger.log("Emailing: " + (inbox() || "(NO ADDRESS — this is the problem)"));
+  Logger.log("Quota left today: " + MailApp.getRemainingDailyQuota());
+
+  var text = sendText(lead);
+  var mail = sendEmail(lead);
+
+  Logger.log("text  -> " + (text.ok ? "sent" : "FAILED: " + text.error));
+  Logger.log("email -> " + (mail.ok ? "sent" : "FAILED: " + mail.error));
+
+  if (!text.ok || !mail.ok) {
+    throw new Error(
+      "text: " + (text.ok ? "sent" : text.error) +
+      " | email: " + (mail.ok ? "sent" : mail.error)
+    );
+  }
+
+  Logger.log("Both sent. Check your phone and " + inbox() + " (look in spam).");
+}
+
+/** The old test, kept: exercises the field-title parsing too. */
+function testFormParsing() {
   onBookingSubmit({
     namedValues: {
       "Name": ["Mike Sanders"],
