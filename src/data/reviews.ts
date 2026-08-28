@@ -15,9 +15,14 @@
  * only as a safety net — anything left `true` is stripped from production
  * builds by `publicReviews`.
  *
- * While this array is empty, /reviews shows an honest empty state and the
- * scrolling marquee is hidden. Both come back automatically on the first real
- * entry. Nothing else needs changing.
+ * While this array is empty there is no reviews section anywhere on the site:
+ * the scrolling marquee on the home page is hidden, and the dedicated /reviews
+ * page is parked at src/app/_disabled/reviews (an underscore folder is excluded
+ * from routing) rather than published as an empty shell.
+ *
+ * Adding the first real entry below brings the home-page band back on its own.
+ * The full page needs a one-line move — see the header comment on the parked
+ * file for the four steps.
  */
 
 export type Review = {

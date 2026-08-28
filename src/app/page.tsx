@@ -310,7 +310,12 @@ export default function HomePage() {
         Hidden entirely until a real testimonial exists. An empty "Client
         Feedback" heading over a blank marquee looks broken and quietly signals
         that nobody has hired you — worse than not having the section at all.
-        It returns automatically on the first entry in src/data/reviews.ts.
+
+        Add a real quote to src/data/reviews.ts and this band returns on its
+        own. The dedicated /reviews page is parked at src/app/_disabled/reviews
+        until then; its header comment explains how to bring it back, and the
+        "Read all reviews" button that linked to it belongs right here when you
+        do.
       */}
       {publicReviews.length > 0 && (
         <section className="pb-24 md:pb-36" aria-labelledby="reviews-heading">
@@ -319,11 +324,6 @@ export default function HomePage() {
           id="reviews-heading" index="06" eyebrow="Client Feedback" title="Reviews" />
           </div>
           <ReviewsMarquee />
-          <div className="shell mt-12 flex justify-center">
-            <Magnetic href="/reviews" variant="outline">
-              Read all reviews
-            </Magnetic>
-          </div>
         </section>
       )}
 

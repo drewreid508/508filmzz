@@ -36,9 +36,12 @@ Full setup — Pages, the form backend, and DNS — is in
 
 Two things in this build are placeholders and must be replaced:
 
-1. **Reviews** — there are none yet, and the section is hidden site-wide until
-   there are. Add real quotes to `src/data/reviews.ts` with `placeholder: false`
-   and it returns on its own. Only publish quotes you have permission to use.
+1. **Reviews** — there are none yet, so there is no reviews section anywhere on
+   the site. The home-page band is hidden and the `/reviews` page is parked at
+   `src/app/_disabled/reviews/` (underscore folders are excluded from routing).
+   Add real quotes to `src/data/reviews.ts` with `placeholder: false` and the
+   home-page band returns on its own; the parked file's header comment covers
+   restoring the full page. Only publish quotes you have permission to use.
 2. **Booking notifications** — the form has no backend until you deploy the
    Apps Script and set `NEXT_PUBLIC_FORM_ENDPOINT`. Until then it tells visitors
    to call or email instead of pretending to send. See

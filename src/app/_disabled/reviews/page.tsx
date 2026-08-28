@@ -1,3 +1,25 @@
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * THIS PAGE IS PARKED. IT IS NOT LIVE.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Any folder in `src/app` starting with an underscore is a Next.js *private
+ * folder* — it is excluded from routing entirely, so nothing under
+ * `_disabled/` is built or published. The file is kept here rather than
+ * deleted so bringing it back is a move, not a rewrite.
+ *
+ * TO PUT REVIEWS BACK, once you have real quotes:
+ *
+ *   1. Add them to `src/data/reviews.ts` (real names, with permission).
+ *   2. Move this file back to a live route:
+ *        git mv src/app/_disabled/reviews src/app/reviews
+ *   3. Re-add the /reviews entry to `src/app/sitemap.ts`.
+ *   4. Re-add the "Read all reviews" button on the home page — see the
+ *      Reviews comment block in `src/app/page.tsx`.
+ *
+ * Step 1 on its own is enough to bring the scrolling quotes back to the home
+ * page. Steps 2–4 add the dedicated page.
+ */
+
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/page-hero";
 import { ReviewsMarquee } from "@/components/reviews/reviews-marquee";

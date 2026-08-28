@@ -189,8 +189,12 @@ the headline stays readable.
 
 ## Add real reviews
 
-`src/data/reviews.ts`. The whole reviews section is hidden site-wide while the
-list is empty, and returns the moment you add one:
+There is **no reviews section on the site right now** — no band on the home
+page, and no `/reviews` page. Nothing was thrown away: the page is parked at
+`src/app/_disabled/reviews/page.tsx`, and any folder in `src/app` starting with
+an underscore is skipped by the router, so it is simply not built.
+
+To bring reviews back, start with the quotes. `src/data/reviews.ts`:
 
 ```ts
 export const reviews: Review[] = [
@@ -208,6 +212,23 @@ export const reviews: Review[] = [
 
 Only publish quotes you have permission to use, with real names. Anything left
 as `placeholder: true` stays hidden.
+
+That one edit brings the scrolling band back to the home page. If you also want
+the dedicated `/reviews` page, do three more things — they are listed in full at
+the top of the parked file:
+
+```bash
+git mv src/app/_disabled/reviews src/app/reviews
+```
+
+then re-add the `/reviews` line to `src/app/sitemap.ts`, and re-add the "Read
+all reviews" button in `src/app/page.tsx` (the Reviews comment block says
+exactly where it goes).
+
+**Why it is parked rather than left up empty.** A live "Reviews" page reading
+*"first reviews landing soon"* tells every visitor that nobody has hired you
+yet. A page that does not exist tells them nothing. Until there are real quotes,
+the portfolio is the honest version of a testimonial.
 
 ---
 
