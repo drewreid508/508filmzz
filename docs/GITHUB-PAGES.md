@@ -34,46 +34,50 @@ Without this the form still validates and still looks right, but it shows
 *"The booking form isn't connected yet"* rather than pretending to send. Phone
 and email links keep working throughout.
 
-### a. Create the Sheet
+### a. Create the script
 
-New Google Sheet → name it something like `508 Filmzz — Leads`. Copy the id out
-of the URL:
+Go to **[script.new](https://script.new)** and name it `508 Filmzz Booking`.
+Select all the placeholder code and paste the entire contents of
+[`apps-script/Code.gs`](../apps-script/Code.gs) over it. Save.
 
-```
-docs.google.com/spreadsheets/d/  THIS_LONG_STRING  /edit
-```
+There is no Sheet to make first. The script creates **508 Filmzz Leads** in your
+Drive on the first submission and remembers where it put it — the setup step
+that used to exist here was two chances to paste the wrong id.
 
-You do **not** need to add headers. The script writes them on the first booking.
+### b. Settings (all optional)
 
-### b. Create the script
+Nothing is required. Deploy it and it works: leads land in the Sheet it makes,
+and the studio brief goes to the Google account the script runs as.
 
-In that Sheet: **Extensions → Apps Script**. Delete the placeholder code and
-paste the entire contents of [`apps-script/Code.gs`](../apps-script/Code.gs).
+To override any of that: **Project Settings** (gear icon) **→ Script Properties
+→ Add script property.**
 
-### c. Add your credentials
-
-**Project Settings** (gear icon) **→ Script Properties → Add script property.**
-
-| Property | Required | Value |
-|---|---|---|
-| `SHEET_ID` | **yes** | The long string from step (a) |
-| `NOTIFY_EMAIL` | **yes** | Where booking alerts go — `drew@508filmzz.com` |
-| `SHEET_TAB` | no | Defaults to `Leads` |
-| `DRIVE_FOLDER_ID` | no | A Drive folder id, to keep uploaded reference files |
-| `TWILIO_SID` | no | Twilio Account SID |
-| `TWILIO_TOKEN` | no | Twilio Auth Token |
-| `TWILIO_FROM` | no | Your Twilio number, `+18645551234` format |
-| `SMS_TO` | no | Your phone, `+18649154071` format |
+| Property | Value |
+|---|---|
+| `SHEET_ID` | Use a Sheet you already have, instead of the one it creates |
+| `NOTIFY_EMAIL` | Send booking alerts somewhere other than your own account |
+| `SHEET_TAB` | Tab name. Defaults to `Leads` |
+| `DRIVE_FOLDER_ID` | A Drive folder id, to keep uploaded reference files |
+| `TWILIO_SID` | Twilio Account SID |
+| `TWILIO_TOKEN` | Twilio Auth Token |
+| `TWILIO_FROM` | Your Twilio number, `+18645551234` format |
+| `SMS_TO` | Your phone, `+18649154071` format |
 
 These live in Google, never in this repo. Safe with a public repository.
 
-Skip the Twilio rows and everything still works — you just get the Sheet row and
-both emails instead of a text.
+Twilio needs a paid account. Skip those four and everything still works — you
+get the Sheet row and both emails instead of a text.
 
 ### d. Test before deploying
 
 In the script editor pick **`testBooking`** from the function dropdown and press
-**Run**. Grant permissions when asked (it needs Sheets, Gmail, and Drive).
+**Run**.
+
+Google will ask you to authorize it and will warn **"Google hasn't verified this
+app"**. That is expected — it is your own script, written by you, running in
+your account. Click **Advanced → Go to 508 Filmzz Booking (unsafe) → Allow**. It
+needs Sheets, Gmail, and Drive: one to record the lead, one to send the two
+emails, one to hold uploaded reference files.
 
 Check: a row in the Sheet, an email in your inbox, and a text if you configured
 Twilio. Fix anything broken now — it is much easier here than through the site.

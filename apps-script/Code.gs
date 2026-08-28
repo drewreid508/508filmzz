@@ -19,11 +19,15 @@
  */
 
 // ── Configuration ──────────────────────────────────────────────────────────
-// Set these in Project Settings → Script Properties. Only SHEET_ID is required.
+// All optional — deploy the script and it works. Set any of these in
+// Project Settings → Script Properties to override the defaults.
 //
-//   SHEET_ID          the long id from the Sheet's URL
+//   SHEET_ID          the long id from a Sheet's URL.
+//                     Default: creates "508 Filmzz Leads" in your Drive on the
+//                     first submission and remembers it.
 //   SHEET_TAB         tab name (default "Leads")
-//   NOTIFY_EMAIL      where the studio brief goes
+//   NOTIFY_EMAIL      where the studio brief goes.
+//                     Default: the Google account this script runs as.
 //   DRIVE_FOLDER_ID   optional: folder for uploaded reference files
 //   TWILIO_SID        optional: Twilio Account SID
 //   TWILIO_TOKEN      optional: Twilio Auth Token
@@ -66,6 +70,69 @@ var MAX_FILE_BYTES = 5 * 1024 * 1024;
 function prop(key, fallback) {
   var value = PropertiesService.getScriptProperties().getProperty(key);
   return value === null || value === "" ? fallback || "" : value;
+}
+
+function setProp(key, value) {
+  PropertiesService.getScriptProperties().setProperty(key, value);
+}
+
+/**
+ * Where the studio brief goes.
+ *
+ * Defaults to whoever owns this script — the deployment runs as you, so
+ * `getEffectiveUser()` is your Google address. Set NOTIFY_EMAIL in Script
+ * Properties to send leads somewhere else instead. Nothing to configure for the
+ * common case, and no address hardcoded in a public repo.
+ */
+function notifyEmail() {
+  var configured = prop("NOTIFY_EMAIL");
+  if (configured) return configured;
+  try {
+    return Session.getEffectiveUser().getEmail() || "";
+  } catch (err) {
+    return "";
+  }
+}
+
+/**
+ * The lead Sheet, created on demand.
+ *
+ * Setup used to mean making a spreadsheet by hand and pasting its id into
+ * Script Properties before the first lead could land — two steps that could
+ * only be got wrong. Now the first submission creates "508 Filmzz Leads" in
+ * your Drive and remembers its id, so deploying the script is the whole setup.
+ *
+ * A pre-made Sheet still wins: set SHEET_ID and this never runs.
+ *
+ * The lock matters. Two submissions arriving together would otherwise each see
+ * no id, each create a spreadsheet, and the leads would split across two files
+ * — with the second overwriting the first's id.
+ */
+function leadSheetId() {
+  var existing = prop("SHEET_ID");
+  if (existing) return existing;
+
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(20000);
+  } catch (err) {
+    return "";
+  }
+
+  try {
+    // Re-read inside the lock: another thread may have created it while we
+    // waited, and a second spreadsheet would silently split the leads.
+    existing = prop("SHEET_ID");
+    if (existing) return existing;
+
+    var book = SpreadsheetApp.create("508 Filmzz Leads");
+    setProp("SHEET_ID", book.getId());
+    return book.getId();
+  } catch (err) {
+    return "";
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 /** Apps Script cannot answer a CORS preflight, so responses stay simple. */
@@ -147,8 +214,8 @@ function saveFiles(files) {
 
 function appendRow(lead, attachmentNames) {
   try {
-    var sheetId = prop("SHEET_ID");
-    if (!sheetId) return { ok: false, error: "SHEET_ID is not set" };
+    var sheetId = leadSheetId();
+    if (!sheetId) return { ok: false, error: "could not open or create the lead Sheet" };
 
     var book = SpreadsheetApp.openById(sheetId);
     var tabName = prop("SHEET_TAB", "Leads");
@@ -183,7 +250,7 @@ function appendRow(lead, attachmentNames) {
 
 function emailStudio(lead, attachmentLinks, attachmentNames) {
   try {
-    var to = prop("NOTIFY_EMAIL");
+    var to = notifyEmail();
     if (!to) return { ok: false, error: "NOTIFY_EMAIL is not set" };
 
     var rows = [
@@ -263,7 +330,7 @@ function emailStudio(lead, attachmentLinks, attachmentNames) {
 
 function emailCustomer(lead) {
   try {
-    var studio = prop("NOTIFY_EMAIL");
+    var studio = notifyEmail();
     var firstName = lead.name.split(" ")[0];
 
     var html =
@@ -454,7 +521,7 @@ function testBooking() {
       contents: JSON.stringify({
         name: "Test Client",
         businessName: "Test Motors",
-        email: prop("NOTIFY_EMAIL", "you@example.com"),
+        email: notifyEmail() || "you@example.com",
         phone: "8645551234",
         projectType: "Automotive",
         shootDate: "",
