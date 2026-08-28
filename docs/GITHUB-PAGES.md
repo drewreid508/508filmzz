@@ -64,10 +64,21 @@ Google Form's file question forces the visitor to sign into Google, which would
 cost more bookings than reference images are worth. The message field asks for
 links instead.
 
-### Turn on your own notifications
+### Booking alerts — text + email
 
-Form → **Responses** → **⋮** → **Get email notifications for new responses.**
-Without it, bookings land in the Sheet silently and you have to go looking.
+[`apps-script/BookingAlerts.gs`](../apps-script/BookingAlerts.gs) runs inside
+the responses Sheet (Extensions → Apps Script) and fires on every submission: a
+short text to your phone through T-Mobile's email-to-text gateway, and the full
+brief by email with reply-to set to the client.
+
+Nothing to deploy — it is a Sheet-bound script with an installed trigger, not a
+web app. Setup is in that file's header: paste, run `setup`, run `testAlert`.
+
+The two alerts are sent independently and neither can throw, so a carrier
+dropping the text never costs you the email as well.
+
+This replaces Form → Responses → ⋮ → *Get email notifications*. Turning that on
+as well just means two emails per booking.
 
 ### If you want the richer version back
 
