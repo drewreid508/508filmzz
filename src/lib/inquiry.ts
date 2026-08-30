@@ -11,13 +11,24 @@ import { z } from "zod";
   own rows: nine options is a menu, six is a choice, and the project
   description says what Other means far better than a label would.
 */
+/**
+ * The option that switches the booking form to its monthly branch.
+ *
+ * Exported, and compared against by identity rather than retyped, because it
+ * was retyped once: the form checked for "Monthly Content" while the option
+ * read "Monthly Content Package", so the monthly panel never appeared and no
+ * one could select a package or see the introductory rate. A string that has
+ * to match another string in a different file will eventually stop matching.
+ */
+export const MONTHLY_PROJECT_TYPE = "Monthly Content Package";
+
 export const PROJECT_TYPES = [
   "Automotive Reel",
   "Dealership Content",
   "Detailing / Shop Content",
   "Social Media Content",
   "Event",
-  "Monthly Content Package",
+  MONTHLY_PROJECT_TYPE,
   "Other",
 ] as const;
 

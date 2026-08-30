@@ -10,6 +10,7 @@ import {
   REFERRAL_SOURCES,
   TIME_WINDOWS,
   SHOOT_FREQUENCIES,
+  MONTHLY_PROJECT_TYPE,
 } from "@/lib/inquiry";
 import { monthlyPackages, packages } from "@/data/site";
 import {
@@ -215,7 +216,7 @@ export function BookingForm() {
             required
             defaultValue=""
             onChange={(e) => {
-              const monthly = e.target.value === "Monthly Content";
+              const monthly = e.target.value === MONTHLY_PROJECT_TYPE;
               setIsMonthly(monthly);
               if (!monthly) setMonthlyId("");
             }}
