@@ -6,6 +6,7 @@ import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { Preloader } from "@/components/chrome/preloader";
 import { PageTransition } from "@/components/chrome/page-transition";
 import { Cursor } from "@/components/chrome/cursor";
+import { PromoModal } from "@/components/chrome/promo-modal";
 import { Header } from "@/components/chrome/header";
 import { Footer } from "@/components/chrome/footer";
 import { StickyCta } from "@/components/chrome/sticky-cta";
@@ -107,6 +108,8 @@ export default function RootLayout({
         <SmoothScroll>
           <Preloader />
           <Cursor />
+          {/* Opens only on a Pricing click, once per visit. Never on load. */}
+          <PromoModal />
           <Header />
           <PageTransition>
             <main id="main">{children}</main>

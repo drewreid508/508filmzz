@@ -62,6 +62,9 @@ var ADMIN_HEADERS = [
   "Signed By",
   "Signature File",
   "Closed At",
+  "Promo Code Used",
+  "First-Time Discount",
+  "Repeat Client",
   "Admin Notes",
 ];
 
@@ -351,12 +354,17 @@ function onBookingSubmit(e) {
   ensureAdminColumns();
 
   var lead = leadFromNamedValues((e && e.namedValues) || {});
+  var promo = promoFromMessage(lead.message);
+  var repeat = hasBookedBefore(lead.email, (e && e.range && e.range.getRow()) || 0);
   var row = (e && e.range && e.range.getRow()) || sheet().getLastRow();
   lead.row = row;
   lead.token = makeToken();
 
   setCell(row, "Status", "New Request");
   setCell(row, "Token", lead.token);
+  setCell(row, "Promo Code Used", promo.code || "None");
+  setCell(row, "First-Time Discount", promo.valid ? "Yes" : "No");
+  setCell(row, "Repeat Client", repeat ? "YES — check eligibility" : "No");
 
   // Independent on purpose: one failing channel must not stop the others, and
   // a throw anywhere here would abandon the rest of the booking.
@@ -402,6 +410,9 @@ function emailStudioNew(lead) {
       "NEW BOOKING REQUEST\n\n" +
       detailBlock(lead) + "\n" +
       "Project details:\n" + or(lead.message, "(none)") + "\n\n" +
+      (promoFromMessage(lead.message).valid
+        ? "PROMO: FIRST15 claimed — check the Repeat Client column before honouring it.\n\n"
+        : "") +
       "─────────────────────────────\n" +
       "TO APPROVE: open the bookings Sheet, click this booking's row,\n" +
       "then 508 Filmzz > Approve selected booking.\n" +
@@ -450,6 +461,49 @@ function studioSmsText(lead) {
   if (lead.phone) lines.push("Call: " + lead.phone);
   lines.push("", "Approve it in the Sheet.");
   return lines.join("\n");
+}
+
+/**
+ * Reads the promo code back out of the project details.
+ *
+ * The website appends it there because the Google Form has no field for it.
+ * Recording it in its own column is what makes eligibility checkable at all —
+ * a static page cannot know who has booked before, so the judgement happens
+ * here, against the Sheet, where the history actually lives.
+ */
+function promoFromMessage(message) {
+  var m = /promo code used\s*:\s*([^\n\r]+)/i.exec(message || "");
+  if (!m) return { code: "", valid: false };
+  var code = m[1].trim();
+  var v = /first-time discount\s*:\s*(yes)/i.test(message || "");
+  return { code: code, valid: v };
+}
+
+/**
+ * Has this email booked before?
+ *
+ * Advisory, not enforcement. The row is flagged so the code can be honoured or
+ * declined on the quote — silently refusing it on the website would be a rule
+ * the visitor cannot see, applied to a person who may simply have mistyped
+ * their address last time.
+ */
+function hasBookedBefore(email, currentRow) {
+  try {
+    if (!email) return false;
+    var sh = sheet();
+    var c = colOf("Email");
+    if (!c || sh.getLastRow() < 3) return false;
+    var values = sh.getRange(2, c, sh.getLastRow() - 1, 1).getValues();
+    var target = String(email).trim().toLowerCase();
+    var seen = 0;
+    for (var i = 0; i < values.length; i++) {
+      if (i + 2 === currentRow) continue;
+      if (String(values[i][0]).trim().toLowerCase() === target) seen++;
+    }
+    return seen > 0;
+  } catch (err) {
+    return false;
+  }
 }
 
 function or(v, fallback) {

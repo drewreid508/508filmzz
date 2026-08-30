@@ -1,7 +1,14 @@
 import { inquirySchema } from "@/lib/inquiry";
 import { FORM_ENDPOINT, FIELD_IDS, BLANK_PLACEHOLDERS } from "@/lib/google-form";
-import { monthlyPackages } from "@/data/site";
-import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
+import { monthlyPackages, packages } from "@/data/site";
+import {
+  discountedPrice,
+  DISCOUNT_LABEL,
+  MINIMUM_MONTHS,
+  PROMO_CODE,
+  isPromoCode,
+  discountBreakdown,
+} from "@/lib/offer";
 
 export { FORM_ENDPOINT };
 
@@ -39,6 +46,19 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     what the Apps Script reads back to fill the contract. The labels are the
     contract's parser, so they are written once and not reworded casually.
   */
+  /*
+    The promo code travels with the booking so the quote can honour it and the
+    Sheet can record who claimed it. Eligibility is not decided here: a static
+    page has no way to know whether someone has booked before, and a check that
+    cannot actually check is worse than none — it would confirm to a returning
+    client that the code still works.
+  */
+  const promoRaw = String(form.get("promoCode") ?? "").trim();
+  const promoValid = promoRaw ? isPromoCode(promoRaw) : false;
+
+  const oneOffId = String(form.get("oneOffPackage") ?? "");
+  const oneOff = packages.find((p) => p.id === oneOffId);
+
   const monthlyId = String(form.get("monthlyPackage") ?? "");
   const chosen = monthlyPackages.find((p) => p.id === monthlyId);
   if (chosen) {
@@ -52,6 +72,25 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
       `Minimum term: ${MINIMUM_MONTHS} months`,
     ].filter(Boolean);
     raw.message = `${raw.message}\n\n${terms.join("\n")}`;
+  } else if (oneOff) {
+    raw.message = `${raw.message}\n\nPackage: ${oneOff.name}\nListed rate: ${oneOff.price}`;
+  }
+
+  if (promoRaw) {
+    const applied = promoValid ? discountBreakdown((chosen ?? oneOff)?.price ?? null) : null;
+    const lines = [
+      `Promo code used: ${promoValid ? PROMO_CODE : promoRaw}`,
+      `First-time discount: ${promoValid ? "Yes" : "No — code not recognised"}`,
+    ];
+    if (applied) {
+      lines.push(
+        `Discount (${DISCOUNT_LABEL}): -${applied.saving}`,
+        chosen
+          ? `First month total: ${applied.total} (months 2-${MINIMUM_MONTHS} at ${applied.original})`
+          : `Discounted total: ${applied.total}`
+      );
+    }
+    raw.message = `${raw.message}\n\n${lines.join("\n")}`;
   }
 
   const parsed = inquirySchema.safeParse(raw);

@@ -5,8 +5,14 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { PROJECT_TYPES, BUDGETS } from "@/lib/inquiry";
-import { monthlyPackages } from "@/data/site";
-import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
+import { monthlyPackages, packages } from "@/data/site";
+import {
+  DISCOUNT_LABEL,
+  MINIMUM_MONTHS,
+  PROMO_CODE,
+  isPromoCode,
+  discountBreakdown,
+} from "@/lib/offer";
 import { submitLead } from "@/lib/submit-lead";
 import { site } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
@@ -54,7 +60,28 @@ export function BookingForm() {
   const [isMonthly, setIsMonthly] = useState(false);
   const [monthlyId, setMonthlyId] = useState("");
   const chosen = monthlyPackages.find((p) => p.id === monthlyId) ?? null;
-  const firstMonth = chosen ? discountedPrice(chosen.price) : null;
+
+  /* One-time bookings need a package too, or there is no price to discount. */
+  const [oneOffId, setOneOffId] = useState("");
+  const oneOff = packages.find((p) => p.id === oneOffId) ?? null;
+
+  /* The package the promo actually applies to, whichever branch is in use. */
+  const selected = isMonthly ? chosen : oneOff;
+  const breakdown = discountBreakdown(selected?.price ?? null);
+
+  const [promoInput, setPromoInput] = useState("");
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [promoError, setPromoError] = useState<string | null>(null);
+
+  function applyPromo() {
+    if (isPromoCode(promoInput)) {
+      setPromoApplied(true);
+      setPromoError(null);
+    } else {
+      setPromoApplied(false);
+      setPromoError("That code isn't recognised.");
+    }
+  }
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -201,6 +228,38 @@ export function BookingForm() {
           <FieldError message={errors.projectType} />
 
           {/*
+            A package for one-time work, so the promo code has a figure to work
+            from. Optional — plenty of enquiries do not map to a tier, and a
+            required selector would turn a booking into a configurator.
+          */}
+          {!isMonthly && (
+            <div className="mt-7">
+              {/* Unnumbered: it is a refinement of the field above, not a
+                  step of its own, and a number here would renumber the form. */}
+              <label
+                htmlFor="oneOffPackage"
+                className="eyebrow mb-1 block"
+              >
+                Package (optional)
+              </label>
+              <select
+                id="oneOffPackage"
+                name="oneOffPackage"
+                value={oneOffId}
+                onChange={(e) => setOneOffId(e.target.value)}
+                className={cn(fieldBase, "cursor-pointer")}
+              >
+                <option value="">Not sure yet</option>
+                {packages.map((p) => (
+                  <option key={p.id} value={p.id} className="bg-ink-2">
+                    {p.name} — {p.price}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/*
             Shown only for monthly. Everything in it is derived: the reduced
             figure comes from the package's own price, the minimum from one
             constant. Nothing here is a second copy of a number written
@@ -238,7 +297,7 @@ export function BookingForm() {
                         <dt className="text-accent">
                           First month, new clients ({DISCOUNT_LABEL} off)
                         </dt>
-                        <dd className="text-accent tabular-nums">{firstMonth}</dd>
+                        <dd className="text-accent tabular-nums">{breakdown?.total}</dd>
                       </div>
                       <div className="flex items-baseline justify-between gap-4">
                         <dt className="text-mute">
@@ -319,7 +378,108 @@ export function BookingForm() {
       </fieldset>
 
       <div className="flex flex-col">
-        <Label index={9} htmlFor="message">
+        {/*
+          Promo code.
+          ────────────────────────────────────────────────────────────────────
+          Deliberately not validated as "new client" here. A static page cannot
+          know who has booked before, and pretending to check would only teach
+          a returning client that the code works. Eligibility is settled on the
+          quote, where it can actually be looked up — the Sheet records the code
+          against every booking for exactly that.
+        */}
+        <div className="flex flex-col">
+          <Label index={9} htmlFor="promoCode">
+            Promo Code
+          </Label>
+
+          <div className="flex gap-3">
+            <input
+              id="promoCode"
+              name="promoCode"
+              value={promoInput}
+              onChange={(e) => {
+                setPromoInput(e.target.value);
+                setPromoError(null);
+                setPromoApplied(false);
+              }}
+              onKeyDown={(e) => {
+                // Enter inside a promo field means "apply", not "submit the
+                // whole booking" — which is what it would do by default.
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applyPromo();
+                }
+              }}
+              autoCapitalize="characters"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="Enter code"
+              className={cn(fieldBase, "flex-1 uppercase tracking-[0.14em]")}
+            />
+            <button
+              type="button"
+              onClick={applyPromo}
+              className="shrink-0 border border-line-strong px-6 text-[0.68rem] font-medium tracking-[0.2em] text-bone uppercase transition-colors duration-400 hover:border-accent hover:text-accent"
+            >
+              Apply
+            </button>
+          </div>
+
+          {promoError && (
+            <p role="alert" className="mt-2 text-[0.72rem] tracking-wide text-accent">
+              {promoError}
+            </p>
+          )}
+
+          {promoApplied && (
+            <div className="mt-4 border border-accent/45 bg-accent/[0.055] p-5">
+              <p className="flex items-center gap-2 text-[0.72rem] font-medium tracking-[0.18em] text-accent uppercase">
+                {PROMO_CODE} applied ✓
+              </p>
+              <p className="mt-1 text-[0.72rem] tracking-[0.14em] text-mute uppercase">
+                {DISCOUNT_LABEL} first-time discount
+              </p>
+
+              {breakdown ? (
+                <dl className="mt-5 flex flex-col gap-2.5 border-t border-accent/25 pt-4 text-[0.84rem]">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <dt className="text-mute">Original</dt>
+                    <dd className="text-bone tabular-nums">{breakdown.original}</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <dt className="text-mute">
+                      {isMonthly ? "First month discount" : "First-time discount"}
+                    </dt>
+                    <dd className="text-accent tabular-nums">−{breakdown.saving}</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-4 border-t border-accent/25 pt-3">
+                    <dt className="text-bone">
+                      {isMonthly ? "First month total" : "Your total"}
+                    </dt>
+                    <dd className="display text-xl text-accent tabular-nums">
+                      {breakdown.total}
+                    </dd>
+                  </div>
+                </dl>
+              ) : (
+                <p className="mt-4 border-t border-accent/25 pt-4 text-[0.78rem] leading-relaxed text-mute">
+                  Pick a package above and the figures appear here. On a custom
+                  quote the discount is applied to your quoted amount.
+                </p>
+              )}
+
+              {isMonthly && (
+                <p className="mt-4 text-[0.76rem] leading-relaxed text-faint">
+                  {DISCOUNT_LABEL} applies to month 1 only. Regular monthly
+                  pricing resumes from month 2, under the {MINIMUM_MONTHS}-month
+                  minimum.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <Label index={10} htmlFor="message">
           Message *
         </Label>
         <textarea

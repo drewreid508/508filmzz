@@ -209,9 +209,9 @@ export default function PricingPage() {
         <SectionHeader
           id="oneoff-heading"
           index="03"
-          eyebrow="Single Productions"
-          title="One-Off Packages"
-          lead="Book a shoot when you need one. Priced per production, delivered, done — no commitment past the project."
+          eyebrow="One-Time Projects"
+          title="Auto & Personal"
+          lead="Single bookings for a car, a build, or a one-off job. Priced per production, delivered, done — no commitment past the project."
         />
 
         <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 lg:grid-cols-3">
@@ -252,8 +252,8 @@ export default function PricingPage() {
         <SectionHeader
           id="monthly-heading"
           index="04"
-          eyebrow="Recurring Partnership"
-          title="Monthly Content"
+          eyebrow="Ongoing Content"
+          title="Business Monthly"
           lead="One shoot builds a campaign. A schedule builds a brand. A monthly package is a standing production slot — the same standard as any single shoot, booked on a rhythm — so there is always something new to publish and one consistent look running through all of it."
         />
 
