@@ -32,7 +32,15 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | Automotive & Commercial Video Production`,
+    /*
+      The market belongs in the home title.
+      ────────────────────────────────────────────────────────────────────────
+      Local search weighs the title heavily, and this is the page that ranks
+      for "videographer greenville sc". Kept to one place name rather than a
+      list: a title reading like a service area is the thing that looks like
+      keyword stuffing to a reader and to Google alike.
+    */
+    default: `${site.name} | Video Production in Greenville, SC`,
     template: `%s — ${site.name}`,
   },
   description: site.description,

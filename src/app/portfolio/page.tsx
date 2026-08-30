@@ -6,7 +6,7 @@ import { FilmStrip } from "@/components/portfolio/film-strip";
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
-    "Automotive, commercial, and photography work by 508 Filmzz — finished commercials and every frame from the archive, on one page.",
+    "Automotive, commercial and photography work by 508 Filmzz, a video production company in Greenville, SC — finished commercials and every frame from the archive, on one page.",
   alternates: { canonical: "/portfolio" },
 };
 
