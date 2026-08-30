@@ -14,6 +14,7 @@ import {
   valueProps,
   valueStatement,
   newClientOffer,
+  commitmentTiers,
   faqs,
   site,
 } from "@/data/site";
@@ -359,6 +360,45 @@ export default function PricingPage() {
               </p>
             </div>
           </div>
+        </Reveal>
+
+        {/*
+          Term lengths.
+          ──────────────────────────────────────────────────────────────────
+          "Billed monthly" is stated on the block rather than in a footnote:
+          "12 months" beside a saving reads as a sum due today, and a client who
+          thinks a year is being asked for up front stops reading before the
+          correction. The percentages come from the data, so the labels cannot
+          drift from what is actually offered.
+        */}
+        <Reveal delay={0.1}>
+          <div className="mt-12 grid gap-px border-t border-l border-line bg-line sm:grid-cols-3">
+            {commitmentTiers.map((tier) => (
+              <div key={tier.term} className="bg-ink p-7 md:p-8">
+                <p className="display text-3xl leading-none md:text-[2rem]">
+                  {tier.term}
+                </p>
+                <p
+                  className={cn(
+                    "mt-3 text-[0.72rem] font-medium tracking-[0.18em] uppercase",
+                    tier.saving > 0 ? "text-accent" : "text-faint"
+                  )}
+                >
+                  {tier.saving > 0
+                    ? `Save ${Math.round(tier.saving * 100)}% monthly`
+                    : "Standard rate"}
+                </p>
+                <p className="mt-4 text-[0.82rem] leading-relaxed text-mute">
+                  {tier.note}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-faint">
+            Longer commitments receive preferred monthly pricing. Every package is
+            billed monthly — nothing is charged up front for the full term.
+          </p>
         </Reveal>
 
         <Reveal delay={0.1}>

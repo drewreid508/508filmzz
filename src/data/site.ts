@@ -109,13 +109,21 @@ export const closedDays = ["Sunday"] as const;
  */
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Work", href: "/portfolio" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "Services", href: "/services" },
-  { label: "Drone", href: "/drone" },
-  { label: "About", href: "/about" },
   { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
+
+/*
+  Drone is off the nav, not deleted.
+
+  Six items is the most a phone header carries without wrapping, and drone is a
+  service rather than a section — it is reached from Services and from the
+  homepage vertical grid, both of which still link to /drone. The page, its
+  copy and its route are untouched.
+*/
 
 export type Service = {
   id: string;
@@ -488,6 +496,22 @@ export const newClientOffer = {
   ],
   cta: "Start Your Monthly Content",
 };
+
+/**
+ * Longer commitments, better monthly rate.
+ *
+ * `saving` is a fraction so the copy and the arithmetic cannot drift — the
+ * label under each term is generated from it, not typed alongside it.
+ *
+ * Billing is monthly in every case. That is stated on the block itself because
+ * "12 months" next to a price reads as a figure due today, and a client who
+ * thinks they are being asked for a year up front stops reading.
+ */
+export const commitmentTiers = [
+  { term: "3 months", saving: 0, note: "The standard minimum on every monthly package." },
+  { term: "6 months", saving: 0.05, note: "A half-year of consistent output, at a preferred rate." },
+  { term: "12 months", saving: 0.1, note: "A full year of coverage, at the best monthly rate offered." },
+];
 
 /** Shown under the monthly grid, same job as `pricingNote` above. */
 export const monthlyNote =

@@ -135,26 +135,31 @@ export function Hero() {
           transition={{ delay: 0.72, duration: 1, ease: EASE }}
         >
           <p className="body-lg max-w-lg text-balance">
-            Automotive filmmaking, commercial content, photography, and aerial
-            production built to make your brand stand out.
+            Cinematic video content that makes businesses, brands, vehicles and
+            projects impossible to ignore.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+            {/*
+              Booking is the primary action, so it gets the solid button.
+              Previously the filled button sent people to the portfolio, which
+              is the thing they are already looking at.
+            */}
             <Magnetic
-              href="/portfolio"
+              href="/contact"
               variant="solid"
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              View Work
+              Book a Shoot
             </Magnetic>
             <Magnetic
-              href="/contact"
+              href="/portfolio"
               variant="outline"
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              Book a Shoot
+              View My Work
             </Magnetic>
           </div>
         </motion.div>
