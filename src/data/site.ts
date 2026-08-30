@@ -322,6 +322,101 @@ export const packages: Package[] = [
   },
 ];
 
+/**
+ * ── EDIT ME: MONTHLY CONTENT ───────────────────────────────────────────────
+ * The recurring side of the business, kept deliberately separate from
+ * `packages` above. A one-off is a project; this is a partnership, and mixing
+ * the two in one grid makes a monthly figure look like a single shoot's price.
+ *
+ *   price     the headline figure, or null for "Custom quote"
+ *   featured  highlights one card — keep it to a single tier
+ */
+export type MonthlyPackage = {
+  id: string;
+  name: string;
+  /** null renders as "Custom quote" with no "Starting at" or "/month" label. */
+  price: string | null;
+  summary: string;
+  includes: string[];
+  featured?: boolean;
+};
+
+export const monthlyPackages: MonthlyPackage[] = [
+  {
+    id: "starter",
+    name: "Monthly Starter",
+    price: "$700+",
+    summary:
+      "For businesses that need consistent content without a huge production schedule.",
+    includes: [
+      "1 shoot per month",
+      "2–3 hour production session",
+      "2 edited vertical videos",
+      "Rolling & static coverage",
+      "Basic photography",
+      "Colour grade & sound design",
+      "Ready-to-post content",
+    ],
+  },
+  {
+    id: "growth",
+    name: "Monthly Growth",
+    price: "$1,000+",
+    summary:
+      "Built for businesses that want to stay active on social media throughout the month.",
+    includes: [
+      "2 shoots per month",
+      "Rolling & tracking shots",
+      "4–6 edited vertical videos",
+      "Photography included",
+      "Drone coverage when needed",
+      "Multiple locations / vehicles",
+      "Colour grade & sound design",
+      "Social-ready delivery",
+    ],
+    featured: true,
+  },
+  {
+    id: "full-coverage",
+    name: "Monthly Full Coverage",
+    price: "$1,500+",
+    summary:
+      "Full-service monthly content for businesses that want their brand consistently filmed at a higher level.",
+    includes: [
+      "2–4 production days per month",
+      "Full automotive coverage",
+      "Rolling, tracking & detail shots",
+      "Drone coverage",
+      "Professional photography",
+      "6–10+ social videos",
+      "Hero / brand film",
+      "Motion graphics",
+      "Full colour grade & sound design",
+    ],
+  },
+  {
+    id: "custom",
+    name: "Custom Monthly",
+    price: null,
+    summary: "For brands that need a completely custom content schedule.",
+    includes: [
+      "Custom shoot schedule",
+      "Creative planning",
+      "Cars, products, people & locations",
+      "Rolling / vehicle coverage",
+      "Drone production",
+      "Photography",
+      "Social media content",
+      "Commercial / brand films",
+      "Custom deliverables",
+    ],
+  },
+];
+
+/** Shown under the monthly grid, same job as `pricingNote` above. */
+export const monthlyNote =
+  "Every monthly package is custom quoted based on shoot frequency, production time, locations, and deliverables.";
+
 /** Shown under the pricing grid so the numbers are never mistaken for quotes. */
 export const pricingNote =
   "Every project is custom quoted on shoot time, location, and deliverables. These are starting points — tell me what you have in mind and I'll give you a real number.";

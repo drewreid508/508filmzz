@@ -2,17 +2,136 @@ import type { Metadata } from "next";
 import { Check } from "lucide-react";
 
 import { PageHero } from "@/components/ui/page-hero";
+import { SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/ui/magnetic";
-import { packages, pricingNote, faqs, site } from "@/data/site";
+import {
+  packages,
+  monthlyPackages,
+  pricingNote,
+  monthlyNote,
+  faqs,
+  site,
+} from "@/data/site";
 import { cn, pad } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Starting rates for social content, automotive production, commercial production, drone coverage, and full content packages. Every project custom quoted.",
+    "One-off production packages for social, automotive, commercial and drone work, plus monthly content partnerships from $700. Every project custom quoted.",
   alternates: { canonical: "/pricing" },
 };
+
+/**
+ * One card, used by both grids.
+ *
+ * The two sections have to read as siblings — same rule, same numbering, same
+ * button — or the monthly tiers look like a bolted-on afterthought. Sharing the
+ * component is what guarantees that, rather than two copies drifting apart the
+ * first time either is edited.
+ */
+function PriceCard({
+  index,
+  name,
+  price,
+  summary,
+  includes,
+  featured,
+  /** Appended after the figure. Monthly tiers pass "/month"; one-offs pass none. */
+  cadence,
+}: {
+  index: number;
+  name: string;
+  price: string | null;
+  summary: string;
+  includes: string[];
+  featured?: boolean;
+  cadence?: string;
+}) {
+  return (
+    <Reveal
+      delay={(index % 3) * 0.06}
+      className={cn(
+        "relative flex flex-col justify-between bg-ink p-8 md:p-10",
+        featured && "bg-ink-2"
+      )}
+    >
+      {featured && (
+        <span aria-hidden="true" className="absolute top-0 left-0 h-px w-full bg-accent" />
+      )}
+
+      <div>
+        <div className="mb-7 flex items-start justify-between gap-4">
+          <p className="eyebrow">{pad(index + 1)}</p>
+          {featured && (
+            <span className="border border-accent px-2.5 py-1 text-[0.58rem] font-medium tracking-[0.18em] text-accent uppercase">
+              Most booked
+            </span>
+          )}
+        </div>
+
+        <h3 className="display text-3xl leading-none md:text-[2.1rem]">{name}</h3>
+
+        {/*
+          A null price is a real state, not a missing one — the custom tier has
+          no figure to start from. It gets the same visual weight as a number so
+          the card does not read as unfinished next to the priced ones.
+        */}
+        {price ? (
+          <>
+            <p className="mt-5 text-[0.6rem] tracking-[0.22em] text-faint uppercase">
+              Starting at
+            </p>
+            <p className="display mt-1 flex items-baseline gap-1.5 text-5xl leading-none text-bone md:text-6xl xl:text-[3.4rem]">
+              {price}
+              {cadence && (
+                <span className="text-lg tracking-normal text-faint md:text-xl">
+                  {cadence}
+                </span>
+              )}
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="mt-5 text-[0.6rem] tracking-[0.22em] text-faint uppercase">
+              Priced per brand
+            </p>
+            <p className="display mt-1 text-4xl leading-none text-bone md:text-5xl xl:text-[2.6rem]">
+              Custom quote
+            </p>
+          </>
+        )}
+
+        <p className="mt-5 text-sm leading-relaxed text-mute">{summary}</p>
+
+        <ul className="mt-7 flex flex-col gap-2.5 border-t border-line pt-6">
+          {includes.map((item) => (
+            <li key={item} className="flex items-start gap-3 text-[0.82rem] text-mute">
+              <Check
+                size={12}
+                strokeWidth={2}
+                aria-hidden="true"
+                className="mt-1 shrink-0 text-accent"
+              />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-9">
+        <Magnetic
+          href="/contact"
+          variant={featured ? "solid" : "outline"}
+          wrapperClassName="w-full"
+          className="w-full"
+        >
+          Get a Quote
+        </Magnetic>
+      </div>
+    </Reveal>
+  );
+}
 
 export default function PricingPage() {
   return (
@@ -21,88 +140,85 @@ export default function PricingPage() {
         index="01"
         eyebrow="Investment"
         title="Pricing"
-        lead="Straight starting points, not a maze of tiers. Every project is quoted on shoot time, location, and what you need delivered — so you always know what you're paying for."
+        lead="Two ways to work together: book a single production, or put the camera on a schedule. Every project is quoted on shoot time, location, and what you need delivered — so you always know what you're paying for."
       />
 
-      {/* ── Packages ──────────────────────────────────────────────────────── */}
-      <section className="shell pb-16 md:pb-20" aria-label="Packages">
-        <div className="grid gap-px border-t border-l border-line bg-line md:grid-cols-2 lg:grid-cols-3">
+      {/* ── One-off packages ──────────────────────────────────────────────── */}
+      <section className="shell pb-16 md:pb-24" aria-labelledby="oneoff-heading">
+        <SectionHeader
+          id="oneoff-heading"
+          index="02"
+          eyebrow="Single Productions"
+          title="One-Off Packages"
+          lead="Book a shoot when you need one. Priced per production, delivered, done — no commitment past the project."
+        />
+
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 lg:grid-cols-3">
           {packages.map((pkg, i) => (
-            <Reveal
+            <PriceCard
               key={pkg.id}
-              delay={(i % 3) * 0.06}
-              className={cn(
-                "relative flex flex-col justify-between bg-ink p-8 md:p-10",
-                pkg.featured && "bg-ink-2"
-              )}
-            >
-              {pkg.featured && (
-                <span
-                  aria-hidden="true"
-                  className="absolute top-0 left-0 h-px w-full bg-accent"
-                />
-              )}
-
-              <div>
-                <div className="mb-7 flex items-start justify-between gap-4">
-                  <p className="eyebrow">{pad(i + 1)}</p>
-                  {pkg.featured && (
-                    <span className="border border-accent px-2.5 py-1 text-[0.58rem] font-medium tracking-[0.18em] text-accent uppercase">
-                      Most booked
-                    </span>
-                  )}
-                </div>
-
-                <h2 className="display text-3xl leading-none md:text-[2.1rem]">
-                  {pkg.name}
-                </h2>
-
-                <p className="mt-5 flex items-baseline gap-2">
-                  <span className="text-[0.6rem] tracking-[0.22em] text-faint uppercase">
-                    Starting at
-                  </span>
-                </p>
-                <p className="display mt-1 text-6xl leading-none text-bone md:text-7xl">
-                  {pkg.price}
-                </p>
-
-                <p className="mt-5 text-sm leading-relaxed text-mute">{pkg.summary}</p>
-
-                <ul className="mt-7 flex flex-col gap-2.5 border-t border-line pt-6">
-                  {pkg.includes.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-3 text-[0.82rem] text-mute"
-                    >
-                      <Check
-                        size={12}
-                        strokeWidth={2}
-                        aria-hidden="true"
-                        className="mt-1 shrink-0 text-accent"
-                      />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-9">
-                <Magnetic
-                  href="/contact"
-                  variant={pkg.featured ? "solid" : "outline"}
-                  wrapperClassName="w-full"
-                  className="w-full"
-                >
-                  Get a Quote
-                </Magnetic>
-              </div>
-            </Reveal>
+              index={i}
+              name={pkg.name}
+              price={pkg.price}
+              summary={pkg.summary}
+              includes={pkg.includes}
+              featured={pkg.featured}
+            />
           ))}
+
+          {/*
+            Fills the hole five cards leave in the last row.
+
+            The hairline rules between cards are the container's background
+            showing through a 1px gap, so an empty cell shows that background as
+            a solid grey panel — a card-shaped block with nothing in it. One
+            filler covers both breakpoints: five items leave exactly one gap in
+            a two-column grid and one in a three-column grid. Single column
+            needs none, hence hidden below md.
+          */}
+          <div aria-hidden="true" className="hidden bg-ink md:block" />
         </div>
 
         <Reveal delay={0.1}>
           <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">
             {pricingNote}
+          </p>
+        </Reveal>
+      </section>
+
+      {/* ── Monthly content ───────────────────────────────────────────────── */}
+      <section className="shell pb-16 md:pb-24" aria-labelledby="monthly-heading">
+        <SectionHeader
+          id="monthly-heading"
+          index="03"
+          eyebrow="Recurring Partnership"
+          title="Monthly Content"
+          lead="One shoot builds a campaign. A schedule builds a brand. Monthly clients get the same production standard on a repeating basis, so there is always something new to publish and a consistent look across all of it."
+        />
+
+        {/*
+          Two across before four. These carry longer lists than the one-off
+          cards, and four columns below 1280px squeezes the price and wraps the
+          checklist mid-phrase.
+        */}
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 xl:grid-cols-4">
+          {monthlyPackages.map((pkg, i) => (
+            <PriceCard
+              key={pkg.id}
+              index={i}
+              name={pkg.name}
+              price={pkg.price}
+              summary={pkg.summary}
+              includes={pkg.includes}
+              featured={pkg.featured}
+              cadence="/mo"
+            />
+          ))}
+        </div>
+
+        <Reveal delay={0.1}>
+          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">
+            {monthlyNote}
           </p>
         </Reveal>
       </section>
@@ -116,8 +232,8 @@ export default function PricingPage() {
               Get a custom quote<span className="text-accent">.</span>
             </p>
             <p className="body-lg mt-5 max-w-lg">
-              Multi-car shoots, monthly content, dealership retainers, and full
-              campaigns are all quoted per project.
+              Multi-car shoots, dealership retainers, launch campaigns, and
+              schedules that do not fit a tier are all quoted per brand.
             </p>
           </div>
           <div className="flex flex-col gap-3">

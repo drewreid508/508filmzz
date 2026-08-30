@@ -48,6 +48,16 @@ number wrong.
 
 The line under the grid is `pricingNote` in the same file.
 
+### Monthly packages
+
+`src/data/site.ts` → `monthlyPackages`, same shape with one difference: `price`
+may be `null`, which renders "Custom quote" instead of a figure. The closing
+line is `monthlyNote`.
+
+Both grids on `/pricing` render through one shared `PriceCard`, so a change to
+the card's look applies to one-off and monthly together and they cannot drift
+apart.
+
 ---
 
 ## Change your email or social links
