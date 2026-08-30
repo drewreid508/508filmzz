@@ -23,7 +23,7 @@ export function isPromoCode(input: string): boolean {
 export const FIRST_MONTH_DISCOUNT = 0.15;
 
 /** Months a monthly package runs before it can go month-to-month. */
-export const MINIMUM_MONTHS = 3;
+export const MINIMUM_MONTHS = 2;
 
 /**
  * Pulls the number out of a price string and applies the discount, preserving

@@ -232,7 +232,8 @@ export const capabilities = [
 export type Package = {
   id: string;
   name: string;
-  price: string;
+  /** null renders as "Custom quote" — the Custom project has no figure to start from. */
+  price: string | null;
   summary: string;
   includes: string[];
   featured?: boolean;
@@ -241,88 +242,130 @@ export type Package = {
 export const packages: Package[] = [
   {
     id: "social",
-    name: "Social Content",
+    name: "Social Media Reel",
     price: "$200+",
-    summary: "Vertical-first content built to run on Reels, TikTok and Shorts.",
+    summary:
+      "Professionally filmed and edited short-form content ready for social media.",
     includes: [
-      "Half-day shoot",
-      "Vertical 9:16 cutdowns",
-      "Colour grade & sound design",
+      "Filmed on location",
+      "Edited vertical reel",
+      "Captions and music",
       "Ready to post",
     ],
   },
   {
     id: "automotive",
-    name: "Automotive Production",
+    name: "Automotive Video",
     price: "$300+",
-    summary: "Rolling, static and detail coverage for a build, a car or a shop.",
+    summary:
+      "Cinematic automotive content for vehicles, builds, dealerships, detail shops, and events.",
     includes: [
-      "Rolling & tracking shots",
+      "Rolling and static coverage",
       "Detail and hero frames",
-      "Full edit and grade",
-      "Social cutdowns included",
+      "Full edit, colour grade and sound",
+      "Vertical cutdowns included",
     ],
     featured: true,
   },
   {
     id: "commercial",
-    name: "Commercial Production",
+    name: "Commercial Video",
     price: "$500+",
-    summary: "A full brand film for a business, product or campaign.",
+    summary:
+      "Professional promotional video content for businesses, products, and services.",
     includes: [
-      "Concept and shot list",
+      "Planned before the shoot",
       "Full production day",
-      "Motion graphics",
-      "Master plus social cutdowns",
+      "Full edit, colour grade and sound",
+      "Master plus vertical cutdowns",
     ],
   },
   {
-    id: "full",
-    name: "Full Content Package",
-    price: "$750+",
-    summary: "Ground, air and social — one shoot, everything delivered.",
+    id: "custom-project",
+    name: "Custom Project",
+    price: null,
+    summary:
+      "Anything outside the three above — a bigger production, an event, or a one-off idea.",
     includes: [
-      "Full production day",
-      "Drone coverage included",
-      "Master film plus social cutdowns",
-      "Multiple deliverables",
+      "Scoped around the job",
+      "Quoted before anything is booked",
     ],
   },
 ];
 
 /**
- * ── EDIT ME: THE CASE FOR IT ───────────────────────────────────────────────
- * What the money buys, in business terms rather than production terms. Sits
- * above the prices, because a figure only means something once the reader knows
+ * ── EDIT ME: WHY A BUSINESS PAYS FOR THIS ──────────────────────────────────
+ * Four reasons, in the language a business owner already uses. This is the
+ * homepage answer to "why is a video worth money", and it sits before any
+ * price on the page, because a figure means nothing until the reader knows
  * what it is for.
  *
- * Deliberately no numbers, no guarantees, no invented results — nothing here
- * promises customers, sales, or views. Every line is a description of the work
- * and what it is built to do, which is the only honest claim available and the
- * only one a serious business owner believes anyway.
+ * Every line describes the work or what it is built to do. Nothing here
+ * promises customers, sales, followers or growth — those are outcomes no
+ * filmmaker controls, and a business owner who has been sold one before stops
+ * believing the rest of the page the moment they read it.
  */
-export const valueProps = [
+export const benefits = [
   {
-    title: "Get noticed",
-    body: "Content shot and cut for the platforms your customers already scroll, not repurposed from a widescreen edit.",
-  },
-  {
-    title: "Build trust",
-    body: "Your actual work, filmed properly. People hire what they can already picture you doing for them.",
-  },
-  {
-    title: "Look premium",
-    body: "Cinema glass, controlled light, and a grade built in the timeline. The look does the arguing about your price for you.",
+    title: "Get attention",
+    body: "Stop the scroll with professional videos that showcase what makes your business different.",
   },
   {
     title: "Stay consistent",
-    body: "One shoot delivers a master plus vertical cutdowns and stills — enough to keep posting without going quiet.",
+    body: "Get a steady supply of ready-to-post content instead of constantly wondering what to post.",
   },
   {
-    title: "Turn views into contact",
-    body: "Every piece is cut toward one action: a call, a message, a booking. Attention is only worth what it converts into.",
+    title: "Look professional",
+    body: "High-quality content helps your business look established, trustworthy, and worth choosing.",
+  },
+  {
+    title: "Turn attention into customers",
+    body: "Give potential customers a reason to learn more, visit your page, call, or book.",
   },
 ];
+
+/**
+ * The division of labour, stated plainly.
+ *
+ * It closes the benefits grid because it answers the objection those four
+ * cards raise: yes, but who does all that? One person, and not you.
+ */
+export const ownerPledge = {
+  lines: ["You run the business.", "I'll handle the content."],
+  body: "I plan the shots, film the footage, edit the videos, and deliver content that's ready to post.",
+  cta: "Book a Shoot",
+};
+
+/**
+ * ── EDIT ME: WHAT THE MONEY ACTUALLY BUYS ──────────────────────────────────
+ * The stages between hiring me and having something to post. It exists because
+ * the thing being sold looks, from outside, like a thirty-second video — and a
+ * thirty-second video sounds like thirty seconds of work.
+ *
+ * Kept to single words. This is a chain to be glanced at, not read; the moment
+ * a stage needs a sentence it stops working as a diagram. `process` below
+ * carries the same four middle stages with the detail, for anyone who wants it.
+ */
+export const contentPipeline = [
+  "Ideas",
+  "Planning",
+  "Filming",
+  "Editing",
+  "Ready-to-post content",
+];
+
+/** The point of the chain above, in one line. No numbers, nothing promised. */
+export const pipelineNote =
+  "One filming session can give your business weeks of professional content.";
+
+/**
+ * Why a schedule beats a one-off, for anyone weighing the monthly tiers.
+ */
+export const batchNote = {
+  title: "One shoot can become weeks of content.",
+  body: "I batch your content so you can stay consistent online without having to constantly figure out what to post.",
+};
+
 
 /** The sign-off under the value grid. First person, like the rest of the site. */
 export const valueStatement =
@@ -342,6 +385,13 @@ export type MonthlyPackage = {
   name: string;
   /** Shown as its own line so a buyer can compare tiers without reading lists. */
   bestFor?: string;
+  /*
+    Bare numerals, with the unit carried by the card's label.
+
+    They are set at display size in a half-width box: "1 shoot / month" wrapped
+    onto two lines at 375px and overlapped its own caption. A numeral cannot
+    wrap, so the box can never overflow however many tiers are added.
+  */
   shoots?: string;
   reels?: string;
   /*
@@ -350,6 +400,10 @@ export type MonthlyPackage = {
     which is what makes the difference between Bronze and Silver read instantly.
   */
   drone?: boolean;
+  /** Photo stills, the second thing Bronze does not get. Same reasoning as drone. */
+  stills?: boolean;
+  /** Shown as the standout ribbon. One tier only, or it stops meaning anything. */
+  popular?: boolean;
   /** null renders as "Custom quote" with no "Starting at" or "/month" label. */
   price: string | null;
   summary: string;
@@ -361,72 +415,78 @@ export const monthlyPackages: MonthlyPackage[] = [
   {
     id: "bronze",
     name: "Bronze",
-    price: "$700+",
+    price: "$399",
     bestFor: "Businesses starting to post consistently",
-    shoots: "1 shoot per month",
-    reels: "2 edited reels",
+    shoots: "1",
+    reels: "8",
     drone: false,
-    summary: "For businesses that need consistent content without a heavy production schedule.",
+    stills: false,
+    summary: "Consistent content without a heavy production schedule.",
     includes: [
-      "1 shoot per month",
-      "2 edited vertical reels",
-      "Rolling & static coverage",
-      "Colour grade & sound design",
-      "Ready-to-post delivery",
+      "8 professionally edited reels",
+      "1 batch filming session",
+      "Captions + music",
+      "Content planning",
+      "1 revision round",
+      "Ready-to-post vertical videos",
     ],
   },
   {
     id: "silver",
     name: "Silver",
-    price: "$1,000+",
+    price: "$649",
     bestFor: "Businesses staying active on social all month",
-    shoots: "2 shoots per month",
-    reels: "4–6 edited reels",
+    shoots: "2",
+    reels: "12",
     drone: true,
-    summary: "Built for businesses that want to stay in front of customers throughout the month.",
+    stills: true,
+    summary: "Enough content to stay in front of customers all month.",
     includes: [
-      "2 shoots per month",
-      "4–6 edited vertical reels",
-      "Rolling & tracking shots",
-      "Multiple locations or vehicles",
-      "Colour grade & sound design",
-      "Social-ready delivery",
+      "12 professionally edited reels",
+      "2 batch filming sessions",
+      "Drone content included",
+      "Professional photo stills included",
+      "Captions + music",
+      "Content planning",
+      "1 revision round",
+      "Ready-to-post vertical videos",
     ],
     featured: true,
+    popular: true,
   },
   {
     id: "gold",
     name: "Gold",
-    price: "$1,500+",
+    price: "$999",
     bestFor: "Businesses that want a brand, not just posts",
-    shoots: "2–4 production days per month",
-    reels: "6–10+ edited reels",
+    shoots: "3",
+    reels: "16",
     drone: true,
-    summary: "Full-service monthly content for businesses that want their brand filmed at a higher level.",
+    stills: true,
+    summary: "The most content, the most filming days, first pick of the calendar.",
     includes: [
-      "2–4 production days per month",
-      "6–10+ edited vertical reels",
-      "Rolling, tracking & detail shots",
-      "Hero / brand film",
-      "Motion graphics",
-      "Full colour grade & sound design",
+      "16 professionally edited reels",
+      "3 batch filming sessions",
+      "Drone content included",
+      "Professional photo stills included",
+      "Priority scheduling",
+      "Captions + music",
+      "Content planning",
+      "1 revision round",
+      "Ready-to-post vertical videos",
     ],
   },
   {
     id: "custom",
     name: "Custom",
     price: null,
-    bestFor: "Brands with their own schedule and goals",
-    shoots: "Custom shoot schedule",
-    reels: "Custom deliverables",
-    drone: true,
-    summary: "Built around your business. Tell us what you need and we'll build a package around your goals, content needs and budget.",
+    bestFor: "Built around your business",
+    summary:
+      "For businesses that need a custom amount of content, special projects, different shoot schedules, or something outside the standard packages.",
     includes: [
       "Custom number of videos",
       "Custom shoot schedule",
-      "Drone content",
       "Custom deliverables",
-      "Custom project requirements",
     ],
   },
 ];
@@ -440,8 +500,8 @@ export const monthlyPackages: MonthlyPackage[] = [
  * buys footage, two months start building a library and a recognisable look.
  */
 export const monthlyCommitment = {
-  label: "3-Month Minimum",
-  body: "Monthly content partnerships run on a three-month minimum. After the initial term, packages continue month-to-month unless your agreement says otherwise.",
+  label: "2-Month Minimum",
+  body: "Monthly packages run on a two-month minimum. After that they continue month to month unless your agreement says otherwise.",
   custom: "Custom packages may carry different terms, set by the scope of the work.",
 };
 
@@ -459,11 +519,11 @@ export const monthlyCommitment = {
 export const newClientOffer = {
   eyebrow: "New Monthly Clients",
   label: "Your first month, reduced",
-  body: "Start a monthly content package and your first month is billed at a reduced rate. Months two and three run at the standard quoted price, and the package continues month-to-month after that.",
+  body: "Start a monthly content package and your first month is billed at a reduced rate. The rest of the term runs at the standard quoted price, and the package continues month to month after that.",
   terms: [
     "New monthly clients only",
     "Applies to the first month of a package",
-    "Requires the three-month minimum",
+    "Requires the two-month minimum",
     "Your exact rate comes from your quote",
   ],
   cta: "Start Your Monthly Content",
@@ -480,7 +540,7 @@ export const newClientOffer = {
  * thinks they are being asked for a year up front stops reading.
  */
 export const commitmentTiers = [
-  { term: "3 months", saving: 0, note: "The standard minimum on every monthly package." },
+  { term: "2 months", saving: 0, note: "The standard minimum on every monthly package." },
   { term: "6 months", saving: 0.05, note: "A half-year of consistent output, at a preferred rate." },
   { term: "12 months", saving: 0.1, note: "A full year of coverage, at the best monthly rate offered." },
 ];
@@ -497,7 +557,7 @@ export const pricingNote =
 export const process = [
   {
     step: "Plan",
-    body: "We lock the story, the shot list, and the deliverables before a single frame is shot. No guessing on the day.",
+    body: "I lock the story, the shot list, and the deliverables before a single frame is shot. No guessing on the day.",
   },
   {
     step: "Film",

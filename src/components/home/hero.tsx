@@ -168,7 +168,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              View Our Work
+              View My Work
             </Magnetic>
           </div>
         </motion.div>

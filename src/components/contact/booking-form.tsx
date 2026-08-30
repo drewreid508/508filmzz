@@ -566,14 +566,23 @@ export function BookingForm() {
         </div>
 
         <Label index={13} htmlFor="message">
-          Message *
+          What do you need filmed? *
         </Label>
+        {/*
+          Renamed from "Message".
+          ────────────────────────────────────────────────────────────────────
+          A field called Message invites a greeting; this one has to come back
+          with the thing being filmed, because a quote cannot be written
+          without it. Asking the actual question is the whole change — the
+          placeholder then covers the rest, so a custom enquiry arrives with
+          everything a number can be built from in one field.
+        */}
         <textarea
           id="message"
           name="message"
           required
           rows={5}
-          placeholder="The vehicle, the business, or the season — and what you want the finished piece to do."
+          placeholder="The business, the vehicle, the product — what you want filmed, and anything else I should know."
           className={cn(fieldBase, "resize-none")}
           aria-invalid={Boolean(errors.message)}
         />

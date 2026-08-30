@@ -5,13 +5,14 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/ui/magnetic";
+import { MonthlyCard } from "@/components/pricing/monthly-card";
 import {
   packages,
   monthlyPackages,
   pricingNote,
   monthlyNote,
   monthlyCommitment,
-  valueProps,
+  benefits,
   valueStatement,
   newClientOffer,
   commitmentTiers,
@@ -19,7 +20,7 @@ import {
   site,
 } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
-import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
+import { DISCOUNT_LABEL } from "@/lib/offer";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -29,12 +30,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * One card, used by both grids.
+ * One one-off project card.
  *
- * The two sections have to read as siblings — same rule, same numbering, same
- * button — or the monthly tiers look like a bolted-on afterthought. Sharing the
- * component is what guarantees that, rather than two copies drifting apart the
- * first time either is edited.
+ * The monthly tiers used to share this component and no longer do — they carry
+ * reels, shoots, drone and stills, which a single booking has no equivalent
+ * for, and forcing both through one card meant half its props were dead on
+ * every render. They live in MonthlyCard now, which the homepage renders too,
+ * so the tiers still cannot drift between pages.
  */
 function PriceCard({
   index,
@@ -43,13 +45,8 @@ function PriceCard({
   summary,
   includes,
   featured,
-  /** Appended after the figure. Monthly tiers pass "/month"; one-offs pass none. */
+  /** Appended after the figure. Unused by the one-off grid, kept for clarity. */
   cadence,
-  showFirstMonth,
-  bestFor,
-  shoots,
-  reels,
-  drone,
 }: {
   index: number;
   name: string;
@@ -58,19 +55,7 @@ function PriceCard({
   includes: string[];
   featured?: boolean;
   cadence?: string;
-  /** Monthly tiers pass true; the reduced figure is derived, never written. */
-  showFirstMonth?: boolean;
-  bestFor?: string;
-  shoots?: string;
-  reels?: string;
-  /**
-   * Undefined on one-off cards, which have no tier to compare against. On the
-   * monthly tiers it is always a real boolean, because "no answer" and "no
-   * drone" have to look different — see the spec block below.
-   */
-  drone?: boolean;
 }) {
-  const firstMonth = showFirstMonth ? discountedPrice(price) : null;
   return (
     <Reveal
       delay={(index % 3) * 0.06}
@@ -125,86 +110,7 @@ function PriceCard({
           </>
         )}
 
-        {/*
-          The introductory rate, derived from the figure above rather than
-          written down. A discounted number stored separately is a number that
-          goes stale the first time a package price moves.
-        */}
-        {firstMonth && (
-          <p className="mt-3 text-[0.72rem] tracking-[0.06em] text-accent">
-            {firstMonth} first month for new clients
-          </p>
-        )}
-
         <p className="mt-5 text-sm leading-relaxed text-mute">{summary}</p>
-
-        {/*
-          The comparison block.
-          ────────────────────────────────────────────────────────────────────
-          Four facts in the same order on every tier, so the cards can be read
-          across rather than one at a time. A checklist alone cannot do this:
-          "2 shoots per month" buried at different heights in lists of
-          different lengths is not a comparison, it is four lists.
-
-          Drone is deliberately the loudest line on the card. It is the single
-          concrete thing Bronze does not get, and a client weighing $700
-          against $1,000 deserves to see the difference without reading twice —
-          so a yes is the accent colour with a filled marker, and a no is
-          stated plainly rather than left out. An omission looks like an
-          oversight; "Not included" looks like a decision.
-        */}
-        {(bestFor || shoots || reels || drone !== undefined) && (
-          <dl className="mt-7 flex flex-col gap-px border border-line bg-line">
-            {bestFor && (
-              <div className="bg-ink px-4 py-3.5">
-                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
-                  Best for
-                </dt>
-                <dd className="mt-1.5 text-[0.82rem] leading-snug text-mute">
-                  {bestFor}
-                </dd>
-              </div>
-            )}
-            {shoots && (
-              <div className="flex items-baseline justify-between gap-4 bg-ink px-4 py-3.5">
-                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
-                  Shoots
-                </dt>
-                <dd className="text-right text-[0.82rem] text-bone">{shoots}</dd>
-              </div>
-            )}
-            {reels && (
-              <div className="flex items-baseline justify-between gap-4 bg-ink px-4 py-3.5">
-                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
-                  Reels
-                </dt>
-                <dd className="text-right text-[0.82rem] text-bone">{reels}</dd>
-              </div>
-            )}
-            {drone !== undefined && (
-              <div className="flex items-center justify-between gap-4 bg-ink px-4 py-4">
-                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
-                  Drone
-                </dt>
-                <dd
-                  className={cn(
-                    "flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.14em] uppercase",
-                    drone ? "text-accent" : "text-faint"
-                  )}
-                >
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "h-1.5 w-1.5 shrink-0",
-                      drone ? "bg-accent" : "border border-line-strong"
-                    )}
-                  />
-                  {drone ? "Included" : "Not included"}
-                </dd>
-              </div>
-            )}
-          </dl>
-        )}
 
         <ul className="mt-7 flex flex-col gap-2.5 border-t border-line pt-6">
           {includes.map((item) => (
@@ -228,7 +134,7 @@ function PriceCard({
           wrapperClassName="w-full"
           className="w-full"
         >
-          {price ? "Book This Package" : "Request a Custom Quote"}
+          {price ? "Get a Quote" : "Get a Custom Quote"}
         </Magnetic>
       </div>
     </Reveal>
@@ -262,9 +168,9 @@ export default function PricingPage() {
           up: at five columns these bodies wrap to six or seven lines, which
           stops being scannable.
         */}
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-5">
-          {valueProps.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 5) * 0.05} className="bg-ink p-7 md:p-8">
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+          {benefits.map((item, i) => (
+            <Reveal key={item.title} delay={(i % 4) * 0.05} className="bg-ink p-7 md:p-8">
               <p className="eyebrow mb-5 text-accent">{pad(i + 1)}</p>
               <h3 className="display text-2xl leading-none md:text-[1.6rem]">
                 {item.title}
@@ -291,12 +197,12 @@ export default function PricingPage() {
         <SectionHeader
           id="oneoff-heading"
           index="03"
-          eyebrow="One-Time Projects"
-          title="Auto & Personal"
-          lead="Single bookings for a car, a build, or a one-off job. Priced per production, delivered, done — no commitment past the project."
+          eyebrow="Single Bookings"
+          title="One-Time Projects"
+          lead="Not ready for a monthly schedule? Book a single production instead. Priced per job, delivered, done — no commitment past the project."
         />
 
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 xl:grid-cols-4">
           {packages.map((pkg, i) => (
             <PriceCard
               key={pkg.id}
@@ -310,16 +216,10 @@ export default function PricingPage() {
           ))}
 
           {/*
-            Fills the hole five cards leave in the last row.
-
-            The hairline rules between cards are the container's background
-            showing through a 1px gap, so an empty cell shows that background as
-            a solid grey panel — a card-shaped block with nothing in it. One
-            filler covers both breakpoints: five items leave exactly one gap in
-            a two-column grid and one in a three-column grid. Single column
-            needs none, hence hidden below md.
+            No filler cell here any more. Four one-off packages divide evenly
+            into one, two and four columns, so no empty grid cell is left for
+            the container background to show through.
           */}
-          <div aria-hidden="true" className="hidden bg-ink md:block" />
         </div>
 
         <Reveal delay={0.1}>
@@ -335,8 +235,8 @@ export default function PricingPage() {
           id="monthly-heading"
           index="04"
           eyebrow="Ongoing Content"
-          title="Business Monthly"
-          lead="One shoot builds a campaign. A schedule builds a brand. A monthly package is a standing production slot — the same standard as any single shoot, booked on a rhythm — so there is always something new to publish and one consistent look running through all of it."
+          title="Monthly Content"
+          lead="Consistent content without the hassle. A monthly package is a standing production slot booked on a rhythm, so there is always something new to publish and one look running through all of it."
         />
 
         {/*
@@ -393,21 +293,7 @@ export default function PricingPage() {
 
         <div className="mt-12 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 xl:grid-cols-4">
           {monthlyPackages.map((pkg, i) => (
-            <PriceCard
-              key={pkg.id}
-              index={i}
-              name={pkg.name}
-              price={pkg.price}
-              summary={pkg.summary}
-              includes={pkg.includes}
-              featured={pkg.featured}
-              cadence="/mo"
-              showFirstMonth
-              bestFor={pkg.bestFor}
-              shoots={pkg.shoots}
-              reels={pkg.reels}
-              drone={pkg.drone}
-            />
+            <MonthlyCard key={pkg.id} pkg={pkg} index={i} />
           ))}
         </div>
 
@@ -436,9 +322,8 @@ export default function PricingPage() {
                 {monthlyCommitment.body}
               </p>
               <p className="text-sm leading-relaxed text-mute md:text-base">
-                The introductory rate applies to month one only. Months two and{" "}
-                {MINIMUM_MONTHS} are billed at the standard quoted price for your
-                package.
+                The introductory rate applies to month one only. The rest of the
+                term is billed at the standard quoted price for your package.
               </p>
               <p className="text-sm leading-relaxed text-faint">
                 {monthlyCommitment.custom}
