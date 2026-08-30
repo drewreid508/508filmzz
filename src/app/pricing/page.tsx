@@ -10,6 +10,7 @@ import {
   monthlyPackages,
   pricingNote,
   monthlyNote,
+  monthlyCommitment,
   faqs,
   site,
 } from "@/data/site";
@@ -193,7 +194,7 @@ export default function PricingPage() {
           index="03"
           eyebrow="Recurring Partnership"
           title="Monthly Content"
-          lead="One shoot builds a campaign. A schedule builds a brand. Monthly clients get the same production standard on a repeating basis, so there is always something new to publish and a consistent look across all of it."
+          lead="One shoot builds a campaign. A schedule builds a brand. A monthly package is a standing production slot — the same standard as any single shoot, booked on a rhythm — so there is always something new to publish and one consistent look running through all of it."
         />
 
         {/*
@@ -215,6 +216,37 @@ export default function PricingPage() {
             />
           ))}
         </div>
+
+        {/*
+          Terms, set out like any other part of the offer.
+
+          A boxed notice in a warning colour would read as small print and put a
+          question in the reader's mind at the exact moment they are weighing
+          the price. This uses the same label-left, copy-right rule the rest of
+          the page already uses for section headers, so it reads as one more
+          detail of the package — which is what it is. It sits below the cards
+          on purpose: it answers a question the prices raise, so it has to come
+          after them.
+        */}
+        <Reveal delay={0.08}>
+          <div className="mt-14 flex flex-col gap-6 border-y border-line py-10 md:flex-row md:items-start md:gap-16 md:py-12">
+            <div className="md:w-60 md:shrink-0">
+              <p className="eyebrow mb-3 text-accent">Commitment</p>
+              <h3 className="display text-3xl leading-none md:text-[2.1rem]">
+                {monthlyCommitment.label}
+              </h3>
+            </div>
+
+            <div className="flex max-w-2xl flex-col gap-3 md:pt-1">
+              <p className="text-sm leading-relaxed text-mute md:text-base">
+                {monthlyCommitment.body}
+              </p>
+              <p className="text-sm leading-relaxed text-faint">
+                {monthlyCommitment.custom}
+              </p>
+            </div>
+          </div>
+        </Reveal>
 
         <Reveal delay={0.1}>
           <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">

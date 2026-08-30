@@ -413,6 +413,20 @@ export const monthlyPackages: MonthlyPackage[] = [
   },
 ];
 
+/**
+ * Terms for the monthly packages only — never shown against the one-off tiers,
+ * which carry no commitment at all.
+ *
+ * Written as a term of the partnership rather than a restriction. A minimum is
+ * only worth stating because it is what makes the work compound: a single month
+ * buys footage, two months start building a library and a recognisable look.
+ */
+export const monthlyCommitment = {
+  label: "2-Month Minimum",
+  body: "Monthly content partnerships require a minimum 2-month commitment. After the initial term, packages continue month-to-month.",
+  custom: "Custom packages may carry different terms, set by the scope of the work.",
+};
+
 /** Shown under the monthly grid, same job as `pricingNote` above. */
 export const monthlyNote =
   "Every monthly package is custom quoted based on shoot frequency, production time, locations, and deliverables.";
