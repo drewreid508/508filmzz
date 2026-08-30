@@ -69,6 +69,8 @@ function status() {
     return t.getHandlerFunction() === "onBookingSubmit";
   });
 
+  var book = SpreadsheetApp.getActive();
+  Logger.log("Attached to Sheet : " + (book ? book.getName() : "NOTHING  <-- wrong project, see setup"));
   Logger.log("Trigger installed : " + (triggers.length ? "YES (" + triggers.length + ")" : "NO  <-- run setup"));
   Logger.log("Email to          : " + (inbox() || "NONE"));
   Logger.log("Carrier text to   : " + (SMS_TO || "NONE"));
@@ -82,6 +84,24 @@ function status() {
 }
 
 function setup() {
+  /*
+   * This script has to live INSIDE the bookings spreadsheet.
+   *
+   * Opened from the Sheet (Extensions → Apps Script) it is bound to that
+   * spreadsheet and getActive() returns it. Created standalone at script.new
+   * it is bound to nothing, getActive() returns null, and the trigger below
+   * cannot be created — which looks exactly like everything working and no
+   * notification ever arriving.
+   */
+  var book = SpreadsheetApp.getActive();
+  if (!book) {
+    throw new Error(
+      "This project is not attached to a spreadsheet, so it cannot watch for " +
+      "bookings. Open your booking form's responses Sheet, choose " +
+      "Extensions > Apps Script, paste this file there, and run setup again."
+    );
+  }
+
   // Clear first. Triggers stack silently, and a second one means two texts per
   // booking with no clue where the duplicate came from.
   var existing = ScriptApp.getProjectTriggers();
@@ -92,7 +112,7 @@ function setup() {
   }
 
   ScriptApp.newTrigger("onBookingSubmit")
-    .forSpreadsheet(SpreadsheetApp.getActive())
+    .forSpreadsheet(book)
     .onFormSubmit()
     .create();
 
