@@ -237,3 +237,88 @@
     animation: none;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Print
+   ──────────────────────────────────────────────────────────────────────────
+   The pricing page doubles as a leave-behind, so it has to survive a printer.
+
+   The screen design is near-black, which on paper is a solid sheet of toner
+   that most drivers render as grey mud and many print settings drop entirely —
+   taking the white text with it. So print flips to ink on white and lets the
+   accent carry what the dark ground carried on screen.
+
+   Everything that only makes sense on a screen goes: navigation, the sticky
+   book button, the grain overlay, the custom cursor, video players. Cards are
+   kept off page breaks, because a package split across two sheets reads as two
+   half-packages.
+*/
+@media print {
+  :root {
+    --color-ink: #ffffff;
+    --color-ink-2: #ffffff;
+    --color-surface: #ffffff;
+    --color-bone: #000000;
+    --color-mute: #333333;
+    --color-faint: #666666;
+    --color-line: #cccccc;
+    --color-line-strong: #999999;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Screen-only furniture. */
+  header[class*="fixed"],
+  nav,
+  footer,
+  .grain-overlay,
+  video,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Reveal animations start at opacity 0 — a printed page must not depend on
+     JavaScript having run, or the sheet comes out blank. */
+  * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  section {
+    padding-block: 0.6rem !important;
+    break-inside: avoid;
+  }
+
+  /* One package per block, never split across sheets. */
+  .grid > * {
+    break-inside: avoid;
+    border: 1px solid #ccc;
+  }
+
+  .grid {
+    gap: 0.35rem !important;
+    background: transparent !important;
+  }
+
+  a[href^="/"]::after {
+    content: "";
+  }
+
+  /* Buttons are dead ink on paper; keep the label, drop the fill. */
+  a[class*="bg-bone"] {
+    background: transparent !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+  }
+
+  .display {
+    color: #000 !important;
+  }
+}

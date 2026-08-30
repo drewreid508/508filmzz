@@ -11,6 +11,8 @@ import {
   pricingNote,
   monthlyNote,
   monthlyCommitment,
+  valueProps,
+  valueStatement,
   faqs,
   site,
 } from "@/data/site";
@@ -144,11 +146,52 @@ export default function PricingPage() {
         lead="Two ways to work together: book a single production, or put the camera on a schedule. Every project is quoted on shoot time, location, and what you need delivered — so you always know what you're paying for."
       />
 
+      {/* ── Why it is worth paying for ────────────────────────────────────── */}
+      <section className="shell pb-16 md:pb-24" aria-labelledby="value-heading">
+        <SectionHeader
+          id="value-heading"
+          index="02"
+          eyebrow="What It's For"
+          title="Turn Views Into Customers"
+          lead="Your business deserves more than a video that looks good. Every piece is built to do a job — get seen, earn trust, and end in someone getting in touch."
+        />
+
+        {/*
+          The bordered five-across grid is the same construction the Drone page
+          uses for its inclusions, so this reads as part of the site rather than
+          a sales page dropped into it. One across on a phone and two from 640px
+          up: at five columns these bodies wrap to six or seven lines, which
+          stops being scannable.
+        */}
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-5">
+          {valueProps.map((item, i) => (
+            <Reveal key={item.title} delay={(i % 5) * 0.05} className="bg-ink p-7 md:p-8">
+              <p className="eyebrow mb-5 text-accent">{pad(i + 1)}</p>
+              <h3 className="display text-2xl leading-none md:text-[1.6rem]">
+                {item.title}
+              </h3>
+              <p className="mt-3.5 text-[0.82rem] leading-relaxed text-mute">
+                {item.body}
+              </p>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.12}>
+          <p className="display mt-14 max-w-4xl text-[7vw] leading-[0.98] text-balance sm:text-[4.4vw] md:text-[2.7vw]">
+            {valueStatement}
+          </p>
+          <p className="eyebrow mt-6">
+            508 Filmzz <span className="text-accent">—</span> {site.tagline}
+          </p>
+        </Reveal>
+      </section>
+
       {/* ── One-off packages ──────────────────────────────────────────────── */}
       <section className="shell pb-16 md:pb-24" aria-labelledby="oneoff-heading">
         <SectionHeader
           id="oneoff-heading"
-          index="02"
+          index="03"
           eyebrow="Single Productions"
           title="One-Off Packages"
           lead="Book a shoot when you need one. Priced per production, delivered, done — no commitment past the project."
@@ -191,7 +234,7 @@ export default function PricingPage() {
       <section className="shell pb-16 md:pb-24" aria-labelledby="monthly-heading">
         <SectionHeader
           id="monthly-heading"
-          index="03"
+          index="04"
           eyebrow="Recurring Partnership"
           title="Monthly Content"
           lead="One shoot builds a campaign. A schedule builds a brand. A monthly package is a standing production slot — the same standard as any single shoot, booked on a rhythm — so there is always something new to publish and one consistent look running through all of it."
@@ -255,30 +298,58 @@ export default function PricingPage() {
         </Reveal>
       </section>
 
-      {/* ── Custom quote ──────────────────────────────────────────────────── */}
+      {/* ── Closing CTA ───────────────────────────────────────────────────── */}
+      {/*
+        One band, two actions. This replaced a separate "Something bigger?"
+        block that sat directly below: two full-width call-to-action bands back
+        to back split the reader's attention at the exact point the page is
+        asking for a decision. Both buttons still go to /contact, and the direct
+        email line is kept for anyone who would rather not use a form.
+      */}
       <section className="shell pb-24 md:pb-32">
-        <div className="flex flex-col items-start justify-between gap-8 border-y border-line py-16 md:flex-row md:items-center md:py-20">
-          <div>
-            <p className="eyebrow mb-4">Something bigger?</p>
-            <p className="display text-[11vw] leading-[0.9] sm:text-[6vw] md:text-[4vw]">
-              Get a custom quote<span className="text-accent">.</span>
-            </p>
-            <p className="body-lg mt-5 max-w-lg">
-              Multi-car shoots, dealership retainers, launch campaigns, and
-              schedules that do not fit a tier are all quoted per brand.
-            </p>
+        <div className="border-y border-line py-16 md:py-20">
+          <div className="flex flex-col items-start justify-between gap-9 md:flex-row md:items-end">
+            <div>
+              <p className="eyebrow mb-5">Ready to get more attention?</p>
+              <p className="display max-w-3xl text-[10vw] leading-[0.9] text-balance sm:text-[6vw] md:text-[3.8vw]">
+                Make people stop scrolling<span className="text-accent">.</span>
+              </p>
+              <p className="body-lg mt-6 max-w-xl">
+                Content that gets your work seen and makes people want to do
+                business with you. Book your next shoot, or tell me about a
+                bigger campaign and I&apos;ll quote it per brand.
+              </p>
+            </div>
+
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row md:flex-col md:items-end">
+              <Magnetic
+                href="/contact"
+                variant="solid"
+                wrapperClassName="w-full sm:w-auto"
+                className="w-full sm:w-auto"
+              >
+                Book a Shoot
+              </Magnetic>
+              <Magnetic
+                href="/contact"
+                variant="outline"
+                wrapperClassName="w-full sm:w-auto"
+                className="w-full sm:w-auto"
+              >
+                Get a Custom Quote
+              </Magnetic>
+            </div>
           </div>
-          <div className="flex flex-col gap-3">
-            <Magnetic href="/contact" variant="solid">
-              Get a Custom Quote
-            </Magnetic>
+
+          <p className="mt-10 text-[0.7rem] tracking-[0.2em] text-faint uppercase">
+            Or reach me directly{" "}
             <a
               href={`mailto:${site.email}`}
-              className="text-center text-[0.7rem] tracking-[0.2em] text-mute uppercase transition-colors duration-400 hover:text-accent"
+              className="text-mute transition-colors duration-400 hover:text-accent"
             >
               {site.email}
             </a>
-          </div>
+          </p>
         </div>
       </section>
 

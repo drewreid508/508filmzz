@@ -323,6 +323,44 @@ export const packages: Package[] = [
 ];
 
 /**
+ * ── EDIT ME: THE CASE FOR IT ───────────────────────────────────────────────
+ * What the money buys, in business terms rather than production terms. Sits
+ * above the prices, because a figure only means something once the reader knows
+ * what it is for.
+ *
+ * Deliberately no numbers, no guarantees, no invented results — nothing here
+ * promises customers, sales, or views. Every line is a description of the work
+ * and what it is built to do, which is the only honest claim available and the
+ * only one a serious business owner believes anyway.
+ */
+export const valueProps = [
+  {
+    title: "Get noticed",
+    body: "Content shot and cut for the platforms your customers already scroll, not repurposed from a widescreen edit.",
+  },
+  {
+    title: "Build trust",
+    body: "Your actual work, filmed properly. People hire what they can already picture you doing for them.",
+  },
+  {
+    title: "Look premium",
+    body: "Cinema glass, controlled light, and a grade built in the timeline. The look does the arguing about your price for you.",
+  },
+  {
+    title: "Stay consistent",
+    body: "One shoot delivers a master plus vertical cutdowns and stills — enough to keep posting without going quiet.",
+  },
+  {
+    title: "Turn views into contact",
+    body: "Every piece is cut toward one action: a call, a message, a booking. Attention is only worth what it converts into.",
+  },
+];
+
+/** The sign-off under the value grid. First person, like the rest of the site. */
+export const valueStatement =
+  "You handle the business. I handle making it look impossible to ignore.";
+
+/**
  * ── EDIT ME: MONTHLY CONTENT ───────────────────────────────────────────────
  * The recurring side of the business, kept deliberately separate from
  * `packages` above. A one-off is a project; this is a partnership, and mixing
