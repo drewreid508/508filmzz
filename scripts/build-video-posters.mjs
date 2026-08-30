@@ -30,7 +30,7 @@ const POSTERS = [
   { id: "poster-g-wagon", video: "public/media/video/g-wagon.mp4", at: "2" },
   // The rolling highway shot, not the static bridge opener — motion is the
   // point of this one, and the thumbnail should promise it.
-  { id: "poster-ram", video: "public/media/video/ram-hd.mp4", at: "24" },
+  { id: "poster-ram", video: "public/media/video/ram-2500.mp4", at: "24" },
 ];
 
 const WIDTHS = [420, 720, 1080];

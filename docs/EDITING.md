@@ -161,7 +161,7 @@ Current films:
 | --- | --- |
 | `hds-revuelto.mp4` | Revuelto — HDS / Hannah's Detailing |
 | `bratchers-power-washing.mp4` | Bratchers Power Washing |
-| `ram-hd.mp4` | Heavy Duty — RAM HD on forged wheels |
+| `ram-2500.mp4` | RAM 2500 on forged wheels |
 | `g-wagon.mp4` | G-Class — Mercedes-Benz G-Class |
 | `bratchers-night-wash.mp4` | Night Wash — Bratchers, overnight |
 
