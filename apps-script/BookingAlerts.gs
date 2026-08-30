@@ -15,7 +15,7 @@
  *   1. Open the booking form's responses Sheet.
  *   2. Extensions → Apps Script.
  *   3. Select all the placeholder code and paste this whole file over it.
- *   4. Put your Textbelt key on line 36. Save.
+ *   4. Put your Textbelt key on line 44 (search PASTE_YOUR). Save.
  *   5. Function dropdown → setup → Run. Authorise when asked.
  *   6. Function dropdown → status → Run. Every line should read YES or a value.
  *   7. Function dropdown → testAlert → Run. Your phone should buzz.
@@ -121,14 +121,14 @@ function status() {
   Logger.log("Attached to Sheet : " + (book ? book.getName() : "NOTHING  <-- wrong project"));
   Logger.log("Trigger installed : " + (triggers.length ? "YES" : "NO  <-- run setup"));
   Logger.log("SMS to            : " + (SMS_TO_NUMBER || "NOT SET"));
-  Logger.log("Textbelt key      : " + (keyMissing() ? "NOT SET  <-- paste your key on line 36" : "set"));
+  Logger.log("Textbelt key      : " + (keyMissing() ? "NOT SET  <-- search this file for PASTE_YOUR" : "set"));
   Logger.log("Email to          : " + (inbox() || "NONE"));
   Logger.log("Mail quota left   : " + MailApp.getRemainingDailyQuota());
   if (!keyMissing()) Logger.log("Texts remaining   : " + textsRemaining());
 
   if (!book) throw new Error("Not attached to a spreadsheet. See setup.");
   if (!triggers.length) throw new Error("No trigger installed. Run setup.");
-  if (keyMissing()) throw new Error("Textbelt key not set. Edit line 36.");
+  if (keyMissing()) throw new Error("Textbelt key not set. Search this file for PASTE_YOUR.");
   return "ok";
 }
 
