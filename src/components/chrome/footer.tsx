@@ -77,12 +77,20 @@ export function Footer() {
 
           <nav aria-label="Footer" className="md:col-span-3">
             <p className="eyebrow mb-5">Quick Links</p>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col">
               {nav.map((item) => (
                 <li key={item.href}>
+                  {/*
+                    inline-flex + min-height, not padding on the text.
+                    ────────────────────────────────────────────────────────
+                    A 17px-tall link is a 17px-tall tap target, and on a phone
+                    that is a miss waiting to happen. This gives each one a
+                    44px strike area without moving anything visually — the
+                    box grows, the text does not.
+                  */}
                   <Link
                     href={item.href}
-                    className="text-sm text-mute transition-colors duration-400 hover:text-bone"
+                    className="inline-flex min-h-[44px] items-center text-sm text-mute transition-colors duration-400 hover:text-bone"
                   >
                     {item.label}
                   </Link>
@@ -104,11 +112,11 @@ export function Footer() {
 
           <div className="md:col-span-3">
             <p className="eyebrow mb-5">Contact</p>
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-1">
               <li>
                 <a
                   href={`tel:${site.phoneE164}`}
-                  className="flex items-center gap-3 text-sm text-mute transition-colors duration-400 hover:text-accent"
+                  className="flex min-h-[44px] items-center gap-3 text-sm text-mute transition-colors duration-400 hover:text-accent"
                 >
                   <Phone size={14} strokeWidth={1.5} aria-hidden="true" className="shrink-0" />
                   {site.phone}
@@ -117,7 +125,7 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="flex items-center gap-3 text-sm break-all text-mute transition-colors duration-400 hover:text-accent"
+                  className="flex min-h-[44px] items-center gap-3 text-sm break-all text-mute transition-colors duration-400 hover:text-accent"
                 >
                   <Mail size={14} strokeWidth={1.5} aria-hidden="true" className="shrink-0" />
                   {site.email}
@@ -143,7 +151,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="transition-colors duration-400 hover:text-bone"
+                    className="inline-flex min-h-[44px] items-center transition-colors duration-400 hover:text-bone"
                   >
                     {item.label}
                   </Link>
