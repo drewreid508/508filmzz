@@ -1,8 +1,15 @@
 /**
  * 508 FILMZZ — booking alerts
  * ═══════════════════════════════════════════════════════════════════════════
- * Texts your iPhone and emails you the moment someone books, and sends the
- * client a receipt.
+ * Emails you the moment someone books, and sends the client a receipt.
+ *
+ * ── NO SMS SERVICE, ON PURPOSE ─────────────────────────────────────────────
+ * Textbelt is gone. Every paid SMS route added an account, a key and a bill
+ * for something Gmail already does: the Gmail app on an iPhone pushes a
+ * banner the moment mail lands, which is the same buzz in your pocket.
+ *
+ * It also removes the last credential from this file. There is now nothing
+ * here that can leak, expire, run out of credit, or silently refuse.
  *
  * This is the SMALL script — alerts only. It lives inside your booking form's
  * responses Sheet, so there is nothing to deploy and no web app to configure.
@@ -15,35 +22,23 @@
  *   1. Open the booking form's responses Sheet.
  *   2. Extensions → Apps Script.
  *   3. Select all the placeholder code and paste this whole file over it.
- *   4. Put your Textbelt key on line 44 (search PASTE_YOUR). Save.
+ *   4. Save.
  *   5. Function dropdown → setup → Run. Authorise when asked.
  *   6. Function dropdown → status → Run. Every line should read YES or a value.
- *   7. Function dropdown → testAlert → Run. Your phone should buzz.
+ *   7. Function dropdown → testAlert → Run. Check your inbox.
+ *
+ * Then turn on Gmail notifications on your iPhone and the email becomes a
+ * push alert. Nothing to buy and nothing to configure here.
  */
 
 // ═══════════════════════════════════════════════════════════════════════════
-// THE ONLY TWO LINES YOU EDIT
+// SETTINGS — one optional line
 // ═══════════════════════════════════════════════════════════════════════════
-
-/** Your iPhone. Digits only — no +1, no spaces, no dashes, no brackets. */
-var SMS_TO_NUMBER = "8649154071";
 
 /**
- * Your Textbelt key from textbelt.com/purchase.
- *
- * Replace the whole placeholder, keeping the quote marks. Keep this private:
- * anyone holding it can spend your texts. It belongs here, inside your Google
- * account — never in the website and never in the public GitHub repository.
- *
- * To try the pipeline before paying, put the single word  textbelt  here. That
- * is a free key good for one message a day, rate-limited per IP — and Apps
- * Script runs from Google's shared servers, so the day's free message has
- * usually been spent by someone else. An "out of quota" reply from it says
- * nothing about your setup.
+ * Where bookings are emailed. Leave blank and it goes to the Google account
+ * this script runs as, which is almost always what you want.
  */
-var TEXTBELT_KEY = "PASTE_YOUR_TEXTBELT_KEY_HERE";
-
-/** Where your copy of each booking goes. Blank = the account this runs as. */
 var EMAIL_TO = "";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -54,11 +49,6 @@ var STUDIO_NAME = "508 Filmzz";
 var STUDIO_TAGLINE = "Cinematic media built to move.";
 var STUDIO_EMAIL = "508filmz@gmail.com";
 var STUDIO_PHONE = "864-915-4071";
-var TEXTBELT_URL = "https://textbelt.com/text";
-
-function keyMissing() {
-  return !TEXTBELT_KEY || TEXTBELT_KEY.indexOf("PASTE_") === 0;
-}
 
 function inbox() {
   if (EMAIL_TO) return EMAIL_TO;
@@ -101,8 +91,7 @@ function setup() {
     .onFormSubmit()
     .create();
 
-  Logger.log("Setup complete. Bookings will now text " + SMS_TO_NUMBER +
-             " and email " + inbox() + ".");
+  Logger.log("Setup complete. Bookings will now email " + inbox() + ".");
 }
 
 /**
@@ -120,30 +109,13 @@ function status() {
 
   Logger.log("Attached to Sheet : " + (book ? book.getName() : "NOTHING  <-- wrong project"));
   Logger.log("Trigger installed : " + (triggers.length ? "YES" : "NO  <-- run setup"));
-  Logger.log("SMS to            : " + (SMS_TO_NUMBER || "NOT SET"));
-  Logger.log("Textbelt key      : " + (keyMissing() ? "NOT SET  <-- search this file for PASTE_YOUR" : "set"));
-  Logger.log("Email to          : " + (inbox() || "NONE"));
+  Logger.log("Email to          : " + (inbox() || "NONE  <-- this is the problem"));
   Logger.log("Mail quota left   : " + MailApp.getRemainingDailyQuota());
-  if (!keyMissing()) Logger.log("Texts remaining   : " + textsRemaining());
 
   if (!book) throw new Error("Not attached to a spreadsheet. See setup.");
   if (!triggers.length) throw new Error("No trigger installed. Run setup.");
-  if (keyMissing()) throw new Error("Textbelt key not set. Search this file for PASTE_YOUR.");
+  if (!inbox()) throw new Error("No inbox address. Set EMAIL_TO at the top.");
   return "ok";
-}
-
-/** How many texts are left on the key. */
-function textsRemaining() {
-  try {
-    var res = UrlFetchApp.fetch(
-      "https://textbelt.com/quota/" + encodeURIComponent(TEXTBELT_KEY),
-      { muteHttpExceptions: true }
-    );
-    var body = JSON.parse(res.getContentText());
-    return body.success ? String(body.quotaRemaining) : "could not read (" + (body.error || "unknown") + ")";
-  } catch (err) {
-    return "could not read (" + err + ")";
-  }
 }
 
 // ── Reading the booking ────────────────────────────────────────────────────
@@ -213,64 +185,10 @@ function readLead(named) {
 function onBookingSubmit(e) {
   var lead = readLead((e && e.namedValues) || {});
 
-  // Each channel is attempted on its own and none may throw. A dead Textbelt
-  // balance must never cost you the email, and neither must cost the client
-  // their receipt.
-  sendText(lead);
+  // Each is attempted on its own and neither may throw: a failure reaching you
+  // must never cost the client their receipt, or the reverse.
   sendEmail(lead);
   sendClientReceipt(lead);
-}
-
-/**
- * The text.
- *
- * Kept short: Textbelt bills per 160-character segment, so this carries what
- * decides whether to ring the client back now. The email carries everything.
- */
-function sendText(lead) {
-  try {
-    if (!SMS_TO_NUMBER) return { ok: false, error: "SMS_TO_NUMBER is empty" };
-    if (keyMissing()) return { ok: false, error: "TEXTBELT_KEY is not set" };
-
-    var lines = ["NEW 508 FILMZZ BOOKING", ""];
-    if (lead.name) lines.push("Name: " + lead.name);
-    if (lead.business) lines.push("Business: " + lead.business);
-    if (lead.service) lines.push("Shoot: " + lead.service);
-    if (lead.date) lines.push("Date: " + lead.date);
-    if (lead.time) lines.push("Time: " + lead.time);
-    if (lead.location) lines.push("Location: " + lead.location);
-    lines.push("");
-    if (lead.phone) lines.push("Phone: " + lead.phone);
-    if (lead.email) lines.push("Email: " + lead.email);
-    lines.push("");
-    lines.push("Open your booking sheet for full details.");
-
-    var res = UrlFetchApp.fetch(TEXTBELT_URL, {
-      method: "post",
-      payload: {
-        phone: SMS_TO_NUMBER,
-        message: lines.join("\n"),
-        key: TEXTBELT_KEY,
-      },
-      muteHttpExceptions: true,
-    });
-
-    var raw = res.getContentText();
-    var body;
-    try {
-      body = JSON.parse(raw);
-    } catch (parseErr) {
-      return { ok: false, error: "unreadable reply: " + raw.slice(0, 140) };
-    }
-
-    if (!body.success) return { ok: false, error: body.error || "refused, no reason given" };
-
-    Logger.log("Text sent. Texts remaining: " + body.quotaRemaining);
-    return { ok: true, error: "", quotaRemaining: body.quotaRemaining };
-  } catch (err) {
-    Logger.log("text failed: " + err);
-    return { ok: false, error: String(err) };
-  }
 }
 
 /** The full brief, with reply-to set so hitting Reply answers the client. */
@@ -352,7 +270,7 @@ function sendClientReceipt(lead) {
  *
  * A real booking swallows a failed channel so it cannot take the others down
  * with it. That same silence makes a dead test impossible to diagnose, so this
- * throws with whatever reason Textbelt gave.
+ * throws with whatever reason the failure gave.
  */
 function testAlert() {
   var lead = {
@@ -371,23 +289,17 @@ function testAlert() {
     message: "TEST booking from the script editor. Delete this once seen.",
   };
 
-  Logger.log("Texting : " + SMS_TO_NUMBER);
   Logger.log("Emailing: " + (inbox() || "(NO ADDRESS - this is the problem)"));
 
-  var text = sendText(lead);
   var mail = sendEmail(lead);
+  var receipt = sendClientReceipt(lead);
 
-  Logger.log("sms   -> " + (text.ok ? "sent, " + text.quotaRemaining + " texts left" : "FAILED: " + text.error));
-  Logger.log("email -> " + (mail.ok ? "sent" : "FAILED: " + mail.error));
+  Logger.log("your email   -> " + (mail.ok ? "sent" : "FAILED: " + mail.error));
+  Logger.log("client email -> " + (receipt.ok ? "sent" : receipt.error));
 
-  if (!text.ok || !mail.ok) {
-    throw new Error(
-      "sms: " + (text.ok ? "sent" : text.error) +
-      " | email: " + (mail.ok ? "sent" : mail.error)
-    );
-  }
+  if (!mail.ok) throw new Error("email: " + mail.error);
 
-  Logger.log("Both sent. Check your phone and " + inbox() + " (look in spam).");
+  Logger.log("Sent. Check " + inbox() + " — look in spam the first time.");
 }
 
 /** Runs a fake submission through the real path, messy form titles and all. */
