@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-import { PROJECT_TYPES, BUDGETS } from "@/lib/inquiry";
+import { PROJECT_TYPES, BUDGETS, REFERRAL_SOURCES } from "@/lib/inquiry";
 import { monthlyPackages, packages } from "@/data/site";
 import {
   DISCOUNT_LABEL,
@@ -479,7 +479,26 @@ export function BookingForm() {
           )}
         </div>
 
-        <Label index={10} htmlFor="message">
+        <div className="flex flex-col">
+          <Label index={10} htmlFor="referral">
+            How Did You Hear About 508 Filmzz?
+          </Label>
+          <select
+            id="referral"
+            name="referral"
+            defaultValue=""
+            className={cn(fieldBase, "cursor-pointer")}
+          >
+            <option value="">Optional</option>
+            {REFERRAL_SOURCES.map((r) => (
+              <option key={r} value={r} className="bg-ink-2">
+                {r}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <Label index={11} htmlFor="message">
           Message *
         </Label>
         <textarea

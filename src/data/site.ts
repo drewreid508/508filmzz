@@ -19,7 +19,7 @@ export const site = {
    */
   url: SITE_URL,
   description:
-    "Cinematic video production in Greenville and Upstate South Carolina — automotive, commercial, social media, photography and drone content for businesses and brands.",
+    "Cinematic video, photography and social media content for automotive brands, businesses and builders across Greenville and Upstate South Carolina.",
   owner: "Drew Reid",
   email: "508filmz@gmail.com",
   phone: "(864) 915-4071",

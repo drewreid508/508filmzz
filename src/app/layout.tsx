@@ -40,7 +40,7 @@ export const metadata: Metadata = {
       list: a title reading like a service area is the thing that looks like
       keyword stuffing to a reader and to Google alike.
     */
-    default: `${site.name} | Video Production in Greenville, SC`,
+    default: `${site.name} | Cinematic Automotive & Commercial Media`,
     template: `%s — ${site.name}`,
   },
   description: site.description,

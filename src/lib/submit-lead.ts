@@ -33,6 +33,7 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     shootDate: String(form.get("shootDate") ?? ""),
     location: String(form.get("location") ?? ""),
     budget: String(form.get("budget") ?? ""),
+    referral: String(form.get("referral") ?? ""),
     message: String(form.get("message") ?? ""),
     website: String(form.get("website") ?? ""),
   };
@@ -53,6 +54,16 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     cannot actually check is worse than none — it would confirm to a returning
     client that the code still works.
   */
+  /*
+    Lead source rides in the project details, like the other fields the Google
+    Form has no question for. Worth capturing: it is the only thing that tells
+    Drew whether the business cards are actually working.
+  */
+  const referral = String(form.get("referral") ?? "").trim();
+  if (referral) {
+    raw.message = `${raw.message}\n\nHeard about 508 Filmzz via: ${referral}`;
+  }
+
   const promoRaw = String(form.get("promoCode") ?? "").trim();
   const promoValid = promoRaw ? isPromoCode(promoRaw) : false;
 

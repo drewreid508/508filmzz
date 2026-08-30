@@ -135,8 +135,8 @@ export function Hero() {
           transition={{ delay: 0.72, duration: 1, ease: EASE }}
         >
           <p className="body-lg max-w-lg text-balance">
-            Cinematic video content that makes businesses, brands, vehicles and
-            projects impossible to ignore.
+            Cinematic media for automotive brands, businesses, and the people
+            who build them.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">

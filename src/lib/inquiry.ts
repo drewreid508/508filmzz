@@ -1,14 +1,33 @@
 import { z } from "zod";
 
+/*
+  The service list, named the way the site names them.
+
+  "Automotive" became "Automotive Cinematography" to match the Services page —
+  a dropdown that uses different words from the page it was reached from makes
+  a visitor stop and check they are in the right place.
+
+  Drone, editing and product launches fold into Other rather than getting their
+  own rows: nine options is a menu, six is a choice, and the project
+  description says what Other means far better than a label would.
+*/
 export const PROJECT_TYPES = [
-  "Automotive",
-  "Commercial",
+  "Automotive Cinematography",
+  "Commercial Production",
   "Social Media Content",
-  "Drone / Aerial",
   "Photography",
-  "Video Editing Only",
-  "Product Launch",
   "Monthly Content",
+  "Other",
+] as const;
+
+/** Where the enquiry came from. Plain options — this is a lead source, not a survey. */
+export const REFERRAL_SOURCES = [
+  "Instagram",
+  "TikTok",
+  "Google search",
+  "Business card",
+  "Word of mouth",
+  "Saw your work somewhere",
   "Other",
 ] as const;
 
@@ -36,6 +55,7 @@ export const inquirySchema = z.object({
     .optional()
     .or(z.literal("")),
   location: z.string().trim().max(180).optional().or(z.literal("")),
+  referral: z.string().trim().max(80).optional().or(z.literal("")),
   budget: z.enum(BUDGETS, { message: "Choose a budget range" }),
   message: z
     .string()
