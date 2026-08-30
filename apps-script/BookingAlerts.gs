@@ -22,9 +22,10 @@
  *   1. Open the booking form's responses Sheet.
  *   2. Extensions → Apps Script. Paste this whole file over what is there.
  *   3. ⚙ Project Settings → Script Properties → add the three above. Save.
- *   4. Function dropdown → setup → Run. Authorise when asked.
- *   5. Function dropdown → status → Run. Every line should read YES or a value.
- *   6. Function dropdown → testAlert → Run. Your phone should buzz.
+ *   4. Authorise when asked: Advanced → Go to … (unsafe) → Allow.
+ *   5. Function dropdown → setup → Run. Installs the booking trigger.
+ *   6. Function dropdown → status     → Run. Proves the credentials, sends nothing.
+ *   7. Function dropdown → testTwilio → Run. Sends one real text to TEST_TO.
  */
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -33,6 +34,13 @@
 
 /** Where booking alerts are texted. E.164: +1 then the ten digits. */
 var OWNER_SMS = "+18649154071";
+
+/**
+ * Where testTwilio() sends its test message. Change this line to text a
+ * different phone — it is used by the test only and never by a real booking,
+ * so pointing it elsewhere cannot misroute a client's alert.
+ */
+var TEST_TO = "+18649154071";
 
 /** Where bookings are emailed. Blank = the account this script runs as. */
 var EMAIL_TO = "";
@@ -172,7 +180,18 @@ function status() {
   ];
   lines.forEach(function (l) { Logger.log(l); });
 
-  if (sid && token) Logger.log("Twilio reachable  : " + twilioReachable());
+  if (sid && token) {
+    var reach = twilioReachable();
+    lines.push("Twilio reachable  : " + reach);
+    Logger.log("Twilio reachable  : " + reach);
+    Logger.log("");
+    Logger.log(reach.indexOf("YES") === 0
+      ? "✅ Credentials work. Run testTwilio to send a real message."
+      : "❌ Credentials rejected — re-copy the SID and Auth Token from the Twilio Console home page.");
+  } else {
+    Logger.log("");
+    Logger.log("❌ Add TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN in Project Settings → Script Properties.");
+  }
 
   try {
     SpreadsheetApp.getUi().alert("508 Filmzz — status", lines.join("\n"),
@@ -547,6 +566,86 @@ function testAlert() {
   if (!ownerMail.ok) throw new Error("Email failed — " + ownerMail.error);
 
   Logger.log("Sent. Check your phone and " + inbox() + ".");
+}
+
+/**
+ * Sends ONE real SMS to TEST_TO. Costs one Twilio message.
+ *
+ * Deliberately separate from testAlert(): this touches Twilio and nothing else,
+ * so a failure here is unambiguously Twilio rather than the Sheet, the trigger
+ * or Gmail. Run status() first — it proves the credentials without spending
+ * anything, and rules out the commonest failure for free.
+ */
+function testTwilio() {
+  Logger.log("─────────────────────────────────────────────");
+  Logger.log("508 FILMZZ — Twilio test");
+  Logger.log("─────────────────────────────────────────────");
+
+  var sid = prop("TWILIO_ACCOUNT_SID");
+  var token = prop("TWILIO_AUTH_TOKEN");
+  var from = prop("TWILIO_FROM");
+  var svc = prop("TWILIO_MESSAGING_SERVICE_SID");
+
+  Logger.log("Account SID  : " + (sid ? (sid.indexOf("AC") === 0 ? "set (" + sid.slice(0, 6) + "…)" : "SET BUT WRONG — must start AC") : "MISSING"));
+  Logger.log("Auth token   : " + (token ? "set (" + token.length + " characters)" : "MISSING"));
+  Logger.log("Sending from : " + (svc ? "Messaging Service " + svc : (from || "MISSING")));
+  Logger.log("Sending to   : " + TEST_TO);
+
+  if (!sid || !token) {
+    Logger.log("");
+    Logger.log("❌ STOPPED — credentials missing.");
+    Logger.log("   Project Settings (⚙) → Script Properties → add");
+    Logger.log("   TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN.");
+    throw new Error("Twilio credentials not set in Script Properties.");
+  }
+  if (!from && !svc) {
+    Logger.log("");
+    Logger.log("❌ STOPPED — no sending number.");
+    Logger.log("   Add TWILIO_FROM as +18642522868 in Script Properties.");
+    throw new Error("No TWILIO_FROM or TWILIO_MESSAGING_SERVICE_SID set.");
+  }
+  if (token.length !== 32) {
+    // Not fatal — Twilio decides — but a token of the wrong length is almost
+    // always the wrong value pasted, and saying so beats a 401 with no context.
+    Logger.log("");
+    Logger.log("⚠️  Auth token is " + token.length + " characters. Twilio's is 32.");
+    Logger.log("   If this fails, check you copied the Auth Token from the");
+    Logger.log("   Console home page, not an API key or another service's token.");
+  }
+
+  Logger.log("");
+  Logger.log("Checking credentials without sending…");
+  Logger.log("  " + twilioReachable());
+
+  Logger.log("");
+  Logger.log("Sending the test message…");
+  var res = sendSms(TEST_TO, "508 Filmzz test message. If you are reading this, Twilio is working.");
+
+  Logger.log("");
+  if (res.ok) {
+    Logger.log("✅ SENT — Twilio accepted it. Message " + res.sid);
+    Logger.log("   Twilio status: " + res.status);
+    Logger.log("");
+    Logger.log("   'queued' or 'accepted' means Twilio took it, not that your");
+    Logger.log("   phone has it. If nothing arrives in a minute, open");
+    Logger.log("   Monitor → Logs → Messaging in the Twilio Console: a message");
+    Logger.log("   that reaches 'undelivered' there is almost always A2P 10DLC");
+    Logger.log("   registration, which US carriers require before they will");
+    Logger.log("   carry application-sent texts.");
+    return "sent";
+  }
+
+  Logger.log("❌ FAILED — " + res.error);
+  Logger.log("");
+  Logger.log("Common causes:");
+  Logger.log("  401 / authenticate  → SID or auth token wrong. Re-copy both.");
+  Logger.log("  code 21608          → trial account: verify " + TEST_TO + " first,");
+  Logger.log("                        or upgrade the account.");
+  Logger.log("  code 21606 / 21659  → TWILIO_FROM is not an SMS-capable number");
+  Logger.log("                        you own. Check it is +18642522868.");
+  Logger.log("  code 30034 / 30032  → A2P 10DLC registration incomplete.");
+  Logger.log("  code 21211          → TEST_TO is not valid E.164 (+1 then 10 digits).");
+  throw new Error("Twilio refused the message: " + res.error);
 }
 
 /** Runs a fake submission through the real path, messy form titles and all. */
