@@ -6,7 +6,7 @@ import { FilmStrip } from "@/components/portfolio/film-strip";
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
-    "Automotive, commercial and photography work by 508 Filmzz, a video production company in Greenville, SC — finished commercials and every frame from the archive, on one page.",
+    "Real businesses, real content. Automotive, commercial and social media video by 508 Filmzz, a video production company in Greenville, SC — every finished film and frame on one page.",
   alternates: { canonical: "/portfolio" },
 };
 
@@ -23,9 +23,9 @@ export default function PortfolioPage() {
     <>
       <PageHero
         index="01"
-        eyebrow="The Archive"
-        title="The Work"
-        lead="Finished commercials up top, then every frame in the archive on one page. Filter by category, or click any photograph to open it full screen."
+        eyebrow="The Work"
+        title="Real Businesses. Real Content."
+        lead="See how 508 Filmzz turns businesses, products and services into content people actually stop to watch. Client films up top, then every frame in the archive on one page — filter by category, or click any frame to open it full screen."
       />
 
       <FilmStrip />

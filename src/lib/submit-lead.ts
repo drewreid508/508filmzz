@@ -35,8 +35,10 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     budget: String(form.get("budget") ?? ""),
     referral: String(form.get("referral") ?? ""),
     shootTime: String(form.get("shootTime") ?? ""),
+    frequency: String(form.get("frequency") ?? ""),
     social: String(form.get("social") ?? ""),
     acknowledged: String(form.get("acknowledged") ?? ""),
+    smsConsent: String(form.get("smsConsent") ?? ""),
     message: String(form.get("message") ?? ""),
     website: String(form.get("website") ?? ""),
   };
@@ -74,7 +76,20 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
   const referral = String(form.get("referral") ?? "").trim();
   if (shootTime) extras.push(`Preferred time: ${shootTime}`);
   if (social) extras.push(`Social: ${social}`);
+  const frequency = String(form.get("frequency") ?? "").trim();
+  if (frequency) extras.push(`Shooting frequency: ${frequency}`);
   if (referral) extras.push(`Heard about 508 Filmzz via: ${referral}`);
+  /*
+    Consent is recorded on every booking, including the refusals.
+
+    A row that says nothing about texting is indistinguishable from one where
+    the box was never rendered, and if a complaint ever lands the only useful
+    record is the one that says which answer this person actually gave. So it
+    is written either way, in fixed wording the Apps Script can read back.
+  */
+  extras.push(
+    `SMS consent: ${String(form.get("smsConsent") ?? "") === "on" ? "Yes" : "No"}`
+  );
   if (extras.length) raw.message = `${raw.message}\n\n${extras.join("\n")}`;
 
   const promoRaw = String(form.get("promoCode") ?? "").trim();

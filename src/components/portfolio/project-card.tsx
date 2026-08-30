@@ -12,8 +12,6 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const categoryLabel: Record<Project["category"], string> = {
   automotive: "Automotive",
   commercial: "Commercial",
-  drone: "Drone",
-  photography: "Photography",
   social: "Social Media",
 };
 

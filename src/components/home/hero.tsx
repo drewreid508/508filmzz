@@ -113,8 +113,17 @@ export function Hero() {
           Cinematic Media — Est. 508
         </motion.p>
 
-        <h1 className="display text-[17vw] leading-[0.82] sm:text-[15vw] md:text-[11.5vw] lg:text-[10.5vw]">
-          {["Cinematic Media.", "Built To Move."].map((line, li) => (
+        {/*
+          Three lines, not two, so the type stays large on a phone.
+
+          The headline is set as fixed line breaks rather than wrapped prose
+          because each line animates up from behind its own mask — a natural
+          wrap would put the mask edge in an arbitrary place. The sizes are
+          smaller than the old two-word headline for the same reason a longer
+          sentence always is: six words at 17vw runs off a 375px screen.
+        */}
+        <h1 className="display text-[11.5vw] leading-[0.86] text-balance sm:text-[10vw] md:text-[7.6vw] lg:text-[6.8vw]">
+          {["Content That Makes", "Your Business", "Stand Out."].map((line, li) => (
             <span key={line} className="block overflow-hidden">
               <motion.span
                 className="block"
@@ -135,8 +144,8 @@ export function Hero() {
           transition={{ delay: 0.72, duration: 1, ease: EASE }}
         >
           <p className="body-lg max-w-lg text-balance">
-            Cinematic media for automotive brands, businesses, and the people
-            who build them.
+            Cinematic video, social media reels, and commercial content built to
+            help businesses get noticed.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
@@ -159,7 +168,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              View My Work
+              View Our Work
             </Magnetic>
           </div>
         </motion.div>

@@ -19,7 +19,7 @@ export const site = {
    */
   url: SITE_URL,
   description:
-    "Cinematic video, photography and social media content for automotive brands, businesses and builders across Greenville and Upstate South Carolina.",
+    "Cinematic video and social media content for automotive brands, businesses and builders across Greenville and Upstate South Carolina.",
   owner: "Drew Reid",
   email: "508filmz@gmail.com",
   phone: "(864) 915-4071",
@@ -126,12 +126,13 @@ export const nav = [
 */
 
 /*
-  Drone is off the nav, not deleted.
+  There is no drone entry, and that is the point.
 
-  Six items is the most a phone header carries without wrapping, and drone is a
-  service rather than a section — it is reached from Services and from the
-  homepage vertical grid, both of which still link to /drone. The page, its
-  copy and its route are untouched.
+  Drone is a capability inside a shoot, not a service someone buys on its own —
+  a client hires 508 Filmzz to film their business, and the aerial is one of the
+  tools that gets used. Selling it separately invites the enquiry nobody wants:
+  an hour of flying with no story attached. It appears where it actually
+  applies, as the line that separates Bronze from Silver and Gold.
 */
 
 export type Service = {
@@ -154,106 +155,68 @@ export type Service = {
  */
 export const services: Service[] = [
   {
-    id: "automotive",
-    title: "Automotive Cinematography",
-    blurb:
-      "Rolling shots, tracking work, and detail macro cut to feel like a factory launch film rather than a walkaround.",
-    points: [
-      "Cinematic car photography",
-      "Rolling shots",
-      "Tracking shots",
-      "Detail shots",
-      "Build videos",
-      "Dealership content",
-      "Automotive commercials",
-    ],
-    image: "pf_img_5850",
-  },
-  {
     id: "social",
-    title: "Social Media Content",
+    title: "Social Media Reels",
     blurb:
-      "Vertical-first packages built for retention — hook in the first two seconds, cut for the screen people actually watch on.",
+      "Short-form video content designed for social media — hook in the first two seconds, cut for the screen people actually watch on.",
     points: [
-      "TikTok",
       "Instagram Reels",
+      "TikTok",
       "YouTube Shorts",
       "Vertical 9:16 content",
-      "Social media packages",
       "Short-form advertising",
     ],
     image: "poster-nmf",
   },
   {
     id: "commercial",
-    title: "Commercial Production",
+    title: "Commercial Video",
     blurb:
-      "Brand films and advertisements built around a promise and a call to action, not just pretty footage.",
+      "Professional cinematic video for businesses, products, services and promotions — built around a promise and a call to action.",
     points: [
       "Business commercials",
       "Product videos",
       "Promotional videos",
       "Brand campaigns",
-      "Professional advertisements",
+      "Service and trade content",
     ],
-    image: "pf_img_5834",
+    image: "poster-blueworks",
   },
   {
-    id: "drone",
-    title: "Drone Services",
+    id: "automotive",
+    title: "Automotive Content",
     blurb:
-      "Aerial reveals, top-down movement, and establishing shots that give a build, a property, or a shop real scale.",
+      "Builds, dealerships, detail shops, rollers and vehicle-focused content — shot like a launch film rather than a walkaround.",
     points: [
-      "Cinematic aerial footage",
-      "Automotive aerial shots",
-      "Property & business aerial footage",
-      "Real estate aerial footage",
-      "Event aerial coverage",
-      "Establishing shots",
-      "Top-down shots",
-      "Tracking & follow shots",
-      "Drone photos",
-      "Commercial drone production",
+      "Rolling & tracking shots",
+      "Detail and hero frames",
+      "Build videos",
+      "Dealership content",
+      "Detail shop content",
     ],
+    image: "poster-ram",
   },
   {
-    id: "photography",
-    title: "Photography",
+    id: "monthly",
+    title: "Monthly Content",
     blurb:
-      "Commercial stills delivered alongside every film — same lighting, same grade, one consistent look across the campaign.",
+      "Recurring packages for businesses that want consistent video throughout the month rather than a single film.",
     points: [
-      "Automotive photography",
-      "Product photography",
-      "Business photography",
-      "Social media photography",
+      "A standing production slot",
+      "Reels delivered every month",
+      "Drone on Silver and Gold",
+      "One consistent look",
+      "Social-ready delivery",
     ],
-    image: "pf_img_5829",
-  },
-  {
-    id: "editing",
-    title: "Video Editing",
-    blurb:
-      "The look is built in the timeline, not bought as a preset. Edit-only work welcome if you already have footage.",
-    points: [
-      "Professional color grading",
-      "Cinematic editing",
-      "Sound design",
-      "Motion graphics",
-      "Speed ramps",
-      "Visual effects",
-      "Social media edits",
-    ],
-    image: "pf_img_5860",
+    image: "poster-bratchers",
   },
 ];
 
 export const capabilities = [
-  "Automotive Cinematography",
-  "Social Media Content",
-  "Commercial Production",
-  "Drone Services",
-  "Photography",
-  "Video Editing",
+  "Social Media Reels",
+  "Commercial Video",
+  "Automotive Content",
+  "Monthly Content",
 ];
 
 /**
@@ -280,7 +243,7 @@ export const packages: Package[] = [
     id: "social",
     name: "Social Content",
     price: "$200+",
-    summary: "Vertical-first content built to run on Reels, TikTok, and Shorts.",
+    summary: "Vertical-first content built to run on Reels, TikTok and Shorts.",
     includes: [
       "Half-day shoot",
       "Vertical 9:16 cutdowns",
@@ -292,12 +255,12 @@ export const packages: Package[] = [
     id: "automotive",
     name: "Automotive Production",
     price: "$300+",
-    summary: "Rolling, static, and detail coverage for a build, a car, or a shop.",
+    summary: "Rolling, static and detail coverage for a build, a car or a shop.",
     includes: [
       "Rolling & tracking shots",
       "Detail and hero frames",
       "Full edit and grade",
-      "Stills set included",
+      "Social cutdowns included",
     ],
     featured: true,
   },
@@ -305,7 +268,7 @@ export const packages: Package[] = [
     id: "commercial",
     name: "Commercial Production",
     price: "$500+",
-    summary: "A full brand film for a business, product, or campaign.",
+    summary: "A full brand film for a business, product or campaign.",
     includes: [
       "Concept and shot list",
       "Full production day",
@@ -314,27 +277,15 @@ export const packages: Package[] = [
     ],
   },
   {
-    id: "drone",
-    name: "Drone Production",
-    price: "$200+",
-    summary: "Aerial coverage on its own or added to any other package.",
-    includes: [
-      "Cinematic aerial footage",
-      "Establishing & top-down shots",
-      "Tracking and follow work",
-      "Aerial stills",
-    ],
-  },
-  {
     id: "full",
     name: "Full Content Package",
     price: "$750+",
-    summary: "Ground, air, stills, and social — one shoot, everything delivered.",
+    summary: "Ground, air and social — one shoot, everything delivered.",
     includes: [
       "Full production day",
       "Drone coverage included",
-      "Photography included",
       "Master film plus social cutdowns",
+      "Multiple deliverables",
     ],
   },
 ];
@@ -389,6 +340,16 @@ export const valueStatement =
 export type MonthlyPackage = {
   id: string;
   name: string;
+  /** Shown as its own line so a buyer can compare tiers without reading lists. */
+  bestFor?: string;
+  shoots?: string;
+  reels?: string;
+  /*
+    Drone is the upgrade reason, so it is a field rather than a bullet buried in
+    `includes`. A card can then say YES or NO in the same place on every tier,
+    which is what makes the difference between Bronze and Silver read instantly.
+  */
+  drone?: boolean;
   /** null renders as "Custom quote" with no "Starting at" or "/month" label. */
   price: string | null;
   summary: string;
@@ -398,52 +359,54 @@ export type MonthlyPackage = {
 
 export const monthlyPackages: MonthlyPackage[] = [
   {
-    id: "starter",
-    name: "Monthly Starter",
+    id: "bronze",
+    name: "Bronze",
     price: "$700+",
-    summary:
-      "For businesses that need consistent content without a huge production schedule.",
+    bestFor: "Businesses starting to post consistently",
+    shoots: "1 shoot per month",
+    reels: "2 edited reels",
+    drone: false,
+    summary: "For businesses that need consistent content without a heavy production schedule.",
     includes: [
       "1 shoot per month",
-      "2–3 hour production session",
-      "2 edited vertical videos",
+      "2 edited vertical reels",
       "Rolling & static coverage",
-      "Basic photography",
       "Colour grade & sound design",
-      "Ready-to-post content",
+      "Ready-to-post delivery",
     ],
   },
   {
-    id: "growth",
-    name: "Monthly Growth",
+    id: "silver",
+    name: "Silver",
     price: "$1,000+",
-    summary:
-      "Built for businesses that want to stay active on social media throughout the month.",
+    bestFor: "Businesses staying active on social all month",
+    shoots: "2 shoots per month",
+    reels: "4–6 edited reels",
+    drone: true,
+    summary: "Built for businesses that want to stay in front of customers throughout the month.",
     includes: [
       "2 shoots per month",
+      "4–6 edited vertical reels",
       "Rolling & tracking shots",
-      "4–6 edited vertical videos",
-      "Photography included",
-      "Drone coverage when needed",
-      "Multiple locations / vehicles",
+      "Multiple locations or vehicles",
       "Colour grade & sound design",
       "Social-ready delivery",
     ],
     featured: true,
   },
   {
-    id: "full-coverage",
-    name: "Monthly Full Coverage",
+    id: "gold",
+    name: "Gold",
     price: "$1,500+",
-    summary:
-      "Full-service monthly content for businesses that want their brand consistently filmed at a higher level.",
+    bestFor: "Businesses that want a brand, not just posts",
+    shoots: "2–4 production days per month",
+    reels: "6–10+ edited reels",
+    drone: true,
+    summary: "Full-service monthly content for businesses that want their brand filmed at a higher level.",
     includes: [
       "2–4 production days per month",
-      "Full automotive coverage",
+      "6–10+ edited vertical reels",
       "Rolling, tracking & detail shots",
-      "Drone coverage",
-      "Professional photography",
-      "6–10+ social videos",
       "Hero / brand film",
       "Motion graphics",
       "Full colour grade & sound design",
@@ -451,19 +414,19 @@ export const monthlyPackages: MonthlyPackage[] = [
   },
   {
     id: "custom",
-    name: "Custom Monthly",
+    name: "Custom",
     price: null,
-    summary: "For brands that need a completely custom content schedule.",
+    bestFor: "Brands with their own schedule and goals",
+    shoots: "Custom shoot schedule",
+    reels: "Custom deliverables",
+    drone: true,
+    summary: "Built around your business. Tell us what you need and we'll build a package around your goals, content needs and budget.",
     includes: [
+      "Custom number of videos",
       "Custom shoot schedule",
-      "Creative planning",
-      "Cars, products, people & locations",
-      "Rolling / vehicle coverage",
-      "Drone production",
-      "Photography",
-      "Social media content",
-      "Commercial / brand films",
+      "Drone content",
       "Custom deliverables",
+      "Custom project requirements",
     ],
   },
 ];
@@ -550,13 +513,16 @@ export const process = [
   },
 ];
 
-/** Framing stats — descriptive of the offer, not invented client metrics. */
-export const stats = [
-  { value: 1, suffix: "", label: "Creator, every step" },
-  { value: 4, suffix: "K", label: "Cinema delivery" },
-  { value: 3, suffix: "", label: "Core verticals" },
-  { value: 8, suffix: "", label: "Services offered" },
-];
+/*
+  Stats removed.
+
+  They were counters that animate up from zero, and on any load where the
+  animation stalled they sat on screen reading "0", "0K", "0" — which reads as
+  a broken site, or worse, as a business with nothing to show. The numbers were
+  framing rather than achievement anyway ("1 creator", "3 verticals"), so
+  nothing true was lost by deleting them.
+*/
+export const stats: { value: number; suffix: string; label: string }[] = [];
 
 /** "Why work with 508 Filmzz" — the booking-page trust block. */
 export const advantages = [
@@ -565,8 +531,8 @@ export const advantages = [
     body: "Cinema glass, controlled light, and a grade built in the timeline — not bought as a preset.",
   },
   {
-    title: "Drone Footage Available",
-    body: "Aerial reveals and top-down movement available on most projects.",
+    title: "Drone Coverage",
+    body: "Aerial reveals and top-down movement, included on the Silver and Gold monthly packages.",
   },
   {
     title: "Creative Direction Included",
@@ -605,7 +571,7 @@ export const faqs = [
   },
   {
     q: "Do you offer drone footage?",
-    a: "Absolutely. Drone footage is available for most projects.",
+    a: "Yes, as part of a shoot rather than on its own. It is included on the Silver and Gold monthly packages, and can be added to a one-off production — ask when you book and it is quoted with the job.",
   },
   {
     q: "Can I use my videos anywhere?",

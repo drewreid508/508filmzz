@@ -24,7 +24,7 @@ import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "One-off production packages for social, automotive, commercial and drone work, plus monthly content partnerships from $700. Every project custom quoted.",
+    "One-off production packages for social, automotive and commercial video, plus Bronze, Silver and Gold monthly content packages from $700. Every project custom quoted.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -46,6 +46,10 @@ function PriceCard({
   /** Appended after the figure. Monthly tiers pass "/month"; one-offs pass none. */
   cadence,
   showFirstMonth,
+  bestFor,
+  shoots,
+  reels,
+  drone,
 }: {
   index: number;
   name: string;
@@ -56,6 +60,15 @@ function PriceCard({
   cadence?: string;
   /** Monthly tiers pass true; the reduced figure is derived, never written. */
   showFirstMonth?: boolean;
+  bestFor?: string;
+  shoots?: string;
+  reels?: string;
+  /**
+   * Undefined on one-off cards, which have no tier to compare against. On the
+   * monthly tiers it is always a real boolean, because "no answer" and "no
+   * drone" have to look different — see the spec block below.
+   */
+  drone?: boolean;
 }) {
   const firstMonth = showFirstMonth ? discountedPrice(price) : null;
   return (
@@ -125,6 +138,74 @@ function PriceCard({
 
         <p className="mt-5 text-sm leading-relaxed text-mute">{summary}</p>
 
+        {/*
+          The comparison block.
+          ────────────────────────────────────────────────────────────────────
+          Four facts in the same order on every tier, so the cards can be read
+          across rather than one at a time. A checklist alone cannot do this:
+          "2 shoots per month" buried at different heights in lists of
+          different lengths is not a comparison, it is four lists.
+
+          Drone is deliberately the loudest line on the card. It is the single
+          concrete thing Bronze does not get, and a client weighing $700
+          against $1,000 deserves to see the difference without reading twice —
+          so a yes is the accent colour with a filled marker, and a no is
+          stated plainly rather than left out. An omission looks like an
+          oversight; "Not included" looks like a decision.
+        */}
+        {(bestFor || shoots || reels || drone !== undefined) && (
+          <dl className="mt-7 flex flex-col gap-px border border-line bg-line">
+            {bestFor && (
+              <div className="bg-ink px-4 py-3.5">
+                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
+                  Best for
+                </dt>
+                <dd className="mt-1.5 text-[0.82rem] leading-snug text-mute">
+                  {bestFor}
+                </dd>
+              </div>
+            )}
+            {shoots && (
+              <div className="flex items-baseline justify-between gap-4 bg-ink px-4 py-3.5">
+                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
+                  Shoots
+                </dt>
+                <dd className="text-right text-[0.82rem] text-bone">{shoots}</dd>
+              </div>
+            )}
+            {reels && (
+              <div className="flex items-baseline justify-between gap-4 bg-ink px-4 py-3.5">
+                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
+                  Reels
+                </dt>
+                <dd className="text-right text-[0.82rem] text-bone">{reels}</dd>
+              </div>
+            )}
+            {drone !== undefined && (
+              <div className="flex items-center justify-between gap-4 bg-ink px-4 py-4">
+                <dt className="text-[0.58rem] tracking-[0.2em] text-faint uppercase">
+                  Drone
+                </dt>
+                <dd
+                  className={cn(
+                    "flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.14em] uppercase",
+                    drone ? "text-accent" : "text-faint"
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "h-1.5 w-1.5 shrink-0",
+                      drone ? "bg-accent" : "border border-line-strong"
+                    )}
+                  />
+                  {drone ? "Included" : "Not included"}
+                </dd>
+              </div>
+            )}
+          </dl>
+        )}
+
         <ul className="mt-7 flex flex-col gap-2.5 border-t border-line pt-6">
           {includes.map((item) => (
             <li key={item} className="flex items-start gap-3 text-[0.82rem] text-mute">
@@ -147,7 +228,7 @@ function PriceCard({
           wrapperClassName="w-full"
           className="w-full"
         >
-          Get a Quote
+          {price ? "Book This Package" : "Request a Custom Quote"}
         </Magnetic>
       </div>
     </Reveal>
@@ -175,9 +256,9 @@ export default function PricingPage() {
         />
 
         {/*
-          The bordered five-across grid is the same construction the Drone page
-          uses for its inclusions, so this reads as part of the site rather than
-          a sales page dropped into it. One across on a phone and two from 640px
+          The bordered five-across grid is the same construction the service pages
+          use for their inclusions, so this reads as part of the site rather
+          than a sales page dropped into it. One across on a phone and two from 640px
           up: at five columns these bodies wrap to six or seven lines, which
           stops being scannable.
         */}
@@ -322,6 +403,10 @@ export default function PricingPage() {
               featured={pkg.featured}
               cadence="/mo"
               showFirstMonth
+              bestFor={pkg.bestFor}
+              shoots={pkg.shoots}
+              reels={pkg.reels}
+              drone={pkg.drone}
             />
           ))}
         </div>

@@ -6,18 +6,16 @@ import { Marquee } from "@/components/home/marquee";
 import { Services } from "@/components/home/services";
 import { ReelPanel } from "@/components/home/reel-panel";
 import { ProjectCard } from "@/components/portfolio/project-card";
+import { ShowreelIntro } from "@/components/chrome/showreel-intro";
 import { SectionHeader } from "@/components/ui/section";
-import { AerialGrid } from "@/components/drone/aerial-grid";
-import { Check } from "lucide-react";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Parallax } from "@/components/motion/parallax";
-import { Counter } from "@/components/ui/counter";
 import { Magnetic } from "@/components/ui/magnetic";
 import { Frame } from "@/components/ui/frame";
 import { ReviewsMarquee } from "@/components/reviews/reviews-marquee";
 import { projects, categories } from "@/data/projects";
 import { publicReviews } from "@/data/reviews";
-import { stats, process, packages, services } from "@/data/site";
+import { process, packages } from "@/data/site";
 import { pad } from "@/lib/utils";
 
 export default function HomePage() {
@@ -25,6 +23,9 @@ export default function HomePage() {
 
   return (
     <>
+      {/* The business-card landing. Overlays this page once per visit. */}
+      <ShowreelIntro />
+
       <Hero />
       <Marquee />
 
@@ -73,20 +74,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Counters */}
-        <div className="mt-20 grid grid-cols-2 gap-px border-t border-l border-line bg-line md:mt-28 md:grid-cols-4">
-          {stats.map((stat, i) => (
-            <div key={stat.label} className="bg-ink p-7 md:p-9">
-              <p className="eyebrow mb-5">{pad(i + 1)}</p>
-              <p className="display text-6xl leading-none text-bone md:text-7xl">
-                <Counter value={stat.value} suffix={stat.suffix} />
-              </p>
-              <p className="mt-3 text-[0.7rem] tracking-[0.16em] text-faint uppercase">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
       </section>
 
       {/* ── Selected work ─────────────────────────────────────────────────── */}
@@ -170,78 +157,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Drone — flagship new service ──────────────────────────────────── */}
-      <section
-        className="relative overflow-hidden border-b border-line"
-        aria-labelledby="drone-heading"
-      >
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-end"
-          aria-hidden="true"
-        >
-          <AerialGrid className="h-[190%] w-auto opacity-60 md:h-[150%] md:translate-x-[12%]" />
-        </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40"
-        />
-
-        <div className="shell relative grid gap-10 py-24 md:grid-cols-12 md:py-32">
-          <div className="md:col-span-7">
-            <Reveal>
-              <p className="eyebrow mb-6 flex items-center gap-3">
-                <span className="text-accent">New</span>
-                <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-                Aerial Production
-              </p>
-            </Reveal>
-
-            <h2
-              id="drone-heading"
-              className="display text-[15vw] leading-[0.86] sm:text-[10vw] md:text-[6vw]"
-            >
-              <TextReveal text="Drone Services." />
-            </h2>
-
-            <Reveal delay={0.1}>
-              <p className="body-lg mt-7 max-w-xl">
-                Aerial reveals, establishing shots, and top-down movement — the
-                frames that give a build, a property, or a shop real scale. Book it
-                on its own or add it to any production.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.18}>
-              <div className="mt-9 flex flex-wrap gap-4">
-                <Magnetic href="/drone" variant="solid">
-                  Explore Drone
-                </Magnetic>
-                <Magnetic href="/contact" variant="outline">
-                  Book Aerial
-                </Magnetic>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.12} className="md:col-span-4 md:col-start-9">
-            <ul className="flex flex-col gap-3 border-t border-line pt-7">
-              {(services.find((sv) => sv.id === "drone")?.points ?? [])
-                .slice(0, 6)
-                .map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-sm text-mute">
-                    <Check
-                      size={12}
-                      strokeWidth={2}
-                      aria-hidden="true"
-                      className="mt-1.5 shrink-0 text-accent"
-                    />
-                    {point}
-                  </li>
-                ))}
-            </ul>
-          </Reveal>
-        </div>
-      </section>
 
       <ReelPanel />
 

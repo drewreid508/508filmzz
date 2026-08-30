@@ -11,8 +11,6 @@
 export type CategoryId =
   | "automotive"
   | "commercial"
-  | "drone"
-  | "photography"
   | "social";
 
 export type Project = {
@@ -63,24 +61,6 @@ export const categories: {
     headline: "Commercial",
     blurb:
       "Brand films and service campaigns that make a working business look national.",
-  },
-  {
-    id: "drone",
-    label: "Drone",
-    href: "/drone",
-    eyebrow: "Vertical 03",
-    headline: "Drone",
-    blurb:
-      "Aerial reveals, establishing shots, and top-down movement that give a build real scale.",
-  },
-  {
-    id: "photography",
-    label: "Photography",
-    href: "/photography",
-    eyebrow: "Vertical 04",
-    headline: "Photography",
-    blurb:
-      "Commercial stills that carry the same lighting and grade as the film they ship with.",
   },
   {
     id: "social",
@@ -161,6 +141,28 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "night-wash",
+    title: "Night Wash",
+    subject: "Bratchers Power Washing",
+    category: "commercial",
+    year: "2026",
+    featured: false,
+    summary: "Overnight service coverage, shot on location while the work happened.",
+    description: [
+      "Commercial cleaning happens after closing, so the shoot happens after closing. Lit almost entirely by the canopy overhead, with the wet concrete doing most of the work as a reflector.",
+      "Coverage of the crew mid-job rather than a staged setup — the version a customer believes.",
+    ],
+    deliverables: ["On-location coverage", "Low-light shooting", "Vertical edit"],
+    hero: "poster-night-wash",
+    gallery: ["poster-night-wash"],
+    video: {
+      src: "/media/video/bratchers-night-wash.mp4",
+      poster: "poster-night-wash",
+      aspect: 9 / 16,
+      label: "Full edit",
+    },
+  },
+  {
     slug: "ram-2500",
     title: "RAM 2500",
     subject: "RAM 2500 on Forged Wheels",
@@ -200,28 +202,6 @@ export const projects: Project[] = [
     video: {
       src: "/media/video/g-wagon.mp4",
       poster: "poster-g-wagon",
-      aspect: 9 / 16,
-      label: "Full edit",
-    },
-  },
-  {
-    slug: "night-wash",
-    title: "Night Wash",
-    subject: "Bratchers Power Washing",
-    category: "commercial",
-    year: "2026",
-    featured: false,
-    summary: "Overnight service coverage, shot on location while the work happened.",
-    description: [
-      "Commercial cleaning happens after closing, so the shoot happens after closing. Lit almost entirely by the canopy overhead, with the wet concrete doing most of the work as a reflector.",
-      "Coverage of the crew mid-job rather than a staged setup — the version a customer believes.",
-    ],
-    deliverables: ["On-location coverage", "Low-light shooting", "Vertical edit"],
-    hero: "poster-night-wash",
-    gallery: ["poster-night-wash"],
-    video: {
-      src: "/media/video/bratchers-night-wash.mp4",
-      poster: "poster-night-wash",
       aspect: 9 / 16,
       label: "Full edit",
     },
@@ -286,7 +266,7 @@ export const projects: Project[] = [
     slug: "season",
     title: "Season",
     subject: "Waterfowl & Wild Country",
-    category: "photography",
+    category: "commercial",
     year: "2026",
     featured: true,
     summary: "A full season documented from blind to last light.",
@@ -348,11 +328,11 @@ export const projects: Project[] = [
     slug: "precision",
     title: "Precision",
     subject: "Machined Components",
-    category: "photography",
+    category: "commercial",
     year: "2026",
     summary: "Macro work on billet and coil, lit for material rather than product.",
     description: [
-      "Component photography treated like still life. A machined housing shot dead-on to show tooling marks, and a coil spring lit through teal gel until the metal reads as something closer to glass.",
+      "Component detail treated like still life. A machined housing shot dead-on to show tooling marks, and a coil spring lit through teal gel until the metal reads as something closer to glass.",
       "Deliberately abstract — these are the frames a supplier uses when the part itself has to look engineered rather than merely photographed.",
     ],
     deliverables: ["Macro component set", "Material studies"],

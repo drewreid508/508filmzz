@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-import { PROJECT_TYPES, BUDGETS, REFERRAL_SOURCES, TIME_WINDOWS } from "@/lib/inquiry";
+import {
+  PROJECT_TYPES,
+  BUDGETS,
+  REFERRAL_SOURCES,
+  TIME_WINDOWS,
+  SHOOT_FREQUENCIES,
+} from "@/lib/inquiry";
 import { monthlyPackages, packages } from "@/data/site";
 import {
   DISCOUNT_LABEL,
@@ -284,6 +290,33 @@ export function BookingForm() {
                   </option>
                 ))}
               </select>
+
+              {/*
+                How often, asked only here.
+                ────────────────────────────────────────────────────────────
+                A one-off booking has a date; ongoing work has a rhythm, and
+                without it a Custom enquiry cannot be quoted without a phone
+                call first. Optional, because "not sure yet" is a legitimate
+                answer and a required field would only collect guesses.
+              */}
+              <div className="mt-6">
+                <label htmlFor="frequency" className="eyebrow mb-1 block">
+                  How often (optional)
+                </label>
+                <select
+                  id="frequency"
+                  name="frequency"
+                  className={cn(fieldBase, "cursor-pointer")}
+                  defaultValue=""
+                >
+                  <option value="">How often do you want to film?</option>
+                  {SHOOT_FREQUENCIES.map((f) => (
+                    <option key={f} value={f} className="bg-ink-2">
+                      {f}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               {chosen && (
                 <dl className="mt-6 flex flex-col gap-2.5 border-t border-accent/25 pt-5 text-[0.82rem]">
@@ -597,6 +630,37 @@ export function BookingForm() {
           </span>
         </label>
         <FieldError message={errors.acknowledged} />
+
+        {/*
+          Text-message consent, kept deliberately separate from the box above.
+          ────────────────────────────────────────────────────────────────────
+          Two rules shape this and neither is styling. It must be unchecked
+          when the page loads — a pre-ticked box is not consent — and it must
+          be its own decision rather than a clause inside the required
+          acknowledgement, or the consent is not express. Everything carriers
+          look for is stated in the label itself: who is texting, what about,
+          that frequency varies, that rates apply, and how to stop.
+        */}
+        <label
+          htmlFor="smsConsent"
+          className="flex cursor-pointer items-start gap-3.5 border border-line p-5 text-[0.78rem] leading-relaxed text-faint transition-colors duration-400 hover:border-line-strong"
+        >
+          <input
+            id="smsConsent"
+            name="smsConsent"
+            type="checkbox"
+            className="mt-0.5 h-[1.15rem] w-[1.15rem] shrink-0 accent-accent"
+          />
+          <span>
+            <span className="text-mute">
+              Text me about my booking (optional).
+            </span>{" "}
+            I agree to receive text messages from 508 Filmzz about this request
+            and my shoot. Message frequency varies. Message and data rates may
+            apply. Reply STOP to opt out or HELP for help. Consent is not a
+            condition of purchase.
+          </span>
+        </label>
 
         <button
           type="submit"

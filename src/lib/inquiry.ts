@@ -48,6 +48,22 @@ export const REFERRAL_SOURCES = [
   "Other",
 ] as const;
 
+/**
+ * How often, for ongoing work.
+ *
+ * Only asked on the monthly branch, and kept to ranges a shoot schedule can
+ * actually be built from. A Custom enquiry that does not answer this is a
+ * quote that cannot be written without a phone call first, which is the one
+ * thing the form exists to avoid.
+ */
+export const SHOOT_FREQUENCIES = [
+  "Once a month",
+  "Twice a month",
+  "Weekly",
+  "A few times a year",
+  "Not sure yet — advise me",
+] as const;
+
 export const BUDGETS = [
   "Under $500",
   "$500 – $1,000",
@@ -74,6 +90,7 @@ export const inquirySchema = z.object({
   location: z.string().trim().max(180).optional().or(z.literal("")),
   referral: z.string().trim().max(80).optional().or(z.literal("")),
   shootTime: z.string().trim().max(40).optional().or(z.literal("")),
+  frequency: z.string().trim().max(40).optional().or(z.literal("")),
   social: z.string().trim().max(80).optional().or(z.literal("")),
   /*
     The acknowledgement. Required, and phrased as an understanding rather than
@@ -83,6 +100,16 @@ export const inquirySchema = z.object({
   acknowledged: z.literal("on", {
     message: "Please confirm you understand this is a request",
   }),
+  /*
+    Text-message consent. Optional, and it has to stay that way.
+
+    Under the TCPA this is express written consent to be texted, which is only
+    valid if it is a separate, affirmative act — so it is its own unchecked box
+    rather than folded into the acknowledgement above, and a booking submits
+    perfectly well without it. Making it required would make every consent on
+    file worthless, because a box you cannot submit without is not a choice.
+  */
+  smsConsent: z.literal("on").optional().or(z.literal("")),
   budget: z.enum(BUDGETS, { message: "Choose a budget range" }),
   message: z
     .string()

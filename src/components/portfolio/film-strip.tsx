@@ -12,8 +12,6 @@ import { pad } from "@/lib/utils";
 const categoryLabel: Record<Project["category"], string> = {
   automotive: "Automotive",
   commercial: "Commercial",
-  drone: "Drone",
-  photography: "Photography",
   social: "Social Media",
 };
 
