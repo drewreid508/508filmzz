@@ -117,7 +117,18 @@ Then in **Settings → Pages → Custom domain**, enter `www.508filmzz.com` and 
 
 `public/CNAME` already carries this domain, so the setting survives every deploy.
 
-### Status: parked, on purpose
+### Status: live on HTTPS
+
+`https://508filmzz.com` — certificate issued, Enforce HTTPS on, and the
+certificate covers `www.508filmzz.com` too, which 301s to the apex.
+
+**What finally unstuck it:** attaching the *apex* as the Pages custom domain.
+Provisioning had been retried repeatedly against `www` and never started. The
+apex is now canonical, so `public/CNAME` and `NEXT_PUBLIC_SITE_URL` both name
+it — those two and the Pages setting must always agree, or the deploy flips the
+domain out from under the certificate.
+
+### Previously: parked
 
 DNS is correct and finished — `www` CNAMEs to GitHub, the apex has the four A
 records, and both resolve from every public resolver. But **GitHub never issued
