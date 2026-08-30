@@ -39,15 +39,20 @@ export function FilmStrip() {
           <p className="eyebrow mb-4 flex items-center gap-3">
             <span className="text-accent">{pad(films.length)}</span>
             <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-            Finished Commercials
+            {/*
+              Not "Finished Commercials" any more. Two of these are full
+              commercials with voiceover and graphics; three are shot-and-cut
+              client pieces. One label has to be true of all five.
+            */}
+            Client Films
           </p>
           <h2 id="films-heading" className="display text-[13vw] leading-[0.9] sm:text-[8vw] md:text-[4.4vw]">
             The Films
           </h2>
         </div>
         <p className="body-lg max-w-md md:text-right">
-          Client work, start to finish — shot, cut, graded, and graphics built in
-          house. Press play.
+          Client work, start to finish — shot, cut and graded in house, from full
+          commercials to rolling coverage. Press play.
         </p>
       </div>
 

@@ -23,6 +23,14 @@ const TMP = path.resolve(".poster-tmp");
 const POSTERS = [
   { id: "poster-bratchers", video: "public/media/video/bratchers-power-washing.mp4", at: "3.2" },
   { id: "poster-revuelto", video: "public/media/video/hds-revuelto.mp4", at: "24" },
+  // The wand mid-spray, with the operator in frame — the shot that says what
+  // the job actually is. The wide of the empty bay reads as a parking lot.
+  { id: "poster-night-wash", video: "public/media/video/bratchers-night-wash.mp4", at: "10" },
+  // Headlight and brush guard: the tightest, best-lit frame in the piece.
+  { id: "poster-g-wagon", video: "public/media/video/g-wagon.mp4", at: "2" },
+  // The rolling highway shot, not the static bridge opener — motion is the
+  // point of this one, and the thumbnail should promise it.
+  { id: "poster-ram", video: "public/media/video/ram-hd.mp4", at: "24" },
 ];
 
 const WIDTHS = [420, 720, 1080];

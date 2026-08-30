@@ -1324,5 +1324,89 @@
         "webp": "/media/photos/poster-revuelto-1080.webp"
       }
     ]
+  },
+  "poster-night-wash": {
+    "id": "poster-night-wash",
+    "width": 1080,
+    "height": 1920,
+    "aspect": 0.5625,
+    "color": "#080808",
+    "lqip": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAAAQBgCdASoUACQAPtFSoU2oJKMiOrzIAQAaCWUAzfwsqPnx6dF+qYA3J9hTNOf3fHOviI7GWEr/z5AA/vd4nQ88KtN17y0yd5CW0xG8TxRuLZ/VfX+3vdU0y0itTyD2fRi062/fmcQDzLt5y/eoG2wUO35Hd+nvbLFHTo2Pdi/oaLX8xgfQwakgAAA=",
+    "sizes": [
+      {
+        "w": 420,
+        "h": 747,
+        "avif": "/media/photos/poster-night-wash-420.avif",
+        "webp": "/media/photos/poster-night-wash-420.webp"
+      },
+      {
+        "w": 720,
+        "h": 1280,
+        "avif": "/media/photos/poster-night-wash-720.avif",
+        "webp": "/media/photos/poster-night-wash-720.webp"
+      },
+      {
+        "w": 1080,
+        "h": 1920,
+        "avif": "/media/photos/poster-night-wash-1080.avif",
+        "webp": "/media/photos/poster-night-wash-1080.webp"
+      }
+    ]
+  },
+  "poster-g-wagon": {
+    "id": "poster-g-wagon",
+    "width": 1080,
+    "height": 1920,
+    "aspect": 0.5625,
+    "color": "#080808",
+    "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAABQBQCdASoUACQAPtFcoE2oJaMiOrmYAQAaCWkAAFvwH6tZrSH2nb5XPL32fyfjZTIWcwAA/pUOVurh0Cwj8akkCWTQkOKFTWJzBDV5JIXOxtWBBIWe4qdFpTtKfDGlXLV57LbhqO0QdtyYOs86T6NtAQAAAA==",
+    "sizes": [
+      {
+        "w": 420,
+        "h": 747,
+        "avif": "/media/photos/poster-g-wagon-420.avif",
+        "webp": "/media/photos/poster-g-wagon-420.webp"
+      },
+      {
+        "w": 720,
+        "h": 1280,
+        "avif": "/media/photos/poster-g-wagon-720.avif",
+        "webp": "/media/photos/poster-g-wagon-720.webp"
+      },
+      {
+        "w": 1080,
+        "h": 1920,
+        "avif": "/media/photos/poster-g-wagon-1080.avif",
+        "webp": "/media/photos/poster-g-wagon-1080.webp"
+      }
+    ]
+  },
+  "poster-ram": {
+    "id": "poster-ram",
+    "width": 1080,
+    "height": 1920,
+    "aspect": 0.5625,
+    "color": "#384858",
+    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADQBACdASoUACQAPulko02pJaMiMAqpIB0JZQC/7AJj2swzfFaNO4vorGgRbWDpCADaupDiHFqa4LYgP73gy22KjYKUhIC86FiFTcmXSZ3QY7B25G2BcxTTBToirToy8UBsKmWGbwAAAA==",
+    "sizes": [
+      {
+        "w": 420,
+        "h": 747,
+        "avif": "/media/photos/poster-ram-420.avif",
+        "webp": "/media/photos/poster-ram-420.webp"
+      },
+      {
+        "w": 720,
+        "h": 1280,
+        "avif": "/media/photos/poster-ram-720.avif",
+        "webp": "/media/photos/poster-ram-720.webp"
+      },
+      {
+        "w": 1080,
+        "h": 1920,
+        "avif": "/media/photos/poster-ram-1080.avif",
+        "webp": "/media/photos/poster-ram-1080.webp"
+      }
+    ]
   }
 }
