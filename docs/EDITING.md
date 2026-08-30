@@ -164,6 +164,8 @@ Current films:
 | `ram-2500.mp4` | RAM 2500 on forged wheels |
 | `g-wagon.mp4` | G-Class — Mercedes-Benz G-Class |
 | `bratchers-night-wash.mp4` | Night Wash — Bratchers, overnight |
+| `nmf-shop.mp4` | NMF — Naked Metal Fab |
+| `blueworks-dumpsters.mp4` | BlueWorks Dumpsters |
 
 The homepage showreel and the hero play button both point at
 `hds-revuelto.mp4`. To feature a different film, change the `src` and `poster`

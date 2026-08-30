@@ -31,6 +31,12 @@ const POSTERS = [
   // The rolling highway shot, not the static bridge opener — motion is the
   // point of this one, and the thumbnail should promise it.
   { id: "poster-ram", video: "public/media/video/ram-2500.mp4", at: "24" },
+  // The roll-off truck with the branded door and a loaded blue can — the frame
+  // that says whose business this is. The welding shots are better footage but
+  // read as a fab shop, not a dumpster service.
+  { id: "poster-blueworks", video: "public/media/video/blueworks-dumpsters.mp4", at: "15.5" },
+  // Painted subframe on the lift: colour, and unmistakably fabrication work.
+  { id: "poster-nmf", video: "public/media/video/nmf-shop.mp4", at: "40" },
 ];
 
 const WIDTHS = [420, 720, 1080];

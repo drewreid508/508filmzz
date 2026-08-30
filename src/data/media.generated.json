@@ -1408,5 +1408,61 @@
         "webp": "/media/photos/poster-ram-1080.webp"
       }
     ]
+  },
+  "poster-blueworks": {
+    "id": "poster-blueworks",
+    "width": 1080,
+    "height": 1920,
+    "aspect": 0.5625,
+    "color": "#e8e8e8",
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQBACdASoUACQAPu1iq08ppSOiMBqoATAdiWUAzrA+ecGW8AMriwCatAD+8MuJGecIngdjXmVavA1XHkNiee5kE+KX5VFCqjbQZAlwGg4y67rbGi0dVwPgQkAAAA==",
+    "sizes": [
+      {
+        "w": 420,
+        "h": 747,
+        "avif": "/media/photos/poster-blueworks-420.avif",
+        "webp": "/media/photos/poster-blueworks-420.webp"
+      },
+      {
+        "w": 720,
+        "h": 1280,
+        "avif": "/media/photos/poster-blueworks-720.avif",
+        "webp": "/media/photos/poster-blueworks-720.webp"
+      },
+      {
+        "w": 1080,
+        "h": 1920,
+        "avif": "/media/photos/poster-blueworks-1080.avif",
+        "webp": "/media/photos/poster-blueworks-1080.webp"
+      }
+    ]
+  },
+  "poster-nmf": {
+    "id": "poster-nmf",
+    "width": 1080,
+    "height": 1920,
+    "aspect": 0.5625,
+    "color": "#080808",
+    "lqip": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAADQBgCdASoUACQAPu1ipU2ppaMiMBqqqTAdiWQAtvtiE/QYxzP1fI2EKFY1zbPmlJCrwuhZTV9SMfCsXCAWKAAA/vDY9AeW/wFBB6jSNi5b/ojC2YwcXDlGrPYjBnBY5AurzD8+zmiP5v/R58VvkcDRLOq4+lEzFLAl6Hp3sk+/xLzH/6/beKYxJOeCraxy1HAPki/r8s7sIOb4tzxJO4xx94YrfcAA",
+    "sizes": [
+      {
+        "w": 420,
+        "h": 747,
+        "avif": "/media/photos/poster-nmf-420.avif",
+        "webp": "/media/photos/poster-nmf-420.webp"
+      },
+      {
+        "w": 720,
+        "h": 1280,
+        "avif": "/media/photos/poster-nmf-720.avif",
+        "webp": "/media/photos/poster-nmf-720.webp"
+      },
+      {
+        "w": 1080,
+        "h": 1920,
+        "avif": "/media/photos/poster-nmf-1080.avif",
+        "webp": "/media/photos/poster-nmf-1080.webp"
+      }
+    ]
   }
 }
