@@ -367,10 +367,6 @@ export const batchNote = {
 };
 
 
-/** The sign-off under the value grid. First person, like the rest of the site. */
-export const valueStatement =
-  "You handle the business. I handle making it look impossible to ignore.";
-
 /**
  * ── EDIT ME: MONTHLY CONTENT ───────────────────────────────────────────────
  * The recurring side of the business, kept deliberately separate from

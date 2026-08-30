@@ -12,8 +12,6 @@ import {
   pricingNote,
   monthlyNote,
   monthlyCommitment,
-  benefits,
-  valueStatement,
   newClientOffer,
   commitmentTiers,
   faqs,
@@ -151,89 +149,11 @@ export default function PricingPage() {
         lead="Two ways to work together: book a single production, or put the camera on a schedule. Every project is quoted on shoot time, location, and what you need delivered — so you always know what you're paying for."
       />
 
-      {/* ── Why it is worth paying for ────────────────────────────────────── */}
-      <section className="shell pb-16 md:pb-24" aria-labelledby="value-heading">
-        <SectionHeader
-          id="value-heading"
-          index="02"
-          eyebrow="What It's For"
-          title="Turn Views Into Customers"
-          lead="Your business deserves more than a video that looks good. Every piece is built to do a job — get seen, earn trust, and end in someone getting in touch."
-        />
-
-        {/*
-          The bordered five-across grid is the same construction the service pages
-          use for their inclusions, so this reads as part of the site rather
-          than a sales page dropped into it. One across on a phone and two from 640px
-          up: at five columns these bodies wrap to six or seven lines, which
-          stops being scannable.
-        */}
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {benefits.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 4) * 0.05} className="bg-ink p-7 md:p-8">
-              <p className="eyebrow mb-5 text-accent">{pad(i + 1)}</p>
-              <h3 className="display text-2xl leading-none md:text-[1.6rem]">
-                {item.title}
-              </h3>
-              <p className="mt-3.5 text-[0.82rem] leading-relaxed text-mute">
-                {item.body}
-              </p>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.12}>
-          <p className="display mt-14 max-w-4xl text-[7vw] leading-[0.98] text-balance sm:text-[4.4vw] md:text-[2.7vw]">
-            {valueStatement}
-          </p>
-          <p className="eyebrow mt-6">
-            508 Filmzz <span className="text-accent">—</span> {site.tagline}
-          </p>
-        </Reveal>
-      </section>
-
-      {/* ── One-off packages ──────────────────────────────────────────────── */}
-      <section className="shell pb-16 md:pb-24" aria-labelledby="oneoff-heading">
-        <SectionHeader
-          id="oneoff-heading"
-          index="03"
-          eyebrow="Single Bookings"
-          title="One-Time Projects"
-          lead="Not ready for a monthly schedule? Book a single production instead. Priced per job, delivered, done — no commitment past the project."
-        />
-
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 xl:grid-cols-4">
-          {packages.map((pkg, i) => (
-            <PriceCard
-              key={pkg.id}
-              index={i}
-              name={pkg.name}
-              price={pkg.price}
-              summary={pkg.summary}
-              includes={pkg.includes}
-              featured={pkg.featured}
-            />
-          ))}
-
-          {/*
-            No filler cell here any more. Four one-off packages divide evenly
-            into one, two and four columns, so no empty grid cell is left for
-            the container background to show through.
-          */}
-        </div>
-
-        <Reveal delay={0.1}>
-          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">
-            {pricingNote}
-          </p>
-        </Reveal>
-      </section>
-
       {/* ── Monthly content ───────────────────────────────────────────────── */}
       <section className="shell pb-16 md:pb-24" aria-labelledby="monthly-heading">
         <SectionHeader
           id="monthly-heading"
-          index="04"
+          index="02"
           eyebrow="Ongoing Content"
           title="Monthly Content"
           lead="Consistent content without the hassle. A monthly package is a standing production slot booked on a rhythm, so there is always something new to publish and one look running through all of it."
@@ -374,6 +294,43 @@ export default function PricingPage() {
         <Reveal delay={0.1}>
           <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">
             {monthlyNote}
+          </p>
+        </Reveal>
+      </section>
+
+      {/* ── One-off packages ──────────────────────────────────────────────── */}
+      <section className="shell pb-16 md:pb-24" aria-labelledby="oneoff-heading">
+        <SectionHeader
+          id="oneoff-heading"
+          index="03"
+          eyebrow="Single Bookings"
+          title="One-Time Projects"
+          lead="Not ready for a monthly schedule? Book a single production instead. Priced per job, delivered, done — no commitment past the project."
+        />
+
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 xl:grid-cols-4">
+          {packages.map((pkg, i) => (
+            <PriceCard
+              key={pkg.id}
+              index={i}
+              name={pkg.name}
+              price={pkg.price}
+              summary={pkg.summary}
+              includes={pkg.includes}
+              featured={pkg.featured}
+            />
+          ))}
+
+          {/*
+            No filler cell here any more. Four one-off packages divide evenly
+            into one, two and four columns, so no empty grid cell is left for
+            the container background to show through.
+          */}
+        </div>
+
+        <Reveal delay={0.1}>
+          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">
+            {pricingNote}
           </p>
         </Reveal>
       </section>
