@@ -38,7 +38,7 @@ export function Footer() {
               Tell me the vehicle, the business, or the season. I&apos;ll tell you
               exactly what it takes to make it look like this.
             </p>
-            <Magnetic href="/contact" variant="solid">
+            <Magnetic href="/book" variant="solid">
               Book a Shoot
             </Magnetic>
           </div>

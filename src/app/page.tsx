@@ -341,7 +341,7 @@ export default function HomePage() {
           </h2>
           <Reveal delay={0.12}>
             <div className="mt-11 flex flex-wrap justify-center gap-4">
-              <Magnetic href="/contact" variant="solid">
+              <Magnetic href="/book" variant="solid">
                 Book a Shoot
               </Magnetic>
               <Magnetic href="/pricing" variant="outline">

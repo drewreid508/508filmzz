@@ -146,7 +146,7 @@ export function Hero() {
               is the thing they are already looking at.
             */}
             <Magnetic
-              href="/contact"
+              href="/book"
               variant="solid"
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"

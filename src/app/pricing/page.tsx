@@ -142,7 +142,7 @@ function PriceCard({
 
       <div className="mt-9">
         <Magnetic
-          href="/contact"
+          href="/book"
           variant={featured ? "solid" : "outline"}
           wrapperClassName="w-full"
           className="w-full"
@@ -290,7 +290,7 @@ export default function PricingPage() {
               </div>
 
               <Magnetic
-                href="/contact"
+                href="/book"
                 variant="solid"
                 wrapperClassName="w-full shrink-0 sm:w-auto"
                 className="w-full sm:w-auto"
@@ -433,7 +433,7 @@ export default function PricingPage() {
 
             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row md:flex-col md:items-end">
               <Magnetic
-                href="/contact"
+                href="/book"
                 variant="solid"
                 wrapperClassName="w-full sm:w-auto"
                 className="w-full sm:w-auto"
@@ -441,7 +441,7 @@ export default function PricingPage() {
                 Book a Shoot
               </Magnetic>
               <Magnetic
-                href="/contact"
+                href="/book"
                 variant="outline"
                 wrapperClassName="w-full sm:w-auto"
                 className="w-full sm:w-auto"

@@ -117,6 +117,15 @@ export const nav = [
 ] as const;
 
 /*
+  Book a Shoot is not in `nav`.
+
+  It is the header's standalone button and the footer's primary action, and it
+  would be a seventh item on a bar that already wraps at seven. Contact stays
+  in the nav because it answers a different question — how to reach me — while
+  /book is where someone goes having already decided.
+*/
+
+/*
   Drone is off the nav, not deleted.
 
   Six items is the most a phone header carries without wrapping, and drone is a

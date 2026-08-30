@@ -202,6 +202,7 @@ function readLead(named) {
     time: fromMessage(message, "preferred time"),
     location: clean(field(named, "location")),
     referral: fromMessage(message, "heard about 508 filmzz via"),
+    social: fromMessage(message, "social"),
     promo: fromMessage(message, "promo code used"),
     message: message,
   };
@@ -231,14 +232,18 @@ function sendText(lead) {
     if (!SMS_TO_NUMBER) return { ok: false, error: "SMS_TO_NUMBER is empty" };
     if (keyMissing()) return { ok: false, error: "TEXTBELT_KEY is not set" };
 
-    var lines = ["508 FILMZZ - NEW BOOKING", ""];
-    lines.push((lead.name || "Someone") + " just requested a shoot.");
-    if (lead.business) lines.push(lead.business);
-    if (lead.service) lines.push(lead.service);
-    if (lead.date) lines.push("Date: " + lead.date + (lead.time ? " " + lead.time : ""));
-    if (lead.location) lines.push(lead.location);
-    if (lead.budget) lines.push("Budget: " + lead.budget);
-    if (lead.phone) lines.push("Call: " + lead.phone);
+    var lines = ["NEW 508 FILMZZ BOOKING", ""];
+    if (lead.name) lines.push("Name: " + lead.name);
+    if (lead.business) lines.push("Business: " + lead.business);
+    if (lead.service) lines.push("Shoot: " + lead.service);
+    if (lead.date) lines.push("Date: " + lead.date);
+    if (lead.time) lines.push("Time: " + lead.time);
+    if (lead.location) lines.push("Location: " + lead.location);
+    lines.push("");
+    if (lead.phone) lines.push("Phone: " + lead.phone);
+    if (lead.email) lines.push("Email: " + lead.email);
+    lines.push("");
+    lines.push("Open your booking sheet for full details.");
 
     var res = UrlFetchApp.fetch(TEXTBELT_URL, {
       method: "post",
@@ -284,6 +289,7 @@ function sendEmail(lead) {
       ["Preferred Time", lead.time],
       ["Location", lead.location],
       ["Budget", lead.budget],
+      ["Instagram / TikTok", lead.social],
       ["How They Found Us", lead.referral],
       ["Promo Code", lead.promo],
     ];
@@ -360,6 +366,7 @@ function testAlert() {
     time: "2:00 PM",
     location: "Greenville, SC",
     referral: "Business card",
+    social: "@sandersdiesel",
     promo: "",
     message: "TEST booking from the script editor. Delete this once seen.",
   };

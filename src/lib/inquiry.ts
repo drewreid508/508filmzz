@@ -12,12 +12,29 @@ import { z } from "zod";
   description says what Other means far better than a label would.
 */
 export const PROJECT_TYPES = [
-  "Automotive Cinematography",
-  "Commercial Production",
+  "Automotive Reel",
+  "Dealership Content",
+  "Detailing / Shop Content",
   "Social Media Content",
-  "Photography",
-  "Monthly Content",
+  "Event",
+  "Monthly Content Package",
   "Other",
+] as const;
+
+/**
+ * When, roughly.
+ *
+ * Windows rather than a clock: an automotive shoot is booked against light,
+ * not against a minute, and "golden hour" is a more useful answer than 6:47pm.
+ * A short dropdown also beats a native time picker on a phone.
+ */
+export const TIME_WINDOWS = [
+  "Morning",
+  "Midday",
+  "Afternoon",
+  "Golden hour",
+  "Evening / night",
+  "Flexible",
 ] as const;
 
 /** Where the enquiry came from. Plain options — this is a lead source, not a survey. */
@@ -56,6 +73,16 @@ export const inquirySchema = z.object({
     .or(z.literal("")),
   location: z.string().trim().max(180).optional().or(z.literal("")),
   referral: z.string().trim().max(80).optional().or(z.literal("")),
+  shootTime: z.string().trim().max(40).optional().or(z.literal("")),
+  social: z.string().trim().max(80).optional().or(z.literal("")),
+  /*
+    The acknowledgement. Required, and phrased as an understanding rather than
+    a waiver — it protects the date from being treated as held, which is the
+    one misunderstanding that costs a shoot.
+  */
+  acknowledged: z.literal("on", {
+    message: "Please confirm you understand this is a request",
+  }),
   budget: z.enum(BUDGETS, { message: "Choose a budget range" }),
   message: z
     .string()

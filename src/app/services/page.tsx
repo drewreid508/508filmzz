@@ -113,7 +113,7 @@ export default function ServicesPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Magnetic href="/contact" variant="solid">
+            <Magnetic href="/book" variant="solid">
               Book a Shoot
             </Magnetic>
             <Magnetic href="/pricing" variant="outline">

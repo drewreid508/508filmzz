@@ -179,7 +179,7 @@ export default async function ProjectPage({
               Start a project<span className="text-accent">.</span>
             </p>
           </div>
-          <Magnetic href="/contact" variant="solid">
+          <Magnetic href="/book" variant="solid">
             Book a Shoot
           </Magnetic>
         </div>

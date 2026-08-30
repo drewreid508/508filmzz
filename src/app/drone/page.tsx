@@ -183,7 +183,7 @@ export default function DronePage() {
             </p>
           </div>
           <div className="flex flex-col gap-3">
-            <Magnetic href="/contact" variant="solid">
+            <Magnetic href="/book" variant="solid">
               Book a Shoot
             </Magnetic>
             <a

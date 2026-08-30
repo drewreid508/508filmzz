@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-import { PROJECT_TYPES, BUDGETS, REFERRAL_SOURCES } from "@/lib/inquiry";
+import { PROJECT_TYPES, BUDGETS, REFERRAL_SOURCES, TIME_WINDOWS } from "@/lib/inquiry";
 import { monthlyPackages, packages } from "@/data/site";
 import {
   DISCOUNT_LABEL,
@@ -480,7 +480,40 @@ export function BookingForm() {
         </div>
 
         <div className="flex flex-col">
-          <Label index={10} htmlFor="referral">
+          <Label index={10} htmlFor="shootTime">
+            Preferred Time
+          </Label>
+          <select
+            id="shootTime"
+            name="shootTime"
+            defaultValue=""
+            className={cn(fieldBase, "cursor-pointer")}
+          >
+            <option value="">Optional</option>
+            {TIME_WINDOWS.map((t) => (
+              <option key={t} value={t} className="bg-ink-2">
+                {t}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-col">
+          <Label index={11} htmlFor="social">
+            Instagram / TikTok
+          </Label>
+          <input
+            id="social"
+            name="social"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="@yourhandle — optional"
+            className={fieldBase}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <Label index={12} htmlFor="referral">
             How Did You Hear About 508 Filmzz?
           </Label>
           <select
@@ -498,7 +531,7 @@ export function BookingForm() {
           </select>
         </div>
 
-        <Label index={11} htmlFor="message">
+        <Label index={13} htmlFor="message">
           Message *
         </Label>
         <textarea
@@ -536,6 +569,34 @@ export function BookingForm() {
         <p className="max-w-sm text-[0.72rem] leading-relaxed text-faint">
           Your details go straight to me — never shared, never added to a list.
         </p>
+
+        {/*
+          The acknowledgement.
+          ────────────────────────────────────────────────────────────────────
+          Sits directly above the button, not buried in fine print, because it
+          is the one thing a client can misread expensively: assuming the date
+          is held the moment they hit send. Required, and written as an
+          understanding rather than a waiver.
+        */}
+        <label
+          htmlFor="acknowledged"
+          className="flex cursor-pointer items-start gap-3.5 border border-line bg-ink-2 p-5 text-[0.84rem] leading-relaxed text-mute transition-colors duration-400 hover:border-line-strong"
+        >
+          <input
+            id="acknowledged"
+            name="acknowledged"
+            type="checkbox"
+            required
+            className="mt-0.5 h-[1.15rem] w-[1.15rem] shrink-0 accent-accent"
+            aria-invalid={Boolean(errors.acknowledged)}
+          />
+          <span>
+            I understand that submitting this form is a booking{" "}
+            <span className="text-bone">request</span> and does not guarantee
+            the date until 508 Filmzz confirms it.
+          </span>
+        </label>
+        <FieldError message={errors.acknowledged} />
 
         <button
           type="submit"

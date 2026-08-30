@@ -34,6 +34,9 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     location: String(form.get("location") ?? ""),
     budget: String(form.get("budget") ?? ""),
     referral: String(form.get("referral") ?? ""),
+    shootTime: String(form.get("shootTime") ?? ""),
+    social: String(form.get("social") ?? ""),
+    acknowledged: String(form.get("acknowledged") ?? ""),
     message: String(form.get("message") ?? ""),
     website: String(form.get("website") ?? ""),
   };
@@ -59,10 +62,20 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     Form has no question for. Worth capturing: it is the only thing that tells
     Drew whether the business cards are actually working.
   */
+  /*
+    Time, handle and lead source ride in the project details, like everything
+    else the Google Form has no question for. The labels are what the Apps
+    Script parses back out for the text and the email, so they are fixed
+    wording rather than prose.
+  */
+  const extras: string[] = [];
+  const shootTime = String(form.get("shootTime") ?? "").trim();
+  const social = String(form.get("social") ?? "").trim();
   const referral = String(form.get("referral") ?? "").trim();
-  if (referral) {
-    raw.message = `${raw.message}\n\nHeard about 508 Filmzz via: ${referral}`;
-  }
+  if (shootTime) extras.push(`Preferred time: ${shootTime}`);
+  if (social) extras.push(`Social: ${social}`);
+  if (referral) extras.push(`Heard about 508 Filmzz via: ${referral}`);
+  if (extras.length) raw.message = `${raw.message}\n\n${extras.join("\n")}`;
 
   const promoRaw = String(form.get("promoCode") ?? "").trim();
   const promoValid = promoRaw ? isPromoCode(promoRaw) : false;

@@ -134,7 +134,7 @@ export default function AboutPage() {
               {site.email}
             </a>
           </div>
-          <Magnetic href="/contact" variant="solid">
+          <Magnetic href="/book" variant="solid">
             Book a Shoot
           </Magnetic>
         </div>
