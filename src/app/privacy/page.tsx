@@ -39,7 +39,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="display mb-4 text-2xl text-bone">Who I am</h2>
             <p>
-              508 Filmzz is a video production and commercial photography
+              508 Filmzz is a video production
               business operated by {site.owner}, based in {site.address.city},{" "}
               {site.address.stateShort}, serving {site.primaryMarket} and Upstate
               South Carolina. For any privacy question, email{" "}
@@ -128,7 +128,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="display mb-4 text-2xl text-bone">Your footage</h2>
             <p>
-              Photographs and video produced for you are covered by our project
+              Video and stills produced for you are covered by our project
               agreement, not this policy. I may show completed work in my
               portfolio and on social media unless we agree otherwise in writing
               before the shoot — just tell me and it stays private.

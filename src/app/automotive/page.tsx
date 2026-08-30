@@ -6,7 +6,7 @@ import { CategoryPitch } from "@/components/portfolio/category-pitch";
 export const metadata: Metadata = {
   title: "Automotive Films",
   description:
-    "Cinematic automotive films and photography — exotics, lifted trucks, and shop builds shot like a factory launch film and cut like a trailer.",
+    "Cinematic automotive films — exotics, lifted trucks, and shop builds shot like a factory launch film and cut like a trailer.",
   alternates: { canonical: "/automotive" },
 };
 

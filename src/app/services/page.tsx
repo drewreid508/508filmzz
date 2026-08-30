@@ -13,7 +13,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Automotive cinematography, social media content, commercial production, drone services, photography, and video editing — serving Greenville and Upstate South Carolina.",
+    "Social media reels, commercial video, automotive content and monthly content packages — serving Greenville and Upstate South Carolina.",
   alternates: { canonical: "/services" },
 };
 

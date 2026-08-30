@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  * The Work page is a wall, not a set of albums.
  *
  * It used to open with project cards that had to be clicked into before a
- * single photograph was visible. Now the two finished films play at the top and
+ * single frame was visible. Now the finished films play at the top and
  * every frame sits below them, filterable in place. Clicking a frame opens it
  * full screen; nothing is hidden behind a page load.
  */
