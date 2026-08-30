@@ -1297,34 +1297,6 @@
       }
     ]
   },
-  "poster-revuelto": {
-    "id": "poster-revuelto",
-    "width": 1080,
-    "height": 1920,
-    "aspect": 0.5625,
-    "color": "#080808",
-    "lqip": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAACQBgCdASoUACQAPtlco02oJaMiOrZoAQAbCWUAxnOAgfhkdNV9kI4EwLuWVAvGnjvwGSYyKFdjjp1zGxxAAP7vZO6j2N2h8ERBdulz8fpu0dMlkvPTcHLKD7M3yMuG4I68Ttw1VeXEs82icJQM+9/5qeMHWiNvQUHfwfbVx8nIUtBGlnm8H4fSyhnnzNfq6hrpyRJAAAA=",
-    "sizes": [
-      {
-        "w": 420,
-        "h": 747,
-        "avif": "/media/photos/poster-revuelto-420.avif",
-        "webp": "/media/photos/poster-revuelto-420.webp"
-      },
-      {
-        "w": 720,
-        "h": 1280,
-        "avif": "/media/photos/poster-revuelto-720.avif",
-        "webp": "/media/photos/poster-revuelto-720.webp"
-      },
-      {
-        "w": 1080,
-        "h": 1920,
-        "avif": "/media/photos/poster-revuelto-1080.avif",
-        "webp": "/media/photos/poster-revuelto-1080.webp"
-      }
-    ]
-  },
   "poster-night-wash": {
     "id": "poster-night-wash",
     "width": 1080,

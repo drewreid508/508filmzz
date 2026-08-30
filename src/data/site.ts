@@ -173,7 +173,7 @@ export const services: Service[] = [
       "Social media packages",
       "Short-form advertising",
     ],
-    image: "poster-revuelto",
+    image: "poster-nmf",
   },
   {
     id: "commercial",

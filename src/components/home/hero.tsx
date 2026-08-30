@@ -205,8 +205,8 @@ export function Hero() {
         transition={{ delay: 1.15, duration: 1 }}
       >
         <VideoModal
-          src={asset("/media/video/hds-revuelto.mp4")}
-          title="Revuelto — HDS commercial"
+          src={asset("/media/video/ram-2500.mp4")}
+          title="RAM 2500 — rolling coverage"
           aspect={9 / 16}
           trigger={<PlayButton label="Watch The Film" />}
         />

@@ -121,8 +121,8 @@ Encode into `public/media/video/`, then add a poster frame in
 
 ```ts
 video: {
-  src: "/media/video/hds-revuelto.mp4",
-  poster: "poster-revuelto",
+  src: "/media/video/ram-2500.mp4",
+  poster: "poster-ram",
   aspect: 9 / 16,
   label: "Full film",
 }

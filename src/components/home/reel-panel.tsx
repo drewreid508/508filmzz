@@ -49,9 +49,9 @@ export function ReelPanel() {
         <div className="md:col-span-6 md:col-start-7">
           <Reveal blur={16} y={40}>
             <ReelPlayer
-              src={asset("/media/video/hds-revuelto.mp4")}
-              poster="poster-revuelto"
-              title="Revuelto — HDS commercial"
+              src={asset("/media/video/ram-2500.mp4")}
+              poster="poster-ram"
+              title="RAM 2500 — rolling coverage"
             />
             <div className="mx-auto mt-5 flex max-w-[380px] items-center justify-between">
               <span className="eyebrow">9:16 — Reels / Shorts</span>

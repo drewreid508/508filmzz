@@ -169,7 +169,6 @@ Current films:
 
 | File | Project |
 | --- | --- |
-| `hds-revuelto.mp4` | Revuelto — HDS / Hannah's Detailing |
 | `bratchers-power-washing.mp4` | Bratchers Power Washing |
 | `ram-2500.mp4` | RAM 2500 on forged wheels |
 | `g-wagon.mp4` | G-Class — Mercedes-Benz G-Class |
@@ -178,7 +177,7 @@ Current films:
 | `blueworks-dumpsters.mp4` | BlueWorks Dumpsters |
 
 The homepage showreel and the hero play button both point at
-`hds-revuelto.mp4`. To feature a different film, change the `src` and `poster`
+`ram-2500.mp4`. To feature a different film, change the `src` and `poster`
 in `src/components/home/reel-panel.tsx` and `src/components/home/hero.tsx`.
 
 ### Poster frames

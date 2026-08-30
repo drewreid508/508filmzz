@@ -95,28 +95,6 @@ export const categories: {
 
 export const projects: Project[] = [
   {
-    slug: "revuelto",
-    title: "Revuelto",
-    subject: "HDS / Hannah's Detailing & Supply",
-    category: "automotive",
-    year: "2026",
-    featured: true,
-    summary: "A full vertical commercial built around a Lamborghini Revuelto.",
-    description: [
-      "A paid ad for a detailing studio, built around the most striking car on the lot. The Revuelto carries the hook; the offer lands once the viewer is already watching.",
-      "Shot and cut vertical from the first frame, with animated brand graphics, captioned voiceover, and a close that puts the offer and the studio name on screen together.",
-    ],
-    deliverables: ["Vertical commercial", "Animated graphics", "Captioned edit"],
-    hero: "poster-revuelto",
-    gallery: ["poster-revuelto"],
-    video: {
-      src: "/media/video/hds-revuelto.mp4",
-      poster: "poster-revuelto",
-      aspect: 9 / 16,
-      label: "Full commercial",
-    },
-  },
-  {
     slug: "bratchers-power-washing",
     title: "Bratchers",
     subject: "Bratchers Power Washing",
