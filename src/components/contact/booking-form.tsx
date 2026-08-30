@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { PROJECT_TYPES, BUDGETS } from "@/lib/inquiry";
 import { submitLead } from "@/lib/submit-lead";
+import { useHydrated } from "@/lib/use-hydrated";
 import { site } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
 
@@ -42,6 +43,7 @@ function FieldError({ message }: { message?: string }) {
 
 export function BookingForm() {
   const router = useRouter();
+  const hydrated = useHydrated();
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
@@ -277,9 +279,23 @@ export function BookingForm() {
           Your details go straight to me — never shared, never added to a list.
         </p>
 
+        {/*
+          Disabled until hydrated, not only while sending.
+          ───────────────────────────────────────────────────────────────────
+          The form is rendered and typeable in the static HTML, but onSubmit
+          only exists once React takes over. Submitting before that falls
+          through to the browser's native handler: with no method or action it
+          GETs this same page, losing the booking and writing the visitor's
+          name, email, phone and message into the URL and browser history.
+
+          A disabled submit button closes both routes to that — the click and
+          the Enter key, which triggers implicit submission through this same
+          button. Nothing here works without JavaScript, so this is the honest
+          state to ship rather than a workaround.
+        */}
         <button
           type="submit"
-          disabled={status === "sending"}
+          disabled={!hydrated || status === "sending"}
           className="inline-flex w-full items-center justify-center gap-3 bg-bone px-10 py-4 text-[0.72rem] font-medium tracking-[0.22em] text-ink uppercase transition-colors duration-500 hover:bg-accent hover:text-white disabled:pointer-events-none disabled:opacity-50 md:w-auto"
         >
           {status === "sending" ? (
