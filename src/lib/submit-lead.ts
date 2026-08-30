@@ -1,5 +1,7 @@
 import { inquirySchema } from "@/lib/inquiry";
 import { FORM_ENDPOINT, FIELD_IDS, BLANK_PLACEHOLDERS } from "@/lib/google-form";
+import { monthlyPackages } from "@/data/site";
+import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
 
 export { FORM_ENDPOINT };
 
@@ -27,6 +29,30 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     message: String(form.get("message") ?? ""),
     website: String(form.get("website") ?? ""),
   };
+
+  /*
+    Monthly terms travel inside the project details.
+
+    The Google Form has no question for a package or a rate, and adding one
+    means editing the form and re-reading its field ids. Appending labelled
+    lines captures the same information today, survives a form edit, and is
+    what the Apps Script reads back to fill the contract. The labels are the
+    contract's parser, so they are written once and not reworded casually.
+  */
+  const monthlyId = String(form.get("monthlyPackage") ?? "");
+  const chosen = monthlyPackages.find((p) => p.id === monthlyId);
+  if (chosen) {
+    const first = discountedPrice(chosen.price);
+    const terms = [
+      `Monthly package: ${chosen.name}`,
+      chosen.price
+        ? `Standard rate: ${chosen.price}/mo`
+        : "Standard rate: quoted per brand",
+      first ? `First month (${DISCOUNT_LABEL} off): ${first}` : null,
+      `Minimum term: ${MINIMUM_MONTHS} months`,
+    ].filter(Boolean);
+    raw.message = `${raw.message}\n\n${terms.join("\n")}`;
+  }
 
   const parsed = inquirySchema.safeParse(raw);
   if (!parsed.success) {

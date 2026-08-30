@@ -13,10 +13,12 @@ import {
   monthlyCommitment,
   valueProps,
   valueStatement,
+  newClientOffer,
   faqs,
   site,
 } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
+import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -42,6 +44,7 @@ function PriceCard({
   featured,
   /** Appended after the figure. Monthly tiers pass "/month"; one-offs pass none. */
   cadence,
+  showFirstMonth,
 }: {
   index: number;
   name: string;
@@ -50,7 +53,10 @@ function PriceCard({
   includes: string[];
   featured?: boolean;
   cadence?: string;
+  /** Monthly tiers pass true; the reduced figure is derived, never written. */
+  showFirstMonth?: boolean;
 }) {
+  const firstMonth = showFirstMonth ? discountedPrice(price) : null;
   return (
     <Reveal
       delay={(index % 3) * 0.06}
@@ -103,6 +109,17 @@ function PriceCard({
               Custom quote
             </p>
           </>
+        )}
+
+        {/*
+          The introductory rate, derived from the figure above rather than
+          written down. A discounted number stored separately is a number that
+          goes stale the first time a package price moves.
+        */}
+        {firstMonth && (
+          <p className="mt-3 text-[0.72rem] tracking-[0.06em] text-accent">
+            {firstMonth} first month for new clients
+          </p>
         )}
 
         <p className="mt-5 text-sm leading-relaxed text-mute">{summary}</p>
@@ -245,7 +262,54 @@ export default function PricingPage() {
           cards, and four columns below 1280px squeezes the price and wraps the
           checklist mid-phrase.
         */}
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 xl:grid-cols-4">
+        {/*
+          The offer sits above the tiers, not inside one.
+          ──────────────────────────────────────────────────────────────────
+          A badge on a card would read as that package being on sale. This is a
+          term of starting a partnership, so it is stated once, in the accent,
+          and the cards carry only their own derived first-month line.
+
+          Deliberately no struck-through prices and no "was/now": that is the
+          grammar of a clearance, and it teaches a client the standard rate is
+          negotiable.
+        */}
+        <Reveal delay={0.06}>
+          <div className="relative mt-14 overflow-hidden border border-accent/45 bg-accent/[0.055] p-8 md:p-11">
+            <span aria-hidden="true" className="absolute top-0 left-0 h-px w-full bg-accent" />
+
+            <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between md:gap-14">
+              <div>
+                <p className="eyebrow mb-4 text-accent">{newClientOffer.eyebrow}</p>
+                <h3 className="display text-[9vw] leading-[0.92] text-balance sm:text-[5.4vw] md:text-[3.1vw]">
+                  {DISCOUNT_LABEL} off your first month
+                </h3>
+                <p className="mt-5 max-w-xl text-sm leading-relaxed text-mute md:text-base">
+                  {newClientOffer.body}
+                </p>
+              </div>
+
+              <Magnetic
+                href="/contact"
+                variant="solid"
+                wrapperClassName="w-full shrink-0 sm:w-auto"
+                className="w-full sm:w-auto"
+              >
+                {newClientOffer.cta}
+              </Magnetic>
+            </div>
+
+            <ul className="mt-9 flex flex-col gap-2.5 border-t border-accent/25 pt-7 sm:grid sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-4">
+              {newClientOffer.terms.map((t) => (
+                <li key={t} className="flex items-start gap-2.5 text-[0.78rem] text-mute">
+                  <span aria-hidden="true" className="mt-[0.44rem] h-1 w-1 shrink-0 bg-accent" />
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Reveal>
+
+        <div className="mt-12 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 xl:grid-cols-4">
           {monthlyPackages.map((pkg, i) => (
             <PriceCard
               key={pkg.id}
@@ -256,6 +320,7 @@ export default function PricingPage() {
               includes={pkg.includes}
               featured={pkg.featured}
               cadence="/mo"
+              showFirstMonth
             />
           ))}
         </div>
@@ -283,6 +348,11 @@ export default function PricingPage() {
             <div className="flex max-w-2xl flex-col gap-3 md:pt-1">
               <p className="text-sm leading-relaxed text-mute md:text-base">
                 {monthlyCommitment.body}
+              </p>
+              <p className="text-sm leading-relaxed text-mute md:text-base">
+                The introductory rate applies to month one only. Months two and{" "}
+                {MINIMUM_MONTHS} are billed at the standard quoted price for your
+                package.
               </p>
               <p className="text-sm leading-relaxed text-faint">
                 {monthlyCommitment.custom}

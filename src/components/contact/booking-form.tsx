@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { PROJECT_TYPES, BUDGETS } from "@/lib/inquiry";
+import { monthlyPackages } from "@/data/site";
+import { discountedPrice, DISCOUNT_LABEL, MINIMUM_MONTHS } from "@/lib/offer";
 import { submitLead } from "@/lib/submit-lead";
 import { site } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
@@ -43,6 +45,16 @@ function FieldError({ message }: { message?: string }) {
 export function BookingForm() {
   const router = useRouter();
   const [status, setStatus] = useState<Status>("idle");
+
+  /*
+    Monthly bookings need terms on screen before the form is sent — the price,
+    the introductory month, and the minimum. Held in state rather than read off
+    the DOM so the panel and the value posted with the request cannot disagree.
+  */
+  const [isMonthly, setIsMonthly] = useState(false);
+  const [monthlyId, setMonthlyId] = useState("");
+  const chosen = monthlyPackages.find((p) => p.id === monthlyId) ?? null;
+  const firstMonth = chosen ? discountedPrice(chosen.price) : null;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -169,6 +181,11 @@ export function BookingForm() {
             name="projectType"
             required
             defaultValue=""
+            onChange={(e) => {
+              const monthly = e.target.value === "Monthly Content";
+              setIsMonthly(monthly);
+              if (!monthly) setMonthlyId("");
+            }}
             className={cn(fieldBase, "cursor-pointer")}
             aria-invalid={Boolean(errors.projectType)}
           >
@@ -182,6 +199,70 @@ export function BookingForm() {
             ))}
           </select>
           <FieldError message={errors.projectType} />
+
+          {/*
+            Shown only for monthly. Everything in it is derived: the reduced
+            figure comes from the package's own price, the minimum from one
+            constant. Nothing here is a second copy of a number written
+            elsewhere, so the form cannot quote terms the pricing page does not.
+          */}
+          {isMonthly && (
+            <div className="mt-7 border border-accent/40 bg-accent/[0.055] p-6">
+              <p className="eyebrow mb-4 text-accent">Monthly Package</p>
+
+              <select
+                id="monthlyPackage"
+                name="monthlyPackage"
+                value={monthlyId}
+                onChange={(e) => setMonthlyId(e.target.value)}
+                className={cn(fieldBase, "cursor-pointer")}
+              >
+                <option value="">Which package are you interested in?</option>
+                {monthlyPackages.map((p) => (
+                  <option key={p.id} value={p.id} className="bg-ink-2">
+                    {p.name}
+                    {p.price ? ` — ${p.price}/mo` : " — custom quote"}
+                  </option>
+                ))}
+              </select>
+
+              {chosen && (
+                <dl className="mt-6 flex flex-col gap-2.5 border-t border-accent/25 pt-5 text-[0.82rem]">
+                  {chosen.price ? (
+                    <>
+                      <div className="flex items-baseline justify-between gap-4">
+                        <dt className="text-mute">Standard monthly rate</dt>
+                        <dd className="text-bone tabular-nums">{chosen.price}/mo</dd>
+                      </div>
+                      <div className="flex items-baseline justify-between gap-4">
+                        <dt className="text-accent">
+                          First month, new clients ({DISCOUNT_LABEL} off)
+                        </dt>
+                        <dd className="text-accent tabular-nums">{firstMonth}</dd>
+                      </div>
+                      <div className="flex items-baseline justify-between gap-4">
+                        <dt className="text-mute">
+                          Months 2 &amp; {MINIMUM_MONTHS}
+                        </dt>
+                        <dd className="text-bone tabular-nums">{chosen.price}/mo</dd>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex items-baseline justify-between gap-4">
+                      <dt className="text-mute">Rate</dt>
+                      <dd className="text-bone">Quoted per brand</dd>
+                    </div>
+                  )}
+
+                  <p className="mt-3 border-t border-accent/25 pt-4 text-[0.76rem] leading-relaxed text-faint">
+                    {MINIMUM_MONTHS}-month minimum. The introductory rate applies to
+                    month one only. Figures are starting points — your exact rate
+                    comes from your quote.
+                  </p>
+                </dl>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col">

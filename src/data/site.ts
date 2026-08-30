@@ -460,9 +460,33 @@ export const monthlyPackages: MonthlyPackage[] = [
  * buys footage, two months start building a library and a recognisable look.
  */
 export const monthlyCommitment = {
-  label: "2-Month Minimum",
-  body: "Monthly content partnerships require a minimum 2-month commitment. After the initial term, packages continue month-to-month.",
+  label: "3-Month Minimum",
+  body: "Monthly content partnerships run on a three-month minimum. After the initial term, packages continue month-to-month unless your agreement says otherwise.",
   custom: "Custom packages may carry different terms, set by the scope of the work.",
+};
+
+/**
+ * The introductory offer for new monthly clients.
+ *
+ * Framed as a first-month rate rather than a sale. The reason the discount can
+ * exist at all is that a monthly client books once and shoots repeatedly, so
+ * the copy points at that rather than at the saving — a studio that discounts
+ * to win work invites being asked to discount again.
+ *
+ * The percentage and the arithmetic live in src/lib/offer.ts. Nothing here
+ * states a reduced figure, so raising a package price cannot leave a stale one.
+ */
+export const newClientOffer = {
+  eyebrow: "New Monthly Clients",
+  label: "Your first month, reduced",
+  body: "Start a monthly content package and your first month is billed at a reduced rate. Months two and three run at the standard quoted price, and the package continues month-to-month after that.",
+  terms: [
+    "New monthly clients only",
+    "Applies to the first month of a package",
+    "Requires the three-month minimum",
+    "Your exact rate comes from your quote",
+  ],
+  cta: "Start Your Monthly Content",
 };
 
 /** Shown under the monthly grid, same job as `pricingNote` above. */
