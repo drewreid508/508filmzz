@@ -34,27 +34,6 @@ var SMS_TO = "8649154071@tmomail.net";
 /** Full booking details by email. Blank = the account this script runs as. */
 var EMAIL_TO = "";
 
-/**
- * Pushover — the reliable channel.
- * ─────────────────────────────────────────────────────────────────────────────
- * The carrier gateway above is free but it is a courtesy service: T-Mobile
- * filters it, delays it, and drops it, and you never find out which. Pushover
- * is a $4.99 one-off iPhone app with a real API — it either delivers or returns
- * an error you can read.
- *
- * Set these in Project Settings → Script Properties. They are NOT written in
- * this file, because this repository is public:
- *
- *   PUSHOVER_TOKEN   the API token from your Pushover application
- *   PUSHOVER_USER    your user key, on the Pushover dashboard
- *
- * Leave them unset and nothing changes — the channel simply sits out.
- */
-function prop(key) {
-  var v = PropertiesService.getScriptProperties().getProperty(key);
-  return v === null ? "" : v;
-}
-
 // ── Setup ──────────────────────────────────────────────────────────────────
 
 /**
@@ -74,7 +53,6 @@ function status() {
   Logger.log("Trigger installed : " + (triggers.length ? "YES (" + triggers.length + ")" : "NO  <-- run setup"));
   Logger.log("Email to          : " + (inbox() || "NONE"));
   Logger.log("Carrier text to   : " + (SMS_TO || "NONE"));
-  Logger.log("Pushover          : " + (prop("PUSHOVER_TOKEN") && prop("PUSHOVER_USER") ? "configured" : "not configured"));
   Logger.log("Mail quota left   : " + MailApp.getRemainingDailyQuota());
 
   if (!triggers.length) {
@@ -181,7 +159,6 @@ function onBookingSubmit(e) {
 
   // Independent on purpose: a carrier gateway that drops the text must never
   // cost you the email as well. Neither is allowed to throw.
-  sendPush(lead);
   sendText(lead);
   sendEmail(lead);
 }
@@ -210,50 +187,6 @@ function sendText(lead) {
     return { ok: true, error: "" };
   } catch (err) {
     Logger.log("text failed: " + err);
-    return { ok: false, error: String(err) };
-  }
-}
-
-/**
- * Pushover push notification.
- *
- * Unlike the carrier gateway this reports back: a non-200 means it did not
- * arrive, and the reason comes back in the body rather than vanishing.
- */
-function sendPush(lead) {
-  try {
-    var token = prop("PUSHOVER_TOKEN");
-    var user = prop("PUSHOVER_USER");
-    if (!token || !user) return { ok: false, error: "not configured" };
-
-    var lines = [];
-    if (lead.business) lines.push(lead.business);
-    if (lead.phone) lines.push(lead.phone);
-    if (lead.email) lines.push(lead.email);
-    var svc = [lead.projectType, lead.budget].filter(String).join(" · ");
-    if (svc) lines.push(svc);
-    if (lead.shootDate) lines.push("Shoot: " + lead.shootDate);
-    if (lead.location) lines.push(lead.location);
-    if (lead.message) lines.push("", lead.message);
-
-    var res = UrlFetchApp.fetch("https://api.pushover.net/1/messages.json", {
-      method: "post",
-      payload: {
-        token: token,
-        user: user,
-        title: "📸 NEW 508 FILMZZ BOOKING",
-        message: (lead.name || "Someone") + " just booked a shoot.\n\n" + lines.join("\n"),
-        priority: "1",       // bypasses quiet hours
-        sound: "persistent",
-      },
-      muteHttpExceptions: true,
-    });
-
-    var code = res.getResponseCode();
-    if (code !== 200) return { ok: false, error: "HTTP " + code + " " + res.getContentText().slice(0, 160) };
-    return { ok: true, error: "" };
-  } catch (err) {
-    Logger.log("push failed: " + err);
     return { ok: false, error: String(err) };
   }
 }
@@ -328,11 +261,9 @@ function testAlert() {
   Logger.log("Emailing: " + (inbox() || "(NO ADDRESS — this is the problem)"));
   Logger.log("Quota left today: " + MailApp.getRemainingDailyQuota());
 
-  var push = sendPush(lead);
   var text = sendText(lead);
   var mail = sendEmail(lead);
 
-  Logger.log("push  -> " + (push.ok ? "sent" : push.error));
   Logger.log("text  -> " + (text.ok ? "sent" : "FAILED: " + text.error));
   Logger.log("email -> " + (mail.ok ? "sent" : "FAILED: " + mail.error));
 
