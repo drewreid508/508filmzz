@@ -93,7 +93,7 @@ export function Header() {
               href="/book"
               className="hidden border border-line-strong px-6 py-3 text-[0.66rem] font-medium tracking-[0.2em] uppercase transition-colors duration-500 hover:border-accent hover:text-accent md:inline-block"
             >
-              Book a Shoot
+              Start Your Project
             </Link>
 
             <button

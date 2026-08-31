@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play } from "lucide-react";
 
 import { asset } from "@/lib/asset";
+import { capabilities } from "@/data/site";
 import { Magnetic } from "@/components/ui/magnetic";
 
 const SEEN_KEY = "508-reel-seen";
@@ -128,7 +129,23 @@ export function ShowreelIntro() {
     */
     video.play().catch(() => setNeedsTap(true));
 
+    /*
+      Pick the reel back up after an app switch.
+
+      A phone pauses video the moment it is backgrounded — a call, a text, a
+      glance at something else — and does not resume on return. Without this
+      the intro sits on a frozen frame with its captions stopped, which looks
+      like a broken page at the exact moment someone has just scanned a card.
+    */
+    const onVisible = () => {
+      if (document.hidden) return;
+      if (video.ended) return;
+      video.play().catch(() => setNeedsTap(true));
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
     return () => {
+      document.removeEventListener("visibilitychange", onVisible);
       document.body.style.overflow = "";
     };
   }, [open]);
@@ -254,12 +271,7 @@ export function ShowreelIntro() {
                     transition={{ duration: 0.5 }}
                     className="flex flex-col gap-1.5"
                   >
-                    {[
-                      "Social Media Reels",
-                      "Commercial Video",
-                      "Automotive Content",
-                      "Monthly Content",
-                    ].map((line, i) => (
+                    {capabilities.map((line, i) => (
                       <motion.li
                         key={line}
                         initial={{ opacity: 0, x: -12 }}
@@ -302,7 +314,7 @@ export function ShowreelIntro() {
                   className="w-full"
                   onClick={dismiss}
                 >
-                  Book a Shoot
+                  Start Your Project
                 </Magnetic>
               </div>
 

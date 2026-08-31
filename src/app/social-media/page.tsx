@@ -6,7 +6,7 @@ import { CategoryPitch } from "@/components/portfolio/category-pitch";
 export const metadata: Metadata = {
   title: "Social Media Content",
   description:
-    "Vertical-first content for Instagram Reels, TikTok, and YouTube Shorts — framed 9:16 from the start and cut for retention.",
+    "Social media video production for businesses — Instagram Reels, TikTok and YouTube Shorts, shot vertical from the start and cut so the first two seconds earn the rest.",
   alternates: { canonical: "/social-media" },
 };
 

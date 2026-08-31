@@ -23,13 +23,13 @@ export function isPromoCode(input: string): boolean {
 export const FIRST_MONTH_DISCOUNT = 0.15;
 
 /** Months a monthly package runs before it can go month-to-month. */
-export const MINIMUM_MONTHS = 2;
+export const MINIMUM_MONTHS = 3;
 
 /**
  * Pulls the number out of a price string and applies the discount, preserving
  * the way the original was written.
  *
- * Prices are strings — "$700+", "$1,000+" — because they are starting points
+ * Prices are strings — "$2,000+", "$1,250" — because they are starting points
  * rather than quotes, and the trailing "+" is what says so. That has to survive
  * the arithmetic, or the discounted figure reads as an exact price and invites
  * an argument on the invoice.

@@ -35,11 +35,12 @@ export function Footer() {
           </div>
           <div className="flex flex-col justify-end gap-8 md:col-span-5 md:items-end">
             <p className="body-lg max-w-sm md:text-right">
-              Tell me the vehicle, the business, or the season. I&apos;ll tell you
-              exactly what it takes to make it look like this.
+              Tell me what your business does and who you want walking through
+              the door. I&apos;ll tell you exactly what it takes to make it look
+              like this.
             </p>
             <Magnetic href="/book" variant="solid">
-              Book a Shoot
+              Start Your Project
             </Magnetic>
           </div>
         </div>

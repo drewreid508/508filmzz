@@ -23,11 +23,11 @@ import { z } from "zod";
 export const MONTHLY_PROJECT_TYPE = "Monthly Content Package";
 
 export const PROJECT_TYPES = [
-  "Automotive Reel",
-  "Dealership Content",
-  "Detailing / Shop Content",
-  "Social Media Content",
-  "Event",
+  "Commercial / Advertisement",
+  "Social Content",
+  "Product or Service Video",
+  "Content Campaign",
+  "Automotive / Dealership",
   MONTHLY_PROJECT_TYPE,
   "Other",
 ] as const;
@@ -76,13 +76,13 @@ export const SHOOT_FREQUENCIES = [
 ] as const;
 
 export const BUDGETS = [
-  "Under $500",
-  "$500 – $1,000",
-  "$1,000 – $2,500",
-  "$2,500 – $5,000",
+  "$750 – $1,500",
+  "$1,500 – $3,000",
+  "$3,000 – $5,000",
   "$5,000 – $10,000",
   "$10,000+",
-  "Not sure yet",
+  "Monthly retainer",
+  "Not sure yet — advise me",
 ] as const;
 
 export const inquirySchema = z.object({

@@ -12,9 +12,9 @@ import { PROJECT_TYPES } from "@/lib/inquiry";
 import { pad } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Book a Shoot",
+  title: "Start Your Project",
   description:
-    "Book cinematic automotive, commercial, drone, and social media production with 508 Filmzz — serving Greenville, Piedmont, and Upstate South Carolina.",
+    "Start a commercial video or advertising project with 508 Filmzz — business video production, social content, motion graphics and drone, serving Greenville, Piedmont and Upstate South Carolina.",
   alternates: { canonical: "/contact" },
 };
 
@@ -112,7 +112,7 @@ export default function ContactPage() {
         <SectionHeader
           id="book-heading"
           index="02"
-          eyebrow="Book a Shoot"
+          eyebrow="Start Your Project"
           title="Tell me about your project."
         />
 
@@ -273,7 +273,7 @@ export default function ContactPage() {
           </div>
           <div className="flex flex-col gap-4">
             <Magnetic href="#book" variant="solid">
-              Book a Shoot
+              Start Your Project
             </Magnetic>
             <Magnetic href="/pricing" variant="outline">
               Request a Quote

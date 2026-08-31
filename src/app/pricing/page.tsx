@@ -23,7 +23,7 @@ import { DISCOUNT_LABEL } from "@/lib/offer";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "One-off production packages for social, automotive and commercial video, plus Bronze, Silver and Gold monthly content packages from $700. Every project custom quoted.",
+    "Commercial video and advertising production in Greenville, SC. Projects from $750, commercials from $1,250, campaigns from $2,000, and monthly content partnerships. Every project quoted individually.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -146,7 +146,7 @@ export default function PricingPage() {
         index="01"
         eyebrow="Investment"
         title="Pricing"
-        lead="Two ways to work together: book a single production, or put the camera on a schedule. Every project is quoted on shoot time, location, and what you need delivered — so you always know what you're paying for."
+        lead="Two ways to work together: book a single production, or put your content on a schedule. Everything is quoted on production time, locations, travel and what you need delivered — so the number you get is the number you pay."
       />
 
       {/* ── Monthly content ───────────────────────────────────────────────── */}
@@ -156,7 +156,7 @@ export default function PricingPage() {
           index="02"
           eyebrow="Ongoing Content"
           title="Monthly Content"
-          lead="Consistent content without the hassle. A monthly package is a standing production slot booked on a rhythm, so there is always something new to publish and one look running through all of it."
+          lead="A monthly package is a standing production slot on your calendar — so there is always something new to publish, one consistent look across all of it, and ad creative ready when you need it."
         />
 
         {/*
@@ -303,9 +303,9 @@ export default function PricingPage() {
         <SectionHeader
           id="oneoff-heading"
           index="03"
-          eyebrow="Single Bookings"
-          title="One-Time Projects"
-          lead="Not ready for a monthly schedule? Book a single production instead. Priced per job, delivered, done — no commitment past the project."
+          eyebrow="Project Work"
+          title="Single Productions"
+          lead="Not ready for a schedule? Book one production and use what comes out of it everywhere. Priced per project, delivered, done — no commitment past the job."
         />
 
         <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 xl:grid-cols-4">
@@ -365,7 +365,7 @@ export default function PricingPage() {
                 wrapperClassName="w-full sm:w-auto"
                 className="w-full sm:w-auto"
               >
-                Book a Shoot
+                Start Your Project
               </Magnetic>
               <Magnetic
                 href="/book"

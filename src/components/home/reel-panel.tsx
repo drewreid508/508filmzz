@@ -16,7 +16,7 @@ export function ReelPanel() {
         <div className="md:col-span-5 md:col-start-1">
           <Reveal>
             <p className="eyebrow mb-6 flex items-center gap-3">
-              <span className="text-accent">02</span>
+              <span className="text-accent">09</span>
               <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
               Showreel
             </p>
@@ -31,9 +31,10 @@ export function ReelPanel() {
 
           <Reveal delay={0.1}>
             <p className="body-lg mt-7 max-w-md">
-              A full production cut down to the piece that matters. Every film is
-              finished twice — a wide master and a vertical cut for Reels, TikTok,
-              and Shorts — same colour, same sound design.
+              A full production cut down to the piece that matters. Everything is
+              finished more than once — a wide version for your website and
+              vertical cuts for Reels, TikTok and Shorts — so one shoot covers
+              everywhere you publish.
             </p>
           </Reveal>
 

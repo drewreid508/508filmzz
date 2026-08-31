@@ -34,6 +34,7 @@ export function ReelPlayer({
 
   const [armed, setArmed] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [buffering, setBuffering] = useState(false);
   const [muted, setMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -76,9 +77,47 @@ export function ReelPlayer({
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      void video.play().catch(() => {});
+      /*
+        One film at a time. Six players on the portfolio page, each a 1080x1920
+        stream — tap a second while the first is running and a phone is pulling
+        two at once over the same connection, which is how both end up
+        stuttering. Pausing the others costs nothing and is what a viewer
+        expects anyway.
+      */
+      for (const other of document.querySelectorAll("video")) {
+        if (other !== video) other.pause();
+      }
+      /*
+        Show the spinner immediately rather than waiting for `waiting` to fire.
+        On a cold tap the browser has nothing buffered and can sit on the
+        request for a second or two before it fires any event at all, and in
+        that gap the tap looks like it did nothing.
+      */
+      if (video.readyState < 3) setBuffering(true);
+      void video.play().catch(() => setBuffering(false));
     } else {
       video.pause();
+    }
+  }, []);
+
+  /*
+    Full screen, including on an iPhone.
+
+    Safari on iPhone does not implement requestFullscreen on elements — only
+    webkitEnterFullscreen on a video, which hands playback to the native player.
+    The old code called requestFullscreen with optional chaining, so on the
+    device most likely to be scanning a business card the button silently did
+    nothing at all.
+  */
+  const goFullscreen = useCallback(() => {
+    const video = videoRef.current as
+      | (HTMLVideoElement & { webkitEnterFullscreen?: () => void })
+      | null;
+    if (!video) return;
+    if (typeof video.requestFullscreen === "function") {
+      void video.requestFullscreen().catch(() => {});
+    } else if (typeof video.webkitEnterFullscreen === "function") {
+      video.webkitEnterFullscreen();
     }
   }, []);
 
@@ -107,12 +146,33 @@ export function ReelPlayer({
           poster={atLeast(posterAsset, 720).webp}
           muted={muted}
           playsInline
-          preload="none"
+          /*
+            Metadata, not nothing.
+
+            With preload="none" the browser fetches zero bytes until the tap,
+            so the duration reads "0:00", the scrubber is dead, and play means
+            opening a connection from cold. Metadata is a few kilobytes off the
+            front of an already faststart-muxed file: the timecode is right
+            before anyone touches it and playback starts from a warm socket.
+            The file body still waits for the tap.
+          */
+          preload={armed ? "metadata" : "none"}
           aria-label={title}
-          className="h-full w-full object-cover"
+          /*
+            contain, not cover. Every film here is 9:16 inside a 9:16 frame, so
+            today the two are identical — but cover silently crops anything that
+            is not, and a portfolio is exactly where a stray 4:5 or 1:1 cut will
+            eventually land. Contain guarantees the whole frame is on screen.
+          */
+          className="h-full w-full object-contain"
           onClick={toggle}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
+          onWaiting={() => setBuffering(true)}
+          onStalled={() => setBuffering(true)}
+          onPlaying={() => setBuffering(false)}
+          onCanPlay={() => setBuffering(false)}
+          onError={() => setBuffering(false)}
           onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
@@ -125,8 +185,24 @@ export function ReelPlayer({
           }}
         />
 
-        {/* Centre play affordance — only while paused */}
-        {!playing && (
+        {/*
+          Buffering.
+          ────────────────────────────────────────────────────────────────────
+          Without this a tap on a slow connection produces no visible change
+          for several seconds, which reads as a broken video rather than a
+          loading one — and the usual response is to tap again, which pauses it.
+        */}
+        {buffering && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-ink/35"
+          >
+            <span className="h-11 w-11 animate-spin rounded-full border border-bone/25 border-t-accent" />
+          </div>
+        )}
+
+        {/* Centre play affordance — only while paused, and not while loading */}
+        {!playing && !buffering && (
           <button
             type="button"
             onClick={toggle}
@@ -196,7 +272,7 @@ export function ReelPlayer({
 
             <button
               type="button"
-              onClick={() => videoRef.current?.requestFullscreen?.()}
+              onClick={goFullscreen}
               aria-label="Full screen"
               className="text-bone transition-colors duration-400 hover:text-accent"
             >

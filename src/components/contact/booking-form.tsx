@@ -582,7 +582,7 @@ export function BookingForm() {
           name="message"
           required
           rows={5}
-          placeholder="The business, the vehicle, the product — what you want filmed, and anything else I should know."
+          placeholder="What does your business do, who are you trying to reach, and where will the content run — website, social, paid ads? Your site or Instagram handle helps too."
           className={cn(fieldBase, "resize-none")}
           aria-invalid={Boolean(errors.message)}
         />

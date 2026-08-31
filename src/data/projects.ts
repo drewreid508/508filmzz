@@ -216,7 +216,7 @@ export const projects: Project[] = [
     summary: "A full build program shot across daylight, sunset, and rain.",
     description: [
       "Twelve frames covering the same program from every angle a buyer cares about: the stance from the front, the badge work up close, the wheel and suspension hardware underneath, and the whole truck sitting in its lot at last light.",
-      "Shot across three conditions on purpose — flat overcast for the hardware detail, sunset for the hero frames, and rain at night for the ones that stop a thumb. Graded cool and deep so the white paint holds shape instead of blowing out.",
+      "Shot across three conditions on purpose — flat overcast for the hardware detail, sunset for the hero frames, and rain at night for the ones that stop a thumb. Finished cool and deep so the white paint holds its shape instead of washing out.",
     ],
     deliverables: ["Hero stills", "Hardware detail set", "Night / rain frames"],
     hero: "pf_img_5850",
@@ -332,7 +332,7 @@ export const projects: Project[] = [
     year: "2026",
     summary: "Macro work on billet and coil, lit for material rather than product.",
     description: [
-      "Component detail treated like still life. A machined housing shot dead-on to show tooling marks, and a coil spring lit through teal gel until the metal reads as something closer to glass.",
+      "Component detail treated like still life. A machined housing shot dead-on to show the tooling marks, and a coil spring lit until the metal reads as something closer to jewellery.",
       "Deliberately abstract — these are the frames a supplier uses when the part itself has to look engineered rather than merely photographed.",
     ],
     deliverables: ["Macro component set", "Material studies"],

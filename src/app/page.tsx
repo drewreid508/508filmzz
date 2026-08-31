@@ -25,6 +25,10 @@ import {
   batchNote,
   monthlyPackages,
   monthlyNote,
+  industries,
+  industriesNote,
+  craft,
+  travel,
 } from "@/data/site";
 import { pad } from "@/lib/utils";
 
@@ -63,21 +67,22 @@ export default function HomePage() {
           <div className="flex flex-col gap-7 md:col-span-6 md:col-start-7">
             <Reveal delay={0.08}>
               <p className="body-lg text-pretty">
-                508 Filmzz is built on one vision. Every shoot is personally planned,
-                filmed, edited, and delivered by me.
+                508 Filmzz is a commercial video and advertising studio in Greenville,
+                South Carolina. Every project is planned, produced, edited and
+                delivered by me — start to finish.
               </p>
             </Reveal>
             <Reveal delay={0.16}>
               <p className="text-sm leading-relaxed text-mute md:text-base">
-                No outsourcing. No shortcuts. Just premium storytelling and attention to
-                detail — the kind that makes a local business look like it has a national
-                budget behind it.
+                No outsourcing, no handoffs, no account managers. You deal with the
+                person doing the work, and you get content that makes a local
+                business look like it has a national budget behind it.
               </p>
             </Reveal>
             <Reveal delay={0.24}>
               <div className="mt-2">
                 <Magnetic href="/about" variant="outline">
-                  More about the work
+                  More about the studio
                 </Magnetic>
               </div>
             </Reveal>
@@ -96,8 +101,8 @@ export default function HomePage() {
           id="why-heading"
           index="02"
           eyebrow="Why It Matters"
-          title="More Than Just A Video."
-          lead="Your customers are already scrolling. Make sure they stop on your business."
+          title="Good Content Is A Business Advantage."
+          lead="Your customers are already comparing you to someone online. This is what decides which of you looks like the safer choice."
         />
 
         <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
@@ -139,6 +144,42 @@ export default function HomePage() {
         </Reveal>
       </section>
 
+      {/* ── Who it is for ─────────────────────────────────────────────────
+        Deliberately unnumbered and short. It exists so a roofing company does
+        not read a page of car films and conclude the studio is not for them —
+        which is the single most expensive assumption a visitor can make here.
+      */}
+      <section className="shell pb-24 md:pb-36" aria-labelledby="industries-heading">
+        <div className="border-y border-line py-12 md:py-16">
+          <div className="grid gap-9 md:grid-cols-12 md:gap-14">
+            <div className="md:col-span-5">
+              <p className="eyebrow mb-5 text-accent">Who I Work With</p>
+              <h2
+                id="industries-heading"
+                className="display text-[9vw] leading-[0.96] text-balance sm:text-[5.4vw] md:text-[2.9vw]"
+              >
+                Built for businesses people compare before they call.
+              </h2>
+            </div>
+            <div className="md:col-span-6 md:col-start-7">
+              <p className="text-sm leading-relaxed text-mute md:text-base">
+                {industriesNote}
+              </p>
+              <ul className="mt-8 flex flex-wrap gap-2.5">
+                {industries.map((industry) => (
+                  <li
+                    key={industry}
+                    className="border border-line px-3.5 py-2 text-[0.68rem] tracking-[0.14em] text-mute uppercase transition-colors duration-500 hover:border-accent hover:text-bone"
+                  >
+                    {industry}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Services ──────────────────────────────────────────────────────── */}
       <section className="pb-24 md:pb-36" aria-labelledby="services-heading">
         <div className="shell mb-14">
@@ -147,10 +188,48 @@ export default function HomePage() {
             index="03"
             eyebrow="What I Do"
             title="Services"
-            lead="Four ways I film for a business, one operator, one consistent look across everything you publish."
+            lead="Six ways to put your business in front of the people already looking for it — booked on their own, or run together through a single production."
           />
         </div>
         <Services />
+      </section>
+
+      {/* ── More than just video ──────────────────────────────────────────
+        The answer to the quiet objection behind every quote at this level:
+        "my nephew has a camera." It is not a better camera — it is six
+        disciplines in one finished piece, and a business is buying all of
+        them at once.
+      */}
+      <section className="shell pb-24 md:pb-36" aria-labelledby="craft-heading">
+        <SectionHeader
+          id="craft-heading"
+          index="04"
+          eyebrow="The Difference"
+          title={craft.title}
+          lead={craft.lead}
+        />
+
+        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+          {craft.disciplines.map((item, i) => (
+            <Reveal
+              key={item.title}
+              delay={(i % 3) * 0.06}
+              className="group bg-ink p-7 md:p-9"
+            >
+              <p className="eyebrow mb-5 text-accent">{pad(i + 1)}</p>
+              <h3 className="display text-2xl leading-none md:text-[1.7rem]">
+                {item.title}
+              </h3>
+              <span
+                aria-hidden="true"
+                className="mt-4 block h-px w-8 bg-line-strong transition-all duration-700 group-hover:w-16 group-hover:bg-accent"
+              />
+              <p className="mt-4 text-[0.84rem] leading-relaxed text-mute">
+                {item.body}
+              </p>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
       {/* ── What the money actually buys ───────────────────────────────────
@@ -161,10 +240,10 @@ export default function HomePage() {
       <section className="shell pb-24 md:pb-36" aria-labelledby="getting-heading">
         <SectionHeader
           id="getting-heading"
-          index="04"
+          index="05"
           eyebrow="How It Works"
-          title="What You're Really Getting"
-          lead="You're not just paying for a short video."
+          title="What You're Really Paying For"
+          lead="The video is the last step, not the job."
         />
 
         <div className="mt-14">
@@ -188,10 +267,10 @@ export default function HomePage() {
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <SectionHeader
             id="monthly-heading"
-            index="05"
+            index="06"
             eyebrow="Ongoing Content"
             title="Monthly Content"
-            lead="Consistent content without the hassle."
+            lead="A standing production slot, and a month of material out of it."
           />
           <Reveal delay={0.1}>
             <Magnetic href="/pricing" variant="outline">
@@ -233,10 +312,10 @@ export default function HomePage() {
       <section className="shell pb-24 md:pb-36" aria-labelledby="onetime-heading">
         <SectionHeader
           id="onetime-heading"
-          index="06"
-          eyebrow="One-Time Projects"
-          title="One-Time Projects"
-          lead="Not ready for a monthly schedule? Book a single production instead."
+          index="07"
+          eyebrow="Project Work"
+          title="Single Productions"
+          lead="Not ready for a monthly schedule? Book one production and use it everywhere."
         />
 
         <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
@@ -277,6 +356,37 @@ export default function HomePage() {
             </Reveal>
           ))}
         </div>
+
+        {/* Travel, stated before anyone has to ask. Folded in under the
+            tiers rather than given its own section: it is a term of the
+            quote, not a chapter of the pitch. */}
+        <Reveal delay={0.1}>
+          <div className="mt-14 border-t border-line pt-12 md:pt-14">
+            <div className="grid gap-9 md:grid-cols-12 md:gap-14">
+              <div className="md:col-span-5">
+                <p className="eyebrow mb-4 text-accent">{travel.eyebrow}</p>
+                <h3 className="display text-[8vw] leading-[0.98] text-balance sm:text-[4.8vw] md:text-[2.4vw]">
+                  {travel.title}
+                </h3>
+                <p className="mt-5 max-w-md text-sm leading-relaxed text-mute">
+                  {travel.lead}
+                </p>
+              </div>
+              <dl className="flex flex-col gap-7 md:col-span-6 md:col-start-7">
+                {travel.points.map((point) => (
+                  <div key={point.title} className="border-l border-line pl-5">
+                    <dt className="text-[0.7rem] tracking-[0.16em] text-bone uppercase">
+                      {point.title}
+                    </dt>
+                    <dd className="mt-2 text-sm leading-relaxed text-mute">
+                      {point.body}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* ── Selected work ─────────────────────────────────────────────────── */}
@@ -285,10 +395,10 @@ export default function HomePage() {
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <SectionHeader
             id="work-heading"
-            index="07"
+            index="08"
             eyebrow="Selected Work"
             title="Real Businesses. Real Content."
-            lead="See how 508 Filmzz turns businesses, products and services into content people actually stop to watch."
+            lead="Work made for businesses that needed to look like the best option in their market."
           />
           <Reveal delay={0.1}>
             <Magnetic href="/portfolio" variant="outline">
@@ -384,7 +494,7 @@ export default function HomePage() {
         <section className="pb-24 md:pb-36" aria-labelledby="reviews-heading">
           <div className="shell mb-14">
             <SectionHeader
-          id="reviews-heading" index="08" eyebrow="Client Feedback" title="Reviews" />
+          id="reviews-heading" index="09" eyebrow="Client Feedback" title="Reviews" />
           </div>
           <ReviewsMarquee />
         </section>
@@ -394,18 +504,18 @@ export default function HomePage() {
       <section className="shell pb-28 md:pb-40" aria-labelledby="book-heading">
         <div className="border-y border-line py-20 text-center md:py-28">
           <Reveal>
-            <p className="eyebrow mb-7">Let&apos;s work</p>
+            <p className="eyebrow mb-7">Start a project</p>
           </Reveal>
           <h2
             id="book-heading"
             className="display mx-auto max-w-5xl text-[12vw] leading-[0.88] sm:text-[8vw] md:text-[5.2vw]"
           >
-            <TextReveal text="Ready to create something different?" />
+            <TextReveal text="Let's make your business the obvious choice." />
           </h2>
           <Reveal delay={0.12}>
             <div className="mt-11 flex flex-wrap justify-center gap-4">
               <Magnetic href="/book" variant="solid">
-                Book a Shoot
+                Start Your Project
               </Magnetic>
               <Magnetic href="/pricing" variant="outline">
                 Request a Quote

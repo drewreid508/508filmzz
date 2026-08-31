@@ -13,7 +13,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "508 Filmzz is a one-man media company. Every project is planned, filmed, edited, and delivered by one director — no outsourcing, no shortcuts.",
+    "508 Filmzz is a commercial video and advertising studio in Greenville, SC. Every project is planned, produced, edited and delivered by one person — no outsourcing, no handoffs.",
   alternates: { canonical: "/about" },
 };
 
@@ -43,7 +43,7 @@ export default function AboutPage() {
 
           <div className="flex flex-col justify-center gap-7 md:col-span-4 md:col-start-9">
             <Reveal>
-              <p className="eyebrow">Behind the rig</p>
+              <p className="eyebrow">Behind the studio</p>
             </Reveal>
             <h2 className="display text-4xl leading-[0.9] md:text-5xl">
               <TextReveal text="The camera is the easy part." />
@@ -135,7 +135,7 @@ export default function AboutPage() {
             </a>
           </div>
           <Magnetic href="/book" variant="solid">
-            Book a Shoot
+            Start Your Project
           </Magnetic>
         </div>
       </section>

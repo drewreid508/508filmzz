@@ -13,7 +13,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Social media reels, commercial video, automotive content and monthly content packages — serving Greenville and Upstate South Carolina.",
+    "Commercial advertising, social content, motion graphics, drone production and content campaigns for businesses across Greenville and Upstate South Carolina.",
   alternates: { canonical: "/services" },
 };
 
@@ -24,7 +24,7 @@ export default function ServicesPage() {
         index="01"
         eyebrow="What I Do"
         title="Services"
-        lead="Six ways to make your brand look like it belongs at the top of the market. Book one, or run the whole production through a single shoot."
+        lead="Six ways to make your business look like the best option in its market. Book one on its own, or run several out of a single production day."
       />
 
       {/* ── Service detail ────────────────────────────────────────────────── */}
@@ -114,7 +114,7 @@ export default function ServicesPage() {
           </div>
           <div className="flex flex-wrap gap-4">
             <Magnetic href="/book" variant="solid">
-              Book a Shoot
+              Start Your Project
             </Magnetic>
             <Magnetic href="/pricing" variant="outline">
               See Pricing

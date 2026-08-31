@@ -49,7 +49,7 @@ export function FilmStrip() {
           </h2>
         </div>
         <p className="body-lg max-w-md md:text-right">
-          Client work, start to finish — shot, cut and graded in house, from full
+          Client work, start to finish — planned, produced and finished in house, from full
           commercials to rolling coverage. Press play.
         </p>
       </div>

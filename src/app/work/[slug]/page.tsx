@@ -180,7 +180,7 @@ export default async function ProjectPage({
             </p>
           </div>
           <Magnetic href="/book" variant="solid">
-            Book a Shoot
+            Start Your Project
           </Magnetic>
         </div>
       </section>

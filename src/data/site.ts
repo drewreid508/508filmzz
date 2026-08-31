@@ -1,10 +1,12 @@
 import { SITE_URL } from "@/lib/site-url";
+import { MINIMUM_MONTHS } from "@/lib/offer";
 
 export const site = {
   name: "508 Filmzz",
   legalName: "508 Filmzz",
   tagline: "Cinematic Media. Built To Move.",
-  positioning: "Cinematic media for automotive brands, businesses, and the people who build them.",
+  positioning:
+    "Commercial video, advertising creative and social content for businesses across Greenville and Upstate South Carolina.",
   /**
    * The canonical origin — where the site actually answers.
    *
@@ -19,7 +21,7 @@ export const site = {
    */
   url: SITE_URL,
   description:
-    "Cinematic video and social media content for automotive brands, businesses and builders across Greenville and Upstate South Carolina.",
+    "Commercial video production and advertising creative in Greenville, SC. Business video, social media content, motion graphics and drone production for contractors, dealerships, and established local businesses across Upstate South Carolina.",
   owner: "Drew Reid",
   email: "508filmz@gmail.com",
   phone: "(864) 915-4071",
@@ -105,7 +107,7 @@ export const closedDays = ["Sunday"] as const;
 
 /**
  * Primary navigation. The header shows everything between Home and Contact;
- * Contact is rendered separately as the "Book a Shoot" button.
+ * Contact is rendered separately as the "Start Your Project" button.
  */
 export const nav = [
   { label: "Home", href: "/" },
@@ -117,7 +119,7 @@ export const nav = [
 ] as const;
 
 /*
-  Book a Shoot is not in `nav`.
+  Start Your Project is not in `nav`.
 
   It is the header's standalone button and the footer's primary action, and it
   would be a seventh item on a bar that already wraps at seven. Contact stays
@@ -132,7 +134,7 @@ export const nav = [
   a client hires 508 Filmzz to film their business, and the aerial is one of the
   tools that gets used. Selling it separately invites the enquiry nobody wants:
   an hour of flying with no story attached. It appears where it actually
-  applies, as the line that separates Bronze from Silver and Gold.
+  applies, as the line that separates Essential from Growth and Partner.
 */
 
 export type Service = {
@@ -155,68 +157,98 @@ export type Service = {
  */
 export const services: Service[] = [
   {
-    id: "social",
-    title: "Social Media Reels",
+    id: "commercial-advertising",
+    title: "Commercial Advertising",
     blurb:
-      "Short-form video content designed for social media — hook in the first two seconds, cut for the screen people actually watch on.",
-    points: [
-      "Instagram Reels",
-      "TikTok",
-      "YouTube Shorts",
-      "Vertical 9:16 content",
-      "Short-form advertising",
-    ],
-    image: "poster-nmf",
-  },
-  {
-    id: "commercial",
-    title: "Commercial Video",
-    blurb:
-      "Professional cinematic video for businesses, products, services and promotions — built around a promise and a call to action.",
+      "The ad itself — a polished commercial built to sell one service to one kind of customer, ready to run wherever you spend money.",
     points: [
       "Business commercials",
-      "Product videos",
-      "Promotional videos",
-      "Brand campaigns",
-      "Service and trade content",
+      "Paid social ad creative",
+      "Website hero videos",
+      "Service promotions",
+      "Seasonal campaigns",
     ],
     image: "poster-blueworks",
   },
   {
-    id: "automotive",
-    title: "Automotive Content",
+    id: "social-content",
+    title: "Social Content",
     blurb:
-      "Builds, dealerships, detail shops, rollers and vehicle-focused content — shot like a launch film rather than a walkaround.",
+      "Short-form video made for the feed — the first two seconds earn the rest, and every cut is built for a phone held vertically.",
     points: [
-      "Rolling & tracking shots",
-      "Detail and hero frames",
-      "Build videos",
-      "Dealership content",
-      "Detail shop content",
+      "Instagram Reels",
+      "TikTok",
+      "YouTube Shorts",
+      "Before and after",
+      "Behind the scenes",
     ],
-    image: "poster-ram",
+    image: "poster-nmf",
   },
   {
-    id: "monthly",
-    title: "Monthly Content",
+    id: "motion-graphics",
+    title: "Motion Graphics",
     blurb:
-      "Recurring packages for businesses that want consistent video throughout the month rather than a single film.",
+      "Animated titles, logo stings, callouts and on-screen text that make your offer land — the layer most local video is missing.",
     points: [
-      "A standing production slot",
-      "Reels delivered every month",
-      "Drone on Silver and Gold",
-      "One consistent look",
-      "Social-ready delivery",
+      "Animated logo and brand stings",
+      "Offer and pricing callouts",
+      "Service and product breakdowns",
+      "On-screen captions",
+      "Lower thirds and end cards",
     ],
     image: "poster-bratchers",
+  },
+  {
+    id: "drone",
+    title: "Drone Production",
+    blurb:
+      "Aerial coverage where it earns its place — showing the size of a property, a roof, a job site, or a finished project from above.",
+    points: [
+      "Property and job-site aerials",
+      "Roof and exterior coverage",
+      "Before and after from above",
+      "Establishing shots",
+      "Aerial stills",
+    ],
+    image: "poster-g-wagon",
+  },
+  {
+    id: "product-service",
+    title: "Product & Service Videos",
+    blurb:
+      "Show a customer exactly what they get before they call. The video that answers the questions your phone keeps ringing about.",
+    points: [
+      "Service explainers",
+      "Process walkthroughs",
+      "Product features",
+      "Facility and shop tours",
+      "Team and owner intros",
+    ],
+    image: "poster-night-wash",
+  },
+  {
+    id: "campaigns",
+    title: "Content Campaigns",
+    blurb:
+      "One production, a month of material. A single shoot cut into a commercial, a set of social videos, and stills you can use everywhere.",
+    points: [
+      "One shoot, many deliverables",
+      "A commercial plus social cutdowns",
+      "Stills from the same session",
+      "One consistent look across all of it",
+      "Planned before anyone shows up",
+    ],
+    image: "poster-ram",
   },
 ];
 
 export const capabilities = [
-  "Social Media Reels",
-  "Commercial Video",
-  "Automotive Content",
-  "Monthly Content",
+  "Commercial Advertising",
+  "Social Content",
+  "Motion Graphics",
+  "Drone Production",
+  "Product & Service Videos",
+  "Content Campaigns",
 ];
 
 /**
@@ -224,7 +256,7 @@ export const capabilities = [
  * Every price is a starting point, so raising them later is a one-line change
  * and never makes a published number wrong.
  *
- *   price     the headline figure, e.g. "$300+"
+ *   price     the headline figure, e.g. "$1,250"
  *   featured  highlights one card — keep it to a single tier
  *
  * Nothing else in the codebase hardcodes a price.
@@ -241,43 +273,46 @@ export type Package = {
 
 export const packages: Package[] = [
   {
-    id: "social",
-    name: "Social Media Reel",
-    price: "$200+",
+    id: "content",
+    name: "Content",
+    price: "$750",
     summary:
-      "Professionally filmed and edited short-form content ready for social media.",
+      "A focused production for businesses that need professional video to post, publish and keep using.",
     includes: [
-      "Filmed on location",
-      "Edited vertical reel",
-      "Captions and music",
-      "Ready to post",
+      "Planned around one clear goal",
+      "Half-day production on location",
+      "A set of finished vertical videos",
+      "Captions, music and sound",
+      "Delivered ready to publish",
     ],
   },
   {
-    id: "automotive",
-    name: "Automotive Video",
-    price: "$300+",
+    id: "advertising",
+    name: "Advertising",
+    price: "$1,250",
     summary:
-      "Cinematic automotive content for vehicles, builds, dealerships, detail shops, and events.",
+      "A finished commercial built to sell one service — the piece that runs on your homepage and behind your ad spend.",
     includes: [
-      "Rolling and static coverage",
-      "Detail and hero frames",
-      "Full edit, colour grade and sound",
-      "Vertical cutdowns included",
+      "Concept and script before the shoot",
+      "Full production day",
+      "Motion graphics and on-screen offer",
+      "Wide master plus vertical cutdowns",
+      "Built to run as paid ad creative",
     ],
     featured: true,
   },
   {
-    id: "commercial",
-    name: "Commercial Video",
-    price: "$500+",
+    id: "campaign",
+    name: "Campaign",
+    price: "$2,000+",
     summary:
-      "Professional promotional video content for businesses, products, and services.",
+      "One production, a month of marketing material. The commercial, the social cutdowns and the stills, all from a single day.",
     includes: [
-      "Planned before the shoot",
-      "Full production day",
-      "Full edit, colour grade and sound",
-      "Master plus vertical cutdowns",
+      "Full production day, planned end to end",
+      "A commercial plus a set of social videos",
+      "Motion graphics package",
+      "Drone coverage where it adds something",
+      "Photography from the same session",
     ],
   },
   {
@@ -285,13 +320,14 @@ export const packages: Package[] = [
     name: "Custom Project",
     price: null,
     summary:
-      "Anything outside the three above — a bigger production, an event, or a one-off idea.",
+      "Multi-location work, ongoing programmes, events, or anything that needs to be built around your business rather than fitted into a package.",
     includes: [
       "Scoped around the job",
-      "Quoted before anything is booked",
+      "Quoted in writing before anything is booked",
     ],
   },
 ];
+
 
 /**
  * ── EDIT ME: WHY A BUSINESS PAYS FOR THIS ──────────────────────────────────
@@ -307,20 +343,20 @@ export const packages: Package[] = [
  */
 export const benefits = [
   {
-    title: "Get attention",
-    body: "Stop the scroll with professional videos that showcase what makes your business different.",
+    title: "Look established",
+    body: "Most local businesses still look local online. Professional video is the fastest way to look like the bigger option in your market.",
   },
   {
-    title: "Stay consistent",
-    body: "Get a steady supply of ready-to-post content instead of constantly wondering what to post.",
+    title: "Earn the click",
+    body: "Content built to stop a thumb, not fill a feed. The first two seconds do the work everything after them depends on.",
   },
   {
-    title: "Look professional",
-    body: "High-quality content helps your business look established, trustworthy, and worth choosing.",
+    title: "Show the work",
+    body: "Customers buy what they can see. Real footage of your crew, your process and your finished jobs beats anything you can say about them.",
   },
   {
-    title: "Turn attention into customers",
-    body: "Give potential customers a reason to learn more, visit your page, call, or book.",
+    title: "Give your ads something to run",
+    body: "Ad spend is only as good as the creative behind it. This is the piece most businesses are missing when their ads underperform.",
   },
 ];
 
@@ -332,8 +368,8 @@ export const benefits = [
  */
 export const ownerPledge = {
   lines: ["You run the business.", "I'll handle the content."],
-  body: "I plan the shots, film the footage, edit the videos, and deliver content that's ready to post.",
-  cta: "Book a Shoot",
+  body: "Planning, production, editing and delivery, handled end to end. You show up, do what you already do well, and get back a month of material you can actually use.",
+  cta: "Start Your Project",
 };
 
 /**
@@ -347,23 +383,23 @@ export const ownerPledge = {
  * carries the same four middle stages with the detail, for anyone who wants it.
  */
 export const contentPipeline = [
-  "Ideas",
+  "Strategy",
   "Planning",
-  "Filming",
-  "Editing",
-  "Ready-to-post content",
+  "Production",
+  "Post",
+  "Content you can publish",
 ];
 
 /** The point of the chain above, in one line. No numbers, nothing promised. */
 export const pipelineNote =
-  "One filming session can give your business weeks of professional content.";
+  "One production day becomes a commercial, a month of social content, and stills you can use everywhere.";
 
 /**
  * Why a schedule beats a one-off, for anyone weighing the monthly tiers.
  */
 export const batchNote = {
-  title: "One shoot can become weeks of content.",
-  body: "I batch your content so you can stay consistent online without having to constantly figure out what to post.",
+  title: "One production. A month of material.",
+  body: "Everything is planned and shot in batches, so you get a commercial, a set of social videos and stills out of the same day — and you are never the one deciding what to post this week.",
 };
 
 
@@ -393,10 +429,10 @@ export type MonthlyPackage = {
   /*
     Drone is the upgrade reason, so it is a field rather than a bullet buried in
     `includes`. A card can then say YES or NO in the same place on every tier,
-    which is what makes the difference between Bronze and Silver read instantly.
+    which is what makes the difference between Essential and Growth read instantly.
   */
   drone?: boolean;
-  /** Photo stills, the second thing Bronze does not get. Same reasoning as drone. */
+  /** Photo stills, the second thing Essential does not get. Same reasoning as drone. */
   stills?: boolean;
   /** Shown as the standout ribbon. One tier only, or it stops meaning anything. */
   popular?: boolean;
@@ -409,67 +445,67 @@ export type MonthlyPackage = {
 
 export const monthlyPackages: MonthlyPackage[] = [
   {
-    id: "bronze",
-    name: "Bronze",
-    price: "$399",
-    bestFor: "Businesses starting to post consistently",
+    id: "essential",
+    name: "Essential",
+    price: "$1,500",
+    bestFor: "Businesses that want to stay visible every month",
     shoots: "1",
     reels: "8",
     drone: false,
     stills: false,
-    summary: "Consistent content without a heavy production schedule.",
+    summary: "A standing production day and a month of content, without running it yourself.",
     includes: [
-      "8 professionally edited reels",
-      "1 batch filming session",
-      "Captions + music",
-      "Content planning",
+      "8 finished videos every month",
+      "1 production day per month",
+      "Captions, music and sound",
+      "Motion graphics on every video",
+      "Content planned before the shoot",
       "1 revision round",
-      "Ready-to-post vertical videos",
     ],
   },
   {
-    id: "silver",
-    name: "Silver",
-    price: "$649",
-    bestFor: "Businesses staying active on social all month",
+    id: "growth",
+    name: "Growth",
+    price: "$2,500",
+    bestFor: "Businesses running ads and posting all month",
     shoots: "2",
-    reels: "12",
+    reels: "14",
     drone: true,
     stills: true,
-    summary: "Enough content to stay in front of customers all month.",
+    summary: "Enough content to stay in front of customers, plus the ad creative to put behind it.",
     includes: [
-      "12 professionally edited reels",
-      "2 batch filming sessions",
-      "Drone content included",
-      "Professional photo stills included",
-      "Captions + music",
-      "Content planning",
+      "14 finished videos every month",
+      "2 production days per month",
+      "Ad creative built for paid campaigns",
+      "Drone coverage included",
+      "Photography from every session",
+      "Motion graphics on every video",
+      "Content planned before the shoot",
       "1 revision round",
-      "Ready-to-post vertical videos",
     ],
     featured: true,
     popular: true,
   },
   {
-    id: "gold",
-    name: "Gold",
-    price: "$999",
-    bestFor: "Businesses that want a brand, not just posts",
+    id: "partner",
+    name: "Partner",
+    price: "$4,000",
+    bestFor: "Businesses that want a content operation, not a posting schedule",
     shoots: "3",
-    reels: "16",
+    reels: "20",
     drone: true,
     stills: true,
-    summary: "The most content, the most filming days, first pick of the calendar.",
+    summary: "The most output, first pick of the calendar, and a look that runs across everything you publish.",
     includes: [
-      "16 professionally edited reels",
-      "3 batch filming sessions",
-      "Drone content included",
-      "Professional photo stills included",
+      "20 finished videos every month",
+      "3 production days per month",
+      "A commercial refreshed each quarter",
+      "Ad creative built for paid campaigns",
+      "Drone coverage included",
+      "Photography from every session",
       "Priority scheduling",
-      "Captions + music",
-      "Content planning",
-      "1 revision round",
-      "Ready-to-post vertical videos",
+      "Quarterly planning session",
+      "2 revision rounds",
     ],
   },
   {
@@ -478,14 +514,15 @@ export const monthlyPackages: MonthlyPackage[] = [
     price: null,
     bestFor: "Built around your business",
     summary:
-      "For businesses that need a custom amount of content, special projects, different shoot schedules, or something outside the standard packages.",
+      "Multi-location businesses, franchises, or anything that needs a different volume, schedule or set of deliverables than the tiers above.",
     includes: [
-      "Custom number of videos",
-      "Custom shoot schedule",
+      "Custom volume and schedule",
+      "Multi-location coverage",
       "Custom deliverables",
     ],
   },
 ];
+
 
 /**
  * Terms for the monthly packages only — never shown against the one-off tiers,
@@ -493,11 +530,11 @@ export const monthlyPackages: MonthlyPackage[] = [
  *
  * Written as a term of the partnership rather than a restriction. A minimum is
  * only worth stating because it is what makes the work compound: a single month
- * buys footage, two months start building a library and a recognisable look.
+ * buys footage, three months start building a library and a recognisable look.
  */
 export const monthlyCommitment = {
-  label: "2-Month Minimum",
-  body: "Monthly packages run on a two-month minimum. After that they continue month to month unless your agreement says otherwise.",
+  label: "3-Month Minimum",
+  body: "Monthly packages run on a three-month minimum. That is not a lock-in — it is how long it takes for a content library and a consistent look to be worth anything. After that they continue month to month unless your agreement says otherwise.",
   custom: "Custom packages may carry different terms, set by the scope of the work.",
 };
 
@@ -519,7 +556,7 @@ export const newClientOffer = {
   terms: [
     "New monthly clients only",
     "Applies to the first month of a package",
-    "Requires the two-month minimum",
+    `Requires the ${MINIMUM_MONTHS}-month minimum`,
     "Your exact rate comes from your quote",
   ],
   cta: "Start Your Monthly Content",
@@ -536,36 +573,36 @@ export const newClientOffer = {
  * thinks they are being asked for a year up front stops reading.
  */
 export const commitmentTiers = [
-  { term: "2 months", saving: 0, note: "The standard minimum on every monthly package." },
+  { term: "3 months", saving: 0, note: "The standard minimum on every monthly package." },
   { term: "6 months", saving: 0.05, note: "A half-year of consistent output, at a preferred rate." },
   { term: "12 months", saving: 0.1, note: "A full year of coverage, at the best monthly rate offered." },
 ];
 
 /** Shown under the monthly grid, same job as `pricingNote` above. */
 export const monthlyNote =
-  "Every monthly package is custom quoted based on shoot frequency, production time, locations, and deliverables.";
+  "Every monthly package is quoted around your business — how often we shoot, how many locations are involved, and what needs to be delivered each month.";
 
 /** Shown under the pricing grid so the numbers are never mistaken for quotes. */
 export const pricingNote =
-  "Every project is custom quoted on shoot time, location, and deliverables. These are starting points — tell me what you have in mind and I'll give you a real number.";
+  "These are starting points, not a menu. What a project actually costs comes down to production time, locations, how far the shoot is, how much editing and motion graphics it needs, and how much is being delivered. Tell me what you have in mind and you get a real number in writing.";
 
 
 export const process = [
   {
     step: "Plan",
-    body: "I lock the story, the shot list, and the deliverables before a single frame is shot. No guessing on the day.",
+    body: "We agree what the video has to do and who it is talking to before anything gets filmed. No guessing on the day.",
   },
   {
     step: "Film",
-    body: "One operator, cinema glass, controlled light. Every setup is chosen because it earns its place in the cut.",
+    body: "A planned production day, run properly. Every setup is there because it earns its place in the finished piece.",
   },
   {
     step: "Edit",
-    body: "Cut to rhythm, graded for depth, mixed for impact. The look is built in the timeline, not bought as a preset.",
+    body: "Cut for pace, finished with motion graphics and sound, and built around the one thing you want a customer to do next.",
   },
   {
     step: "Deliver",
-    body: "Master file, vertical cutdowns, and stills — packaged, labelled, and ready to publish the day you get them.",
+    body: "Everything labelled and sized for where it runs — your website, your social, your ads — ready to publish the day it lands.",
   },
 ];
 
@@ -583,54 +620,159 @@ export const stats: { value: number; suffix: string; label: string }[] = [];
 /** "Why work with 508 Filmzz" — the booking-page trust block. */
 export const advantages = [
   {
-    title: "Professional Cinema Quality",
-    body: "Cinema glass, controlled light, and a grade built in the timeline — not bought as a preset.",
+    title: "Work That Holds Up Anywhere",
+    body: "Content finished to a standard that looks right on your homepage, in a paid ad, and next to a national brand in the same feed.",
   },
   {
     title: "Drone Coverage",
-    body: "Aerial reveals and top-down movement, included on the Silver and Gold monthly packages.",
+    body: "Aerial coverage of properties, roofs and job sites — included on Growth and Partner, and available on any production where it adds something.",
   },
   {
     title: "Creative Direction Included",
-    body: "The story, the shot list, and the hook are planned before the camera comes out of the bag.",
+    body: "You are not handed a shot list to fill in. The angle, the message and the hook are worked out before production starts.",
   },
   {
     title: "Fast Turnaround",
     body: "Most projects are delivered within 3–7 business days.",
   },
   {
-    title: "Social Media Optimized",
-    body: "Every film is finished twice — a wide master and a vertical cutdown for reels and shorts.",
+    title: "Built For Where It Runs",
+    body: "Every piece is finished more than once — a wide version for your site, vertical cutdowns for social, and versions sized for paid ads.",
   },
   {
     title: "One-on-One Communication",
     body: "You talk to the person holding the camera. No account managers, no handoffs.",
   },
   {
-    title: "Serving Greenville & Upstate SC",
-    body: "Based in Piedmont, minutes from Greenville, and available throughout South Carolina and surrounding states.",
+    title: "Greenville & Upstate South Carolina",
+    body: "Based in Piedmont, minutes from Greenville, working with businesses across the Upstate. Projects further out are quoted with travel included.",
   },
 ];
 
+/**
+ * ── EDIT ME: WHO THIS IS FOR ───────────────────────────────────────────────
+ * The industries the studio actually wants enquiries from.
+ *
+ * It is on the page for one reason: a roofing company that lands on a site
+ * full of car videos assumes it is not for them and leaves. Naming the trades
+ * outright is what stops that, and it quietly filters out the people looking
+ * for a fifty-pound favour at the same time.
+ *
+ * Kept to industries where video demonstrably changes how a customer chooses:
+ * visible work, considered purchase, local competition.
+ */
+export const industries = [
+  "Roofing",
+  "HVAC",
+  "Construction",
+  "Remodeling",
+  "Auto Dealerships",
+  "Detailing & Automotive",
+  "Landscaping",
+  "Pressure Washing",
+  "Real Estate",
+  "Med Spas",
+  "Dental Practices",
+  "Home Services",
+];
+
+/** The line that sits over the industry list. */
+export const industriesNote =
+  "If your work looks good in person, it should look good online. These are the businesses where that gap costs the most — and where professional content closes it fastest.";
+
+/**
+ * ── EDIT ME: MORE THAN JUST VIDEO ──────────────────────────────────────────
+ * What is actually bundled into a production, in the client's language.
+ *
+ * This exists to answer the quiet objection behind every quote at this level:
+ * "my nephew has a camera." The answer is not a better camera — it is that
+ * six separate disciplines go into one finished piece, and a business is
+ * buying all of them at once. Deliberately no tools, software or gear named:
+ * a client is buying the result, not the kit that produced it.
+ */
+export const craft = {
+  title: "More Than Just Video",
+  lead: "A finished piece of advertising is not one skill. It is six, and most businesses are only ever sold one of them.",
+  disciplines: [
+    {
+      title: "Cinematography",
+      body: "Knowing where to put the camera, and what to light, so an ordinary job site looks like the best one in the market.",
+    },
+    {
+      title: "Creative Direction",
+      body: "Deciding what the video is actually saying, who it is saying it to, and what you want them to do about it.",
+    },
+    {
+      title: "Editing",
+      body: "Pace and structure. The difference between footage of your business and something a stranger watches to the end.",
+    },
+    {
+      title: "Motion Graphics",
+      body: "Animated titles, offers, callouts and branding — the layer that turns a nice video into an actual advertisement.",
+    },
+    {
+      title: "Sound Design",
+      body: "The part nobody notices until it is missing. Music and mix are most of why something feels expensive.",
+    },
+    {
+      title: "Advertising Storytelling",
+      body: "Built to sell, not just to look good. Every piece is made around one service, one customer, and one next step.",
+    },
+  ],
+};
+
+/**
+ * ── EDIT ME: TRAVEL ────────────────────────────────────────────────────────
+ * Stated plainly, before anyone asks.
+ *
+ * The point is not to charge for mileage. It is to set the expectation that a
+ * production two hours away is a full day of the studio's week, so it gets
+ * scoped as one — which is exactly the conversation that is awkward to have
+ * after someone has already asked for a price.
+ *
+ * Written as how projects are quoted rather than as a list of fees. A travel
+ * policy that reads like a surcharge schedule loses the client it was written
+ * to qualify.
+ */
+export const travel = {
+  eyebrow: "Travel & Coverage",
+  title: "Where I Work",
+  lead: "Greenville, Piedmont, Greer, Simpsonville, Easley, Anderson, Spartanburg and the rest of the Upstate are home ground.",
+  points: [
+    {
+      title: "Local production",
+      body: "Anywhere in the Upstate is quoted normally, with no travel line on the invoice.",
+    },
+    {
+      title: "Extended travel",
+      body: "Further out is welcome and happens often. Travel time is simply built into the quote, so the day gets the production it deserves rather than being squeezed around the drive.",
+    },
+    {
+      title: "Outside the region",
+      body: "Bigger projects further afield are quoted individually, usually as a full production day or a multi-day booking.",
+    },
+  ],
+};
+
 export const faqs = [
   {
-    q: "How much does a shoot cost?",
-    a: "Every project is custom quoted based on your goals, shoot time, and deliverables.",
+    q: "How much does a project cost?",
+    a: "Projects start at $750, commercials at $1,250, and campaigns at $2,000. The final number depends on production time, locations, how much is being delivered, and how far the shoot is — you get it in writing before anything is booked.",
   },
   {
-    q: "How long does editing take?",
-    a: "Most projects are delivered within 3–7 business days.",
+    q: "How long until I get the videos?",
+    a: "Most projects are delivered within 3–7 business days of the production day. Larger campaigns are scheduled with a delivery date agreed up front.",
   },
   {
     q: "Do you travel?",
-    a: "Yes. I travel throughout South Carolina and surrounding states.",
+    a: "Greenville and the Upstate are covered as standard. Further out is no problem — travel is simply factored into the quote so the production day is worth doing properly, and anything outside the usual service area is quoted individually.",
   },
   {
     q: "Do you offer drone footage?",
-    a: "Yes, as part of a shoot rather than on its own. It is included on the Silver and Gold monthly packages, and can be added to a one-off production — ask when you book and it is quoted with the job.",
+    a: "Yes, as part of a production rather than on its own. It is included on Growth and Partner, and can be added to any project where an aerial actually adds something — a roof, a property, a job site.",
   },
   {
-    q: "Can I use my videos anywhere?",
-    a: "Yes. All content is delivered ready for Instagram, Facebook, TikTok, YouTube, and your website.",
+    q: "Can I use the videos anywhere?",
+    a: "Yes. Everything is delivered ready for your website, Instagram, Facebook, TikTok and YouTube, and cleared to run as paid ad creative.",
   },
 ];

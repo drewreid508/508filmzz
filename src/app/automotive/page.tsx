@@ -6,7 +6,7 @@ import { CategoryPitch } from "@/components/portfolio/category-pitch";
 export const metadata: Metadata = {
   title: "Automotive Films",
   description:
-    "Cinematic automotive films — exotics, lifted trucks, and shop builds shot like a factory launch film and cut like a trailer.",
+    "Automotive video production for dealerships, detail shops and build shops — vehicle content made to sell the business behind it, not just the car in front of the camera.",
   alternates: { canonical: "/automotive" },
 };
 
@@ -24,7 +24,7 @@ export default function AutomotivePage() {
         items={[
           {
             title: "Rolling & Tracking",
-            body: "Chase-rig coverage on open road, shot at 60fps so every pass can be slowed without falling apart.",
+            body: "Rolling coverage on open road, built so every pass can be slowed right down and still look right.",
           },
           {
             title: "Studio Control",

@@ -40,16 +40,18 @@ export const metadata: Metadata = {
       list: a title reading like a service area is the thing that looks like
       keyword stuffing to a reader and to Google alike.
     */
-    default: `${site.name} | Cinematic Automotive & Commercial Media`,
+    default: `${site.name} | Commercial Video Production in Greenville, SC`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
   keywords: [
-    "automotive videographer",
-    "cinematic car films",
+    "commercial videographer Greenville SC",
+    "business video production Greenville SC",
     "commercial video production",
-    "aerial videography",
-    "social media reels",
+    "business advertising video",
+    "social media video production",
+    "drone video production",
+    "motion graphics",
     "508 Filmzz",
   ],
   authors: [{ name: site.name, url: site.url }],
@@ -57,14 +59,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
-    title: `${site.name} | Automotive & Commercial Video Production`,
+    title: `${site.name} | Commercial Video & Advertising, Greenville SC`,
     description: site.description,
     url: site.url,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} | Automotive & Commercial Video Production`,
+    title: `${site.name} | Commercial Video & Advertising, Greenville SC`,
     description: site.description,
   },
   robots: robotsMeta,

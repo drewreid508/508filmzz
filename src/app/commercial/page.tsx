@@ -6,7 +6,7 @@ import { CategoryPitch } from "@/components/portfolio/category-pitch";
 export const metadata: Metadata = {
   title: "Commercial Production",
   description:
-    "Brand films, service campaigns, and advertisements for shops, studios, and operators — built around a hook, a promise, and a call to action.",
+    "Commercial video and advertising for contractors, trades, dealerships and local businesses across Greenville and Upstate South Carolina — built around one service, one customer, and one clear next step.",
   alternates: { canonical: "/commercial" },
 };
 

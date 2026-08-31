@@ -16,14 +16,14 @@ import type { MonthlyPackage } from "@/data/site";
  * one answer.
  *
  * ── The ten-second rule ────────────────────────────────────────────────────
- * A business owner should be able to tell Bronze from Silver without reading.
+ * A business owner should be able to tell Essential from Growth without reading.
  * That is what the two big figures near the top are for — reels and shoots, the
  * two numbers that actually change — and what the Drone and Photo stills rows
  * are for below them: the same question answered in the same place on every
  * card, so the eye can run down the row instead of hunting through three lists
  * of different lengths. An included line is the accent colour; a missing one
  * still gets a line, because an omission reads as an oversight where a stated
- * "Not included" reads as a decision, and gives a reason to look at Silver.
+ * "Not included" reads as a decision, and gives a reason to look at Growth.
  */
 export function MonthlyCard({
   pkg,

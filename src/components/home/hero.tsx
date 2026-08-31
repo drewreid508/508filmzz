@@ -110,7 +110,7 @@ export function Hero() {
           transition={{ delay: 0.25, duration: 0.9, ease: EASE }}
         >
           <span className="h-px w-10 bg-accent" aria-hidden="true" />
-          Cinematic Media — Est. 508
+          Commercial Video &amp; Advertising — Greenville, SC
         </motion.p>
 
         {/*
@@ -123,7 +123,7 @@ export function Hero() {
           sentence always is: six words at 17vw runs off a 375px screen.
         */}
         <h1 className="display text-[11.5vw] leading-[0.86] text-balance sm:text-[10vw] md:text-[7.6vw] lg:text-[6.8vw]">
-          {["Content That Makes", "Your Business", "Stand Out."].map((line, li) => (
+          {["Commercial Video", "That Makes You The", "Obvious Choice."].map((line, li) => (
             <span key={line} className="block overflow-hidden">
               <motion.span
                 className="block"
@@ -144,8 +144,9 @@ export function Hero() {
           transition={{ delay: 0.72, duration: 1, ease: EASE }}
         >
           <p className="body-lg max-w-lg text-balance">
-            Cinematic video, social media reels, and commercial content built to
-            help businesses get noticed.
+            Advertising creative, social content and motion graphics for
+            contractors, dealerships, med spas and other established local
+            businesses — built to run on your site, your social and your ads.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
@@ -160,7 +161,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              Book a Shoot
+              Start Your Project
             </Magnetic>
             <Magnetic
               href="/portfolio"
@@ -168,7 +169,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              View My Work
+              See The Work
             </Magnetic>
           </div>
         </motion.div>

@@ -26,6 +26,43 @@ function useIntroSeen() {
   );
 }
 
+/*
+  Has this tab been hidden at any point?
+
+  Never open the curtain over a page nobody is looking at. A tab loaded in the
+  background — opened into a new tab, or backgrounded while it loads on a phone
+  — gets no requestAnimationFrame at all. The counter below has a failsafe, but
+  the lift-away is a framer-motion exit animation, which is also frame-driven,
+  so the curtain is stranded mid-flight with `overflow: hidden` still on the
+  body. The visitor returns to a black screen over a site that has been ready
+  the whole time, and the only way out is a reload.
+
+  Skipping the intro in that case costs nothing: an animation nobody can see has
+  no value to lose. It latches rather than tracking the current state, because
+  once the curtain has missed its moment there is no sense playing it late.
+*/
+let everHidden = false;
+
+function subscribeVisibility(onChange: () => void) {
+  const handler = () => {
+    if (document.hidden) everHidden = true;
+    onChange();
+  };
+  document.addEventListener("visibilitychange", handler);
+  return () => document.removeEventListener("visibilitychange", handler);
+}
+
+function useTabEverHidden() {
+  return useSyncExternalStore(
+    subscribeVisibility,
+    () => {
+      if (document.hidden) everHidden = true;
+      return everHidden;
+    },
+    () => false
+  );
+}
+
 /**
  * Opening curtain. Counts to 100, then lifts away to reveal the hero. Shown
  * once per browser session so repeat navigations stay instant.
@@ -36,7 +73,8 @@ export function Preloader() {
   const [finished, setFinished] = useState(false);
   const [count, setCount] = useState(0);
 
-  const showing = !introSeen && !reduced && !finished;
+  const wasHidden = useTabEverHidden();
+  const showing = !introSeen && !reduced && !finished && !wasHidden;
 
   useEffect(() => {
     if (!showing) return;

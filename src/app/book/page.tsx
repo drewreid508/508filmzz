@@ -7,9 +7,9 @@ import { Reveal } from "@/components/motion/reveal";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Book a Shoot",
+  title: "Start Your Project",
   description:
-    "Request a shoot with 508 Filmzz — automotive reels, dealership and detailing content, social media video, events and monthly content packages across Greenville and Upstate South Carolina.",
+    "Start a project with 508 Filmzz — commercial advertising, social content, motion graphics, drone production and monthly content for businesses across Greenville and Upstate South Carolina.",
   alternates: { canonical: "/book" },
 };
 
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  * the form with nothing above it to scroll past.
  *
  * That matters most on the journey this site was built for: a business owner
- * scans a card, taps Book a Shoot, and should land on the form itself rather
+ * scans a card, taps Start Your Project, and should land on the form itself rather
  * than on a page about how to make contact.
  *
  * The form is the same component either page renders — one form, one
@@ -33,12 +33,12 @@ const REASSURANCE = [
   {
     icon: Clock,
     title: "A reply, not an auto-responder",
-    body: "Every request comes to me directly. You'll hear back about availability and a real number, usually the same day.",
+    body: "Every enquiry comes to me directly — not a form queue. You will hear back about availability and a real number, usually the same day.",
   },
   {
     icon: MapPin,
     title: "Greenville and the Upstate",
-    body: "Based in Piedmont, shooting across South Carolina and the surrounding states. Travel is quoted with the job.",
+    body: "Based in Piedmont, working across the Upstate as standard. Projects further out are welcome — travel is simply built into the quote.",
   },
   {
     icon: Phone,
@@ -52,9 +52,9 @@ export default function BookPage() {
     <>
       <PageHero
         index="01"
-        eyebrow="Request a Shoot"
-        title="Book a Shoot"
-        lead="Tell me what you want filmed and when. I'll come back with availability, what it takes, and a real quote — no obligation, and nothing is charged through this form."
+        eyebrow="Start a Project"
+        title="Start Your Project"
+        lead="Tell me about your business and what you want the content to do. The more you share — what you do, who you are trying to reach, where it needs to run — the more useful the quote I send back. No obligation, and nothing is charged through this form."
       />
 
       {/* ── What happens next ─────────────────────────────────────────────── */}
