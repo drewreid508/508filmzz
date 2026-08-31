@@ -10,7 +10,7 @@ import { SuccessGreeting } from "./greeting";
 
 export const metadata: Metadata = {
   title: "Request Received",
-  description: "Your 508 Filmzz booking request has been received.",
+  description: "Your 508 Filmzz enquiry has been received.",
   robots: { index: false, follow: true },
 };
 
@@ -21,11 +21,11 @@ const NEXT_STEPS = [
   },
   {
     title: "You get a straight answer",
-    body: "Availability for your date, what the project takes, and a custom quote based on your goals and deliverables.",
+    body: "What I think the right approach is, what it takes to run it, and a custom quote built around your goals — not a rate card.",
   },
   {
-    title: "We lock the plan",
-    body: "Story, shot list, and deliverables agreed before the shoot — so nothing gets decided on the day.",
+    title: "I build the plan",
+    body: "Strategy, creative and deliverables agreed in writing before anything starts, so nothing important gets decided on the day.",
   },
 ];
 

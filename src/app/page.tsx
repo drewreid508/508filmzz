@@ -6,7 +6,6 @@ import { Marquee } from "@/components/home/marquee";
 import { Services } from "@/components/home/services";
 import { ReelPanel } from "@/components/home/reel-panel";
 import { ProjectCard } from "@/components/portfolio/project-card";
-import { ShowreelIntro } from "@/components/chrome/showreel-intro";
 import { Pipeline } from "@/components/home/pipeline";
 import { SectionHeader } from "@/components/ui/section";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
@@ -32,9 +31,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* The business-card landing. Overlays this page once per visit. */}
-      <ShowreelIntro />
-
       <Hero />
       <Marquee />
 
@@ -153,7 +149,7 @@ export default function HomePage() {
                 id="industries-heading"
                 className="display text-[9vw] leading-[0.96] text-balance sm:text-[5.4vw] md:text-[2.9vw]"
               >
-                Built for businesses people compare before they call.
+                Any business that needs to be seen.
               </h2>
             </div>
             <div className="md:col-span-6 md:col-start-7">

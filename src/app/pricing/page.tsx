@@ -20,7 +20,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Custom Marketing",
   description:
-    "508 Filmzz builds custom marketing for automotive dealerships, construction companies, builders, real estate and established businesses in South Carolina. No packages — strategy, creative, media and advertising priced around your goals. Request a custom quote.",
+    "508 Filmzz builds custom marketing for businesses of every kind in South Carolina. No packages — strategy, creative, media and advertising priced around your goals. Request a custom quote.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -180,7 +180,7 @@ export default function CustomMarketingPage() {
           id="who-heading"
           index="05"
           eyebrow="Who I Work With"
-          title="Businesses With Something To Defend"
+          title="Any Business That Needs To Be Seen"
           lead={industriesNote}
         />
 

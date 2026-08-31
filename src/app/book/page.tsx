@@ -9,7 +9,7 @@ import { site } from "@/data/site";
 export const metadata: Metadata = {
   title: "Request a Custom Quote",
   description:
-    "Request a custom marketing proposal from 508 Filmzz — marketing strategy, social media marketing, Meta advertising, lead generation, video production and ad creative for automotive dealerships, construction companies, builders and established businesses across South Carolina.",
+    "Request a custom marketing proposal from 508 Filmzz — marketing strategy, social media, content, video, photography, Meta advertising, ad creative and lead generation for businesses of every kind across South Carolina.",
   alternates: { canonical: "/book" },
 };
 

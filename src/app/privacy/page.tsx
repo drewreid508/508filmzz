@@ -106,7 +106,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="display mb-4 text-2xl text-bone">How long it is kept</h2>
             <p>
-              Enquiries are kept while we are in contact and for as long as I need
+              Enquiries are kept while I am in contact with you and for as long as I need
               them for business records. Ask me to delete yours and I will, unless
               I am required to keep it for tax or accounting purposes.
             </p>
@@ -128,10 +128,10 @@ export default function PrivacyPage() {
           <div>
             <h2 className="display mb-4 text-2xl text-bone">Your footage</h2>
             <p>
-              Video and stills produced for you are covered by our project
+              Video and stills produced for you are covered by your project
               agreement, not this policy. I may show completed work in my
-              portfolio and on social media unless we agree otherwise in writing
-              before the shoot — just tell me and it stays private.
+              portfolio and on social media unless you ask me not to, in writing,
+              before the work starts — just tell me and it stays private.
             </p>
           </div>
 

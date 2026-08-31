@@ -5,7 +5,7 @@ export const site = {
   legalName: "508 Filmzz",
   tagline: "Marketing • Media • Growth",
   positioning:
-    "A marketing and media studio for ambitious businesses — strategy, creative, content and advertising, run by one person who works with every client directly.",
+    "A marketing and media studio for businesses that want to be seen, chosen and grown — strategy, creative, content and advertising, run by one person who works with every client directly.",
   /**
    * The canonical origin — where the site actually answers.
    *
@@ -20,7 +20,7 @@ export const site = {
    */
   url: SITE_URL,
   description:
-    "508 Filmzz is a marketing agency and creative studio in Greenville, SC. Marketing strategy, social media marketing, Meta advertising, lead generation, commercial video production and content marketing for automotive dealerships, construction companies, builders, real estate and established businesses across South Carolina.",
+    "508 Filmzz is a marketing agency and creative studio in Greenville, SC. Marketing strategy, social media marketing, content, video production, photography, Meta advertising, ad creative and lead generation for businesses of every kind across South Carolina — run by one person, start to finish.",
   owner: "Drew Reid",
   email: "508filmz@gmail.com",
   phone: "(864) 915-4071",
@@ -225,7 +225,7 @@ export const servicesNote =
   "Very few businesses need all of this, and almost none need it in the same order. I look at where you actually are — what you are already doing, what is working, what is costing you — and build the approach around that. You are hiring an approach, not picking items off a list.";
 
 /*
-  The scrolling capability list — marquee, footer, showreel captions, JSON-LD.
+  The scrolling capability list — marquee, footer, JSON-LD.
 
   Flattened out of the three disciplines rather than written again, so it can
   never advertise something the catalogue no longer offers. It was a hand-kept
@@ -234,13 +234,32 @@ export const servicesNote =
 export const capabilities = services.flatMap((service) => service.items);
 
 /*
-  The three words, for anywhere a list of twenty will not fit.
-
-  The showreel overlay animates one line at a time over twelve seconds of
-  footage — twenty of them is ninety seconds of captions and a wall of text on
-  a phone. This is what the intro and any other fixed-height surface uses.
+  The three words, for anywhere a list of twenty will not fit — section
+  headings, the services grid, and any fixed-height surface.
 */
 export const disciplines = services.map((service) => service.title);
+
+/**
+ * ── EDIT ME: THE HERO LIST ─────────────────────────────────────────────────
+ * What I do, in the words a business owner would use.
+ *
+ * Nine short items rather than the full twenty capabilities, and deliberately
+ * not the three discipline names either. Above the fold the question is not
+ * "how is this organised", it is "does he do the thing I need" — so this is a
+ * scan list, and it ends on Growth because that is the only one anybody
+ * actually wants.
+ */
+export const heroCapabilities = [
+  "Marketing Strategy",
+  "Social Media",
+  "Content",
+  "Video",
+  "Photography",
+  "Advertising",
+  "Creative",
+  "Lead Generation",
+  "Growth",
+];
 
 export const benefits = [
   {
@@ -396,21 +415,31 @@ export const advantages = [
   },
 ];
 
+/**
+ * ── EDIT ME: WHO I WORK WITH ───────────────────────────────────────────────
+ * Examples of range, not a niche.
+ *
+ * Framed carefully. A list like this is read one of two ways: "these are the
+ * only businesses he takes" or "he has worked across all of this". The heading
+ * and `industriesNote` do the framing so it lands as the second — the point is
+ * breadth, and any business that needs better marketing is on the list whether
+ * its name appears here or not.
+ */
 export const industries = [
-  "Automotive Dealerships",
-  "Automotive & Performance",
-  "Construction",
-  "Builders & Developers",
+  "Automotive & Dealerships",
+  "Construction & Trades",
   "Real Estate",
-  "Luxury & Premium Brands",
-  "Marine & Powersports",
   "Home Services",
-  "Manufacturing & Fabrication",
+  "Retail & Hospitality",
+  "Health & Wellness",
   "Professional Services",
+  "Manufacturing",
+  "Marine & Powersports",
+  "Local & Family-Owned",
 ];
 
 export const industriesNote =
-  "Businesses where the product is expensive, the decision is considered, and the customer is comparing you to two or three others before they call. That is where marketing earns its money — and where looking like the obvious choice is worth the most.";
+  "I am not built around one industry. What changes between a dealership and a dental practice is the audience and the message — the work of getting a business seen and chosen is the same. If you sell something you are proud of and not enough people know about it, that is the job.";
 
 /**
  * ── EDIT ME: MORE THAN JUST VIDEO ──────────────────────────────────────────
@@ -518,7 +547,7 @@ export const faqs = [
   },
   {
     q: "What kind of businesses do you work with?",
-    a: "Dealerships and automotive companies, construction firms and builders, real estate, and established businesses with a real marketing budget. The common thread is a considered purchase and a customer comparing two or three options before they call.",
+    a: "All kinds. Automotive, construction and trades, real estate, home services, retail, wellness, professional services — the work is the same whatever the industry: understand who buys from you, make something worth their attention, and put it where they will see it.",
   },
   {
     q: "Do you run Meta ads, or just make the creative?",

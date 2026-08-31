@@ -6,7 +6,7 @@ import { FilmStrip } from "@/components/portfolio/film-strip";
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
-    "Selected marketing, media and creative work by 508 Filmzz — commercial video, automotive and dealership content, brand photography and campaign creative for businesses across South Carolina.",
+    "Selected marketing, media and creative work by 508 Filmzz — commercial video, brand content, photography and campaign creative for businesses across South Carolina.",
   alternates: { canonical: "/portfolio" },
 };
 

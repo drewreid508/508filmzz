@@ -7,6 +7,7 @@ import { asset } from "@/lib/asset";
 import { Magnetic } from "@/components/ui/magnetic";
 import { VideoModal, PlayButton } from "@/components/ui/video-modal";
 import { pad } from "@/lib/utils";
+import { heroCapabilities } from "@/data/site";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -15,12 +16,19 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  * The frames the hero cycles through. Any key from portfolio.generated.json or
  * media.generated.json works — add or remove entries and the indicator on the
  * right adjusts itself.
+ *
+ * Deliberately mixed. All three plates used to be vehicles, which made the
+ * hero read as an automotive specialist however broad the copy above it was —
+ * the picture is the first claim a visitor reads, and it was contradicting the
+ * words. A service business, a retailer, a fabricator and one car say the
+ * thing the copy is trying to say: any business, not one industry.
  */
 const PLATES = [
+  { id: "pf_img_5829", label: "Machined components", vertical: "Product & Manufacturing" },
+  { id: "pf_img_5834", label: "Owner-operator trucking", vertical: "Logistics" },
+  { id: "pf_img_5838", label: "Deep Creek Marine Customs", vertical: "Marine & Retail" },
   { id: "img_5638", label: "Porsche 911 GT2 RS", vertical: "Automotive" },
-  { id: "pf_img_5850", label: "Lifted Super Duty", vertical: "Automotive" },
-  { id: "pf_img_5834", label: "Owner-Operator Rig", vertical: "Commercial" },
-];
+]
 
 const HOLD = 5200;
 
@@ -137,16 +145,46 @@ export function Hero() {
           ))}
         </h1>
 
+        {/*
+          What I do, above the fold.
+
+          The question a visitor has at this point is not how the offer is
+          organised, it is whether the thing they need is on the list — so this
+          is nine plain words to scan rather than the three discipline names,
+          and it answers before anyone has to tap Services. It also does the
+          repositioning on its own: a list that opens on Marketing Strategy and
+          closes on Growth is not a videographer's list.
+        */}
+        <motion.ul
+          className="mt-8 flex flex-wrap gap-x-2.5 gap-y-2"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.62, duration: 0.9, ease: EASE }}
+        >
+          {heroCapabilities.map((item, i) => (
+            <li
+              key={item}
+              className={`border px-3 py-1.5 text-[0.62rem] font-medium tracking-[0.14em] uppercase ${
+                i === heroCapabilities.length - 1
+                  ? "border-accent text-accent"
+                  : "border-line-strong text-mute"
+              }`}
+            >
+              {item}
+            </li>
+          ))}
+        </motion.ul>
+
         <motion.div
           className="mt-9 flex flex-col gap-9 border-t border-line pt-8 md:flex-row md:items-center md:justify-between"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.72, duration: 1, ease: EASE }}
+          transition={{ delay: 0.82, duration: 1, ease: EASE }}
         >
           <p className="body-lg max-w-lg text-balance">
-            Strategy, creative, content and advertising for dealerships,
-            builders, construction and other businesses that intend to be the
-            obvious choice in their market.
+            I help businesses get seen, get chosen and grow — with the
+            strategy, the content and the advertising behind it, handled by
+            one person from start to finish.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
@@ -161,7 +199,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              Start a Project
+              Request a Custom Quote
             </Magnetic>
             <Magnetic
               href="/portfolio"

@@ -6,8 +6,12 @@ import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Magnetic } from "@/components/ui/magnetic";
 
 /**
- * The vertical-film panel. The full film plays inline — visitors never have to
- * leave the page to watch the work.
+ * The work, playing inline.
+ *
+ * Not an intro. The autoplaying overlay that used to gate the homepage is gone;
+ * this is a portfolio piece sitting where it belongs, a third of the way down,
+ * and it starts only when someone taps it. Nothing plays at a visitor before
+ * they have decided to watch.
  */
 export function ReelPanel() {
   return (
@@ -18,7 +22,7 @@ export function ReelPanel() {
             <p className="eyebrow mb-6 flex items-center gap-3">
               <span className="text-accent">09</span>
               <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-              Showreel
+              What It Looks Like
             </p>
           </Reveal>
 
@@ -26,15 +30,15 @@ export function ReelPanel() {
             id="reel-heading"
             className="display text-[13vw] leading-[0.86] sm:text-[9vw] md:text-[4.6vw]"
           >
-            <TextReveal text="Watch the work." />
+            <TextReveal text="See it in action." />
           </h2>
 
           <Reveal delay={0.1}>
             <p className="body-lg mt-7 max-w-md">
-              A full production cut down to the piece that matters. Everything is
-              finished more than once — a wide version for your website and
-              vertical cuts for Reels, TikTok and Shorts — so one shoot covers
-              everywhere you publish.
+              One campaign, finished more than once — a wide cut for your
+              website, verticals for Reels, TikTok and Shorts, and stills that
+              match. A single production feeds everywhere you publish, which is
+              what makes consistent marketing affordable instead of relentless.
             </p>
           </Reveal>
 

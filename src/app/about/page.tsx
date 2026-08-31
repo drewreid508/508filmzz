@@ -13,7 +13,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "508 Filmzz is a marketing and media studio in Greenville, SC, run by Drew Reid. Marketing strategy, social media marketing, Meta advertising, ad creative and video production for dealerships, construction companies, builders and established businesses — planned, produced and delivered by one person, with no handoffs.",
+    "508 Filmzz is a marketing and media studio in Greenville, SC, run by Drew Reid. Marketing strategy, social media, content, video, photography, advertising and lead generation for businesses of every kind — planned, produced and delivered by one person, with no handoffs.",
   alternates: { canonical: "/about" },
 };
 

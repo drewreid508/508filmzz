@@ -52,7 +52,7 @@ export default function TermsPage() {
             <p>
               Submitting the booking form starts a conversation — it does not
               reserve a date, confirm a price, or create a contract. A booking
-              exists once we have agreed scope, date, and fee in writing. Until
+              exists once you and I have agreed scope, date, and fee in writing. Until
               then nothing is held.
             </p>
           </div>
