@@ -13,7 +13,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "508 Filmzz is a commercial video and advertising studio in Greenville, SC. Every project is planned, produced, edited and delivered by one person — no outsourcing, no handoffs.",
+    "508 Filmzz is a marketing and media studio in Greenville, SC, run by Drew Reid. Marketing strategy, social media marketing, Meta advertising, ad creative and video production for dealerships, construction companies, builders and established businesses — planned, produced and delivered by one person, with no handoffs.",
   alternates: { canonical: "/about" },
 };
 
@@ -22,9 +22,9 @@ export default function AboutPage() {
     <>
       <PageHero
         index="01"
-        eyebrow="The Studio"
-        title="One Man. Every Step."
-        lead="508 Filmzz is built on one vision. Every shoot is personally planned, filmed, edited, and delivered by me. No outsourcing. No shortcuts. Just premium storytelling and attention to detail."
+        eyebrow="Who You're Hiring"
+        title="One Person. Every Step."
+        lead="508 Filmzz is me. I build the strategy, direct the creative, run the camera, cut the edit and manage the campaigns behind it. You work with me directly from the first call to the last delivery — there is no account manager, no junior, and nothing gets passed to anyone else."
       />
 
       {/* Portrait / statement */}
@@ -50,9 +50,9 @@ export default function AboutPage() {
             </h2>
             <Reveal delay={0.1}>
               <p className="text-sm leading-relaxed text-mute md:text-base">
-                Anyone can buy a camera. What clients actually pay for is judgement —
-                knowing which shot earns its place, which take to cut on, and what the
-                grade should feel like before the shoot even starts.
+                Anyone can buy a camera. What a business is actually paying for is
+                judgement — what the campaign is supposed to do, which idea is worth
+                filming, and what a customer should think when it reaches them.
               </p>
             </Reveal>
             <Reveal delay={0.18}>
@@ -112,8 +112,8 @@ export default function AboutPage() {
           <SectionHeader
             index="03"
             eyebrow="What I Do"
-            title="Services"
-            lead="One operator, one consistent look across everything you publish."
+            title="Marketing, Media, Creative"
+            lead="One person, one consistent standard across the strategy, the content and the advertising behind it."
           />
         </div>
         <Services />
@@ -135,7 +135,7 @@ export default function AboutPage() {
             </a>
           </div>
           <Magnetic href="/book" variant="solid">
-            Start Your Project
+            Start a Project
           </Magnetic>
         </div>
       </section>

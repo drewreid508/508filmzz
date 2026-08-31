@@ -110,7 +110,7 @@ export function Hero() {
           transition={{ delay: 0.25, duration: 0.9, ease: EASE }}
         >
           <span className="h-px w-10 bg-accent" aria-hidden="true" />
-          Commercial Video &amp; Advertising — Greenville, SC
+          Marketing &bull; Media &bull; Growth
         </motion.p>
 
         {/*
@@ -122,8 +122,8 @@ export function Hero() {
           smaller than the old two-word headline for the same reason a longer
           sentence always is: six words at 17vw runs off a 375px screen.
         */}
-        <h1 className="display text-[11.5vw] leading-[0.86] text-balance sm:text-[10vw] md:text-[7.6vw] lg:text-[6.8vw]">
-          {["Commercial Video", "That Makes You The", "Obvious Choice."].map((line, li) => (
+        <h1 className="display text-[10.5vw] leading-[0.88] text-balance sm:text-[9vw] md:text-[6.6vw] lg:text-[6vw]">
+          {["Marketing Built To Make", "Your Business", "Impossible To Ignore."].map((line, li) => (
             <span key={line} className="block overflow-hidden">
               <motion.span
                 className="block"
@@ -144,9 +144,9 @@ export function Hero() {
           transition={{ delay: 0.72, duration: 1, ease: EASE }}
         >
           <p className="body-lg max-w-lg text-balance">
-            Advertising creative, social content and motion graphics for
-            contractors, dealerships, med spas and other established local
-            businesses — built to run on your site, your social and your ads.
+            Strategy, creative, content and advertising for dealerships,
+            builders, construction and other businesses that intend to be the
+            obvious choice in their market.
           </p>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
@@ -161,7 +161,7 @@ export function Hero() {
               wrapperClassName="w-full sm:w-auto"
               className="w-full sm:w-auto"
             >
-              Start Your Project
+              Start a Project
             </Magnetic>
             <Magnetic
               href="/portfolio"

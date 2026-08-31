@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-import { projects, type Project } from "@/data/projects";
+import { curatedProjects, type Project } from "@/data/projects";
 import { ReelPlayer } from "@/components/ui/reel-player";
 import { Reveal } from "@/components/motion/reveal";
 import { asset } from "@/lib/asset";
@@ -27,7 +27,7 @@ const categoryLabel: Record<Project["category"], string> = {
  * project and it appears here on its own.
  */
 export function FilmStrip() {
-  const films = projects.filter((p) => p.video);
+  const films = curatedProjects.filter((p) => p.video);
   if (!films.length) return null;
 
   return (

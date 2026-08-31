@@ -13,7 +13,7 @@ import { pad } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Commercial advertising, social content, motion graphics, drone production and content campaigns for businesses across Greenville and Upstate South Carolina.",
+    "Marketing, media and creative services from 508 Filmzz — marketing strategy, social media management, Meta advertising, lead generation, cinematic video, photography, drone, ad creative and landing pages for businesses across South Carolina.",
   alternates: { canonical: "/services" },
 };
 
@@ -23,8 +23,8 @@ export default function ServicesPage() {
       <PageHero
         index="01"
         eyebrow="What I Do"
-        title="Services"
-        lead="Six ways to make your business look like the best option in its market. Book one on its own, or run several out of a single production day."
+        title="Marketing. Media. Creative."
+        lead="Three disciplines that make up one engagement — the strategy that decides what gets made, the media that makes it, and the creative that puts it in front of the right people."
       />
 
       {/* ── Service detail ────────────────────────────────────────────────── */}
@@ -40,7 +40,7 @@ export default function ServicesPage() {
                 <p className="eyebrow mb-5 flex items-center gap-3">
                   <span className="text-accent">{pad(i + 1)}</span>
                   <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-                  {service.id === "drone" ? "New" : "Service"}
+                  Discipline
                 </p>
                 <h2 className="display text-[11vw] leading-[0.9] sm:text-[7vw] md:text-[3.6vw]">
                   {service.title}
@@ -50,7 +50,7 @@ export default function ServicesPage() {
 
               {/* Checklist */}
               <ul className="flex flex-col gap-3 md:col-span-4">
-                {service.points.map((point) => (
+                {service.items.map((point) => (
                   <li key={point} className="flex items-start gap-3 text-sm text-mute">
                     <Check
                       size={13}
@@ -114,7 +114,7 @@ export default function ServicesPage() {
           </div>
           <div className="flex flex-wrap gap-4">
             <Magnetic href="/book" variant="solid">
-              Start Your Project
+              Start a Project
             </Magnetic>
             <Magnetic href="/pricing" variant="outline">
               See Pricing

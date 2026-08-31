@@ -51,7 +51,7 @@ export function StickyCta() {
                 aria-hidden="true"
                 className="transition-transform duration-500 group-hover:-translate-y-px"
               />
-              Start Your Project
+              Start a Project
             </Link>
           </div>
         </motion.div>

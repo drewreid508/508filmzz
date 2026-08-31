@@ -18,7 +18,7 @@ export function StructuredData() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["LocalBusiness", "ProfessionalService"],
+        "@type": ["LocalBusiness", "ProfessionalService", "MarketingAgency"],
         "@id": `${site.url}/#organization`,
         name: site.name,
         url: site.url,
@@ -69,13 +69,29 @@ export function StructuredData() {
         })),
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Cinematic media services",
-          itemListElement: services.map((service) => ({
+          name: "Marketing, media and creative services",
+          /*
+            One offer per discipline, each listing its capabilities.
+
+            Nested rather than flattened to twenty offers: the catalogue should
+            describe what is sold — three parts of one engagement — not read as
+            a price list of twenty separate products, which is the exact
+            impression the site itself is built to avoid giving.
+          */
+          itemListElement: services.map((group) => ({
             "@type": "Offer",
             itemOffered: {
               "@type": "Service",
-              name: service.title,
-              description: service.blurb,
+              name: group.title,
+              description: group.blurb,
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: group.title,
+                itemListElement: group.items.map((item) => ({
+                  "@type": "Offer",
+                  itemOffered: { "@type": "Service", name: item },
+                })),
+              },
             },
           })),
         },

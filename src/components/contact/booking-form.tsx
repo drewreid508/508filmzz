@@ -5,21 +5,12 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import {
-  PROJECT_TYPES,
+  SERVICE_INTERESTS,
+  INDUSTRIES,
   BUDGETS,
+  START_WINDOWS,
   REFERRAL_SOURCES,
-  TIME_WINDOWS,
-  SHOOT_FREQUENCIES,
-  MONTHLY_PROJECT_TYPE,
 } from "@/lib/inquiry";
-import { monthlyPackages, packages } from "@/data/site";
-import {
-  DISCOUNT_LABEL,
-  MINIMUM_MONTHS,
-  PROMO_CODE,
-  isPromoCode,
-  discountBreakdown,
-} from "@/lib/offer";
 import { submitLead } from "@/lib/submit-lead";
 import { site } from "@/data/site";
 import { cn, pad } from "@/lib/utils";
@@ -27,7 +18,7 @@ import { cn, pad } from "@/lib/utils";
 type Status = "idle" | "sending" | "error";
 
 const fieldBase =
-  "w-full border-b border-line bg-transparent py-4 text-[0.95rem] text-bone placeholder:text-faint transition-colors duration-400 focus:border-accent focus:outline-none";
+  "w-full border border-line bg-ink-2 px-4 py-3.5 text-sm text-bone transition-colors duration-400 outline-none placeholder:text-faint focus:border-accent";
 
 function Label({
   index,
@@ -39,7 +30,7 @@ function Label({
   children: React.ReactNode;
 }) {
   return (
-    <label htmlFor={htmlFor} className="eyebrow mb-1 flex items-center gap-2.5">
+    <label htmlFor={htmlFor} className="eyebrow mb-2.5 flex items-center gap-3">
       <span className="text-accent">{pad(index)}</span>
       {children}
     </label>
@@ -55,572 +46,343 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
+/**
+ * The enquiry form.
+ *
+ * ── Why it is this long ────────────────────────────────────────────────────
+ * No price appears anywhere on this site, so the brief has to carry everything
+ * a proposal is built from: the industry, what they want help with, the goal,
+ * what is going wrong now, a budget range and a start window. The alternative
+ * is a two-field contact form followed by a reply that asks all of it anyway,
+ * which spends the first exchange on questions instead of on an answer.
+ *
+ * Length also does work here that copy cannot. A form that asks serious
+ * questions reads as a business that takes on serious clients, and it filters:
+ * someone shopping for a cheap video does not fill in eleven fields, and that
+ * is the point rather than a side effect.
+ *
+ * ── Grouped, not stacked ───────────────────────────────────────────────────
+ * Three sections — who you are, what you need, what you are working with — so
+ * eleven fields read as three short questions rather than one long wall. The
+ * numbering runs straight through, because restarting at 01 in each group
+ * makes the form look longer than it is.
+ */
 export function BookingForm() {
   const router = useRouter();
   const [status, setStatus] = useState<Status>("idle");
-
-  /*
-    Monthly bookings need terms on screen before the form is sent — the price,
-    the introductory month, and the minimum. Held in state rather than read off
-    the DOM so the panel and the value posted with the request cannot disagree.
-  */
-  const [isMonthly, setIsMonthly] = useState(false);
-  const [monthlyId, setMonthlyId] = useState("");
-  const chosen = monthlyPackages.find((p) => p.id === monthlyId) ?? null;
-
-  /* One-time bookings need a package too, or there is no price to discount. */
-  const [oneOffId, setOneOffId] = useState("");
-  const oneOff = packages.find((p) => p.id === oneOffId) ?? null;
-
-  /* The package the promo actually applies to, whichever branch is in use. */
-  const selected = isMonthly ? chosen : oneOff;
-  const breakdown = discountBreakdown(selected?.price ?? null);
-
-  const [promoInput, setPromoInput] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [promoError, setPromoError] = useState<string | null>(null);
-
-  function applyPromo() {
-    if (isPromoCode(promoInput)) {
-      setPromoApplied(true);
-      setPromoError(null);
-    } else {
-      setPromoApplied(false);
-      setPromoError("That code isn't recognised.");
-    }
-  }
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
-  const today = new Date().toISOString().slice(0, 10);
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setStatus("sending");
     setErrors({});
     setFormError(null);
 
-    const data = new FormData(event.currentTarget);
+    const result = await submitLead(new FormData(form));
 
-    try {
-      const result = await submitLead(data);
-
-      if (!result.ok) {
-        if (result.fieldErrors) setErrors(result.fieldErrors);
-        if (result.error) setFormError(result.error);
-        setStatus("error");
-        // Move focus to the first problem so keyboard users aren't stranded.
-        const firstKey = result.fieldErrors && Object.keys(result.fieldErrors)[0];
-        if (firstKey) document.getElementById(firstKey)?.focus();
-        return;
-      }
-
-      const name = String(data.get("name") ?? "").trim();
-      const params = new URLSearchParams();
-      if (name) params.set("name", name.split(" ")[0]);
-      if (result.confirmationEmailed) params.set("email", "1");
-      router.push(`/contact/success?${params.toString()}`);
-    } catch {
-      setFormError(
-        `Couldn't reach the server. Please call ${site.phone} or email ${site.email} directly.`
-      );
-      setStatus("error");
+    if (result.ok) {
+      router.push("/contact/success");
+      return;
     }
+
+    setStatus("error");
+    if (result.fieldErrors) setErrors(result.fieldErrors);
+    if (result.error) setFormError(result.error);
+
+    /*
+      Move the reader to the first thing that needs fixing. A form this long
+      scrolls well past the viewport, so an error message rendered beside a
+      field two screens up is an error message nobody sees.
+    */
+    const firstKey = result.fieldErrors && Object.keys(result.fieldErrors)[0];
+    const target = firstKey
+      ? form.querySelector<HTMLElement>(`[name="${firstKey}"]`)
+      : null;
+    (target ?? form).scrollIntoView({ block: "center" });
+    target?.focus({ preventScroll: true });
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-12">
-      {/* Honeypot */}
-      <div aria-hidden="true" className="absolute h-0 w-0 overflow-hidden opacity-0">
-        <label htmlFor="website">Website</label>
-        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
-
-      <fieldset className="grid gap-8 md:grid-cols-2">
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-14">
+      {/* ── Who you are ─────────────────────────────────────────────────── */}
+      <fieldset className="flex flex-col gap-7 border-t border-line pt-10">
         <legend className="sr-only">Your details</legend>
+        <p className="eyebrow text-accent">Your business</p>
 
-        <div className="flex flex-col">
-          <Label index={1} htmlFor="name">
-            Name *
-          </Label>
-          <input
-            id="name"
-            name="name"
-            required
-            autoComplete="name"
-            placeholder="Your full name"
-            className={fieldBase}
-            aria-invalid={Boolean(errors.name)}
-          />
-          <FieldError message={errors.name} />
-        </div>
-
-        <div className="flex flex-col">
-          <Label index={2} htmlFor="businessName">
-            Business Name
-          </Label>
-          <input
-            id="businessName"
-            name="businessName"
-            autoComplete="organization"
-            placeholder="Optional"
-            className={fieldBase}
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <Label index={3} htmlFor="email">
-            Email Address *
-          </Label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="you@business.com"
-            className={fieldBase}
-            aria-invalid={Boolean(errors.email)}
-          />
-          <FieldError message={errors.email} />
-        </div>
-
-        <div className="flex flex-col">
-          <Label index={4} htmlFor="phone">
-            Phone Number *
-          </Label>
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            required
-            autoComplete="tel"
-            placeholder="(000) 000-0000"
-            className={fieldBase}
-            aria-invalid={Boolean(errors.phone)}
-          />
-          <FieldError message={errors.phone} />
-        </div>
-      </fieldset>
-
-      <fieldset className="grid gap-8 md:grid-cols-2">
-        <legend className="sr-only">Project details</legend>
-
-        <div className="flex flex-col">
-          <Label index={5} htmlFor="projectType">
-            Project Type *
-          </Label>
-          <select
-            id="projectType"
-            name="projectType"
-            required
-            defaultValue=""
-            onChange={(e) => {
-              const monthly = e.target.value === MONTHLY_PROJECT_TYPE;
-              setIsMonthly(monthly);
-              if (!monthly) setMonthlyId("");
-            }}
-            className={cn(fieldBase, "cursor-pointer")}
-            aria-invalid={Boolean(errors.projectType)}
-          >
-            <option value="" disabled>
-              Select a project type
-            </option>
-            {PROJECT_TYPES.map((t) => (
-              <option key={t} value={t} className="bg-ink-2">
-                {t}
-              </option>
-            ))}
-          </select>
-          <FieldError message={errors.projectType} />
-
-          {/*
-            A package for one-time work, so the promo code has a figure to work
-            from. Optional — plenty of enquiries do not map to a tier, and a
-            required selector would turn a booking into a configurator.
-          */}
-          {!isMonthly && (
-            <div className="mt-7">
-              {/* Unnumbered: it is a refinement of the field above, not a
-                  step of its own, and a number here would renumber the form. */}
-              <label
-                htmlFor="oneOffPackage"
-                className="eyebrow mb-1 block"
-              >
-                Package (optional)
-              </label>
-              <select
-                id="oneOffPackage"
-                name="oneOffPackage"
-                value={oneOffId}
-                onChange={(e) => setOneOffId(e.target.value)}
-                className={cn(fieldBase, "cursor-pointer")}
-              >
-                <option value="">Not sure yet</option>
-                {packages.map((p) => (
-                  <option key={p.id} value={p.id} className="bg-ink-2">
-                    {p.name} — {p.price}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/*
-            Shown only for monthly. Everything in it is derived: the reduced
-            figure comes from the package's own price, the minimum from one
-            constant. Nothing here is a second copy of a number written
-            elsewhere, so the form cannot quote terms the pricing page does not.
-          */}
-          {isMonthly && (
-            <div className="mt-7 border border-accent/40 bg-accent/[0.055] p-6">
-              <p className="eyebrow mb-4 text-accent">Monthly Package</p>
-
-              <select
-                id="monthlyPackage"
-                name="monthlyPackage"
-                value={monthlyId}
-                onChange={(e) => setMonthlyId(e.target.value)}
-                className={cn(fieldBase, "cursor-pointer")}
-              >
-                <option value="">Which package are you interested in?</option>
-                {monthlyPackages.map((p) => (
-                  <option key={p.id} value={p.id} className="bg-ink-2">
-                    {p.name}
-                    {p.price ? ` — ${p.price}/mo` : " — custom quote"}
-                  </option>
-                ))}
-              </select>
-
-              {/*
-                How often, asked only here.
-                ────────────────────────────────────────────────────────────
-                A one-off booking has a date; ongoing work has a rhythm, and
-                without it a Custom enquiry cannot be quoted without a phone
-                call first. Optional, because "not sure yet" is a legitimate
-                answer and a required field would only collect guesses.
-              */}
-              <div className="mt-6">
-                <label htmlFor="frequency" className="eyebrow mb-1 block">
-                  How often (optional)
-                </label>
-                <select
-                  id="frequency"
-                  name="frequency"
-                  className={cn(fieldBase, "cursor-pointer")}
-                  defaultValue=""
-                >
-                  <option value="">How often do you want to film?</option>
-                  {SHOOT_FREQUENCIES.map((f) => (
-                    <option key={f} value={f} className="bg-ink-2">
-                      {f}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {chosen && (
-                <dl className="mt-6 flex flex-col gap-2.5 border-t border-accent/25 pt-5 text-[0.82rem]">
-                  {chosen.price ? (
-                    <>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <dt className="text-mute">Standard monthly rate</dt>
-                        <dd className="text-bone tabular-nums">{chosen.price}/mo</dd>
-                      </div>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <dt className="text-accent">
-                          First month, new clients ({DISCOUNT_LABEL} off)
-                        </dt>
-                        <dd className="text-accent tabular-nums">{breakdown?.total}</dd>
-                      </div>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <dt className="text-mute">
-                          Months 2 &amp; {MINIMUM_MONTHS}
-                        </dt>
-                        <dd className="text-bone tabular-nums">{chosen.price}/mo</dd>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="flex items-baseline justify-between gap-4">
-                      <dt className="text-mute">Rate</dt>
-                      <dd className="text-bone">Quoted per brand</dd>
-                    </div>
-                  )}
-
-                  <p className="mt-3 border-t border-accent/25 pt-4 text-[0.76rem] leading-relaxed text-faint">
-                    {MINIMUM_MONTHS}-month minimum. The introductory rate applies to
-                    month one only. Figures are starting points — your exact rate
-                    comes from your quote.
-                  </p>
-                </dl>
-              )}
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-col">
-          <Label index={6} htmlFor="shootDate">
-            Preferred Shoot Date
-          </Label>
-          <input
-            id="shootDate"
-            name="shootDate"
-            type="date"
-            min={today}
-            className={cn(fieldBase, "cursor-pointer [color-scheme:dark]")}
-            aria-invalid={Boolean(errors.shootDate)}
-          />
-          <FieldError message={errors.shootDate} />
-        </div>
-
-        <div className="flex flex-col">
-          <Label index={7} htmlFor="location">
-            Location
-          </Label>
-          <input
-            id="location"
-            name="location"
-            autoComplete="address-level2"
-            placeholder="City, or the shop / property address"
-            className={fieldBase}
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <Label index={8} htmlFor="budget">
-            Estimated Budget *
-          </Label>
-          <select
-            id="budget"
-            name="budget"
-            required
-            defaultValue=""
-            className={cn(fieldBase, "cursor-pointer")}
-            aria-invalid={Boolean(errors.budget)}
-          >
-            <option value="" disabled>
-              Select a range
-            </option>
-            {BUDGETS.map((b) => (
-              <option key={b} value={b} className="bg-ink-2">
-                {b}
-              </option>
-            ))}
-          </select>
-          <FieldError message={errors.budget} />
-        </div>
-      </fieldset>
-
-      <div className="flex flex-col">
-        {/*
-          Promo code.
-          ────────────────────────────────────────────────────────────────────
-          Deliberately not validated as "new client" here. A static page cannot
-          know who has booked before, and pretending to check would only teach
-          a returning client that the code works. Eligibility is settled on the
-          quote, where it can actually be looked up — the Sheet records the code
-          against every booking for exactly that.
-        */}
-        <div className="flex flex-col">
-          <Label index={9} htmlFor="promoCode">
-            Promo Code
-          </Label>
-
-          <div className="flex gap-3">
+        <div className="grid gap-7 md:grid-cols-2">
+          <div>
+            <Label index={1} htmlFor="name">
+              Your Name *
+            </Label>
             <input
-              id="promoCode"
-              name="promoCode"
-              value={promoInput}
-              onChange={(e) => {
-                setPromoInput(e.target.value);
-                setPromoError(null);
-                setPromoApplied(false);
-              }}
-              onKeyDown={(e) => {
-                // Enter inside a promo field means "apply", not "submit the
-                // whole booking" — which is what it would do by default.
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  applyPromo();
-                }
-              }}
-              autoCapitalize="characters"
-              autoComplete="off"
-              spellCheck={false}
-              placeholder="Enter code"
-              className={cn(fieldBase, "flex-1 uppercase tracking-[0.14em]")}
+              id="name"
+              name="name"
+              autoComplete="name"
+              className={fieldBase}
+              aria-invalid={Boolean(errors.name)}
             />
-            <button
-              type="button"
-              onClick={applyPromo}
-              className="shrink-0 border border-line-strong px-6 text-[0.68rem] font-medium tracking-[0.2em] text-bone uppercase transition-colors duration-400 hover:border-accent hover:text-accent"
-            >
-              Apply
-            </button>
+            <FieldError message={errors.name} />
           </div>
 
-          {promoError && (
-            <p role="alert" className="mt-2 text-[0.72rem] tracking-wide text-accent">
-              {promoError}
-            </p>
-          )}
+          <div>
+            <Label index={2} htmlFor="businessName">
+              Business Name *
+            </Label>
+            <input
+              id="businessName"
+              name="businessName"
+              autoComplete="organization"
+              className={fieldBase}
+              aria-invalid={Boolean(errors.businessName)}
+            />
+            <FieldError message={errors.businessName} />
+          </div>
 
-          {promoApplied && (
-            <div className="mt-4 border border-accent/45 bg-accent/[0.055] p-5">
-              <p className="flex items-center gap-2 text-[0.72rem] font-medium tracking-[0.18em] text-accent uppercase">
-                {PROMO_CODE} applied ✓
-              </p>
-              <p className="mt-1 text-[0.72rem] tracking-[0.14em] text-mute uppercase">
-                {DISCOUNT_LABEL} first-time discount
-              </p>
+          <div>
+            <Label index={3} htmlFor="email">
+              Email *
+            </Label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              className={fieldBase}
+              aria-invalid={Boolean(errors.email)}
+            />
+            <FieldError message={errors.email} />
+          </div>
 
-              {breakdown ? (
-                <dl className="mt-5 flex flex-col gap-2.5 border-t border-accent/25 pt-4 text-[0.84rem]">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-mute">Original</dt>
-                    <dd className="text-bone tabular-nums">{breakdown.original}</dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-mute">
-                      {isMonthly ? "First month discount" : "First-time discount"}
-                    </dt>
-                    <dd className="text-accent tabular-nums">−{breakdown.saving}</dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4 border-t border-accent/25 pt-3">
-                    <dt className="text-bone">
-                      {isMonthly ? "First month total" : "Your total"}
-                    </dt>
-                    <dd className="display text-xl text-accent tabular-nums">
-                      {breakdown.total}
-                    </dd>
-                  </div>
-                </dl>
-              ) : (
-                <p className="mt-4 border-t border-accent/25 pt-4 text-[0.78rem] leading-relaxed text-mute">
-                  Pick a package above and the figures appear here. On a custom
-                  quote the discount is applied to your quoted amount.
-                </p>
-              )}
+          <div>
+            <Label index={4} htmlFor="phone">
+              Phone *
+            </Label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              className={fieldBase}
+              aria-invalid={Boolean(errors.phone)}
+            />
+            <FieldError message={errors.phone} />
+          </div>
 
-              {isMonthly && (
-                <p className="mt-4 text-[0.76rem] leading-relaxed text-faint">
-                  {DISCOUNT_LABEL} applies to month 1 only. Regular monthly
-                  pricing resumes from month 2, under the {MINIMUM_MONTHS}-month
-                  minimum.
-                </p>
-              )}
-            </div>
-          )}
+          <div>
+            <Label index={5} htmlFor="website">
+              Website
+            </Label>
+            {/* Not type="url": people type "acmebuilders.com" and a browser
+                rejecting that costs a lead over a missing "https://". */}
+            <input
+              id="website"
+              name="website"
+              inputMode="url"
+              autoComplete="url"
+              placeholder="yourbusiness.com"
+              className={fieldBase}
+            />
+          </div>
+
+          <div>
+            <Label index={6} htmlFor="industry">
+              Industry *
+            </Label>
+            <select
+              id="industry"
+              name="industry"
+              defaultValue=""
+              className={cn(fieldBase, "cursor-pointer")}
+              aria-invalid={Boolean(errors.industry)}
+            >
+              <option value="">Select your industry</option>
+              {INDUSTRIES.map((i) => (
+                <option key={i} value={i} className="bg-ink-2">
+                  {i}
+                </option>
+              ))}
+            </select>
+            <FieldError message={errors.industry} />
+          </div>
         </div>
+      </fieldset>
 
-        <div className="flex flex-col">
-          <Label index={10} htmlFor="shootTime">
-            Preferred Time
-          </Label>
-          <select
-            id="shootTime"
-            name="shootTime"
-            defaultValue=""
-            className={cn(fieldBase, "cursor-pointer")}
-          >
-            <option value="">Optional</option>
-            {TIME_WINDOWS.map((t) => (
-              <option key={t} value={t} className="bg-ink-2">
-                {t}
-              </option>
+      {/* ── What you need ───────────────────────────────────────────────── */}
+      <fieldset className="flex flex-col gap-7 border-t border-line pt-10">
+        <legend className="sr-only">What you need</legend>
+        <p className="eyebrow text-accent">What you need</p>
+
+        <div>
+          <p className="eyebrow mb-3.5 flex items-center gap-3">
+            <span className="text-accent">{pad(7)}</span>
+            What are you interested in? *
+          </p>
+          {/*
+            Checkboxes, not a dropdown. Most enquiries want more than one thing,
+            and a single-select would quietly turn a full-service enquiry into
+            a video enquiry — which is precisely the misread this rebrand
+            exists to stop.
+          */}
+          <div className="grid gap-px border border-line bg-line sm:grid-cols-2">
+            {SERVICE_INTERESTS.map((service) => (
+              <label
+                key={service}
+                className="flex cursor-pointer items-center gap-3.5 bg-ink px-4 py-3.5 text-[0.84rem] text-mute transition-colors duration-300 hover:text-bone"
+              >
+                <input
+                  type="checkbox"
+                  name="interests"
+                  value={service}
+                  className="h-[1.05rem] w-[1.05rem] shrink-0 accent-accent"
+                />
+                {service}
+              </label>
             ))}
-          </select>
+          </div>
+          <FieldError message={errors.interests} />
         </div>
 
-        <div className="flex flex-col">
-          <Label index={11} htmlFor="social">
-            Instagram / TikTok
+        <div>
+          <Label index={8} htmlFor="goal">
+            What&apos;s your main marketing goal? *
           </Label>
-          <input
-            id="social"
-            name="social"
-            autoComplete="off"
-            spellCheck={false}
-            placeholder="@yourhandle — optional"
-            className={fieldBase}
+          <textarea
+            id="goal"
+            name="goal"
+            rows={3}
+            placeholder="More qualified leads, moving specific inventory, launching a location, building the brand — whatever winning looks like for you."
+            className={cn(fieldBase, "resize-none")}
+            aria-invalid={Boolean(errors.goal)}
+          />
+          <FieldError message={errors.goal} />
+        </div>
+
+        <div>
+          <Label index={9} htmlFor="challenges">
+            What isn&apos;t working right now? *
+          </Label>
+          <textarea
+            id="challenges"
+            name="challenges"
+            rows={3}
+            placeholder="Ads that don't convert, no consistent content, a website nobody calls from, competitors outspending you — the honest version is the useful one."
+            className={cn(fieldBase, "resize-none")}
+            aria-invalid={Boolean(errors.challenges)}
+          />
+          <FieldError message={errors.challenges} />
+        </div>
+      </fieldset>
+
+      {/* ── What you're working with ────────────────────────────────────── */}
+      <fieldset className="flex flex-col gap-7 border-t border-line pt-10">
+        <legend className="sr-only">Budget and timing</legend>
+        <p className="eyebrow text-accent">Budget &amp; timing</p>
+
+        <div className="grid gap-7 md:grid-cols-2">
+          <div>
+            <Label index={10} htmlFor="budget">
+              Approximate Marketing Budget *
+            </Label>
+            <select
+              id="budget"
+              name="budget"
+              defaultValue=""
+              className={cn(fieldBase, "cursor-pointer")}
+              aria-invalid={Boolean(errors.budget)}
+            >
+              <option value="">Select a range</option>
+              {BUDGETS.map((b) => (
+                <option key={b} value={b} className="bg-ink-2">
+                  {b}
+                </option>
+              ))}
+            </select>
+            <FieldError message={errors.budget} />
+            <p className="mt-2.5 text-[0.72rem] leading-relaxed text-faint">
+              A range, not a commitment. It tells me what is realistic to
+              propose so the first thing you read is an approach, not a
+              question about money.
+            </p>
+          </div>
+
+          <div>
+            <Label index={11} htmlFor="startWindow">
+              Desired Start *
+            </Label>
+            <select
+              id="startWindow"
+              name="startWindow"
+              defaultValue=""
+              className={cn(fieldBase, "cursor-pointer")}
+              aria-invalid={Boolean(errors.startWindow)}
+            >
+              <option value="">When would you want to start?</option>
+              {START_WINDOWS.map((w) => (
+                <option key={w} value={w} className="bg-ink-2">
+                  {w}
+                </option>
+              ))}
+            </select>
+            <FieldError message={errors.startWindow} />
+          </div>
+
+          <div>
+            <Label index={12} htmlFor="referral">
+              How did you hear about me?
+            </Label>
+            <select
+              id="referral"
+              name="referral"
+              defaultValue=""
+              className={cn(fieldBase, "cursor-pointer")}
+            >
+              <option value="">Optional</option>
+              {REFERRAL_SOURCES.map((r) => (
+                <option key={r} value={r} className="bg-ink-2">
+                  {r}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <Label index={13} htmlFor="details">
+            Anything else I should know?
+          </Label>
+          <textarea
+            id="details"
+            name="details"
+            rows={4}
+            placeholder="Competitors you're up against, what you've tried before, deadlines, locations, anything that would change the approach."
+            className={cn(fieldBase, "resize-none")}
           />
         </div>
+      </fieldset>
 
-        <div className="flex flex-col">
-          <Label index={12} htmlFor="referral">
-            How Did You Hear About 508 Filmzz?
-          </Label>
-          <select
-            id="referral"
-            name="referral"
-            defaultValue=""
-            className={cn(fieldBase, "cursor-pointer")}
-          >
-            <option value="">Optional</option>
-            {REFERRAL_SOURCES.map((r) => (
-              <option key={r} value={r} className="bg-ink-2">
-                {r}
-              </option>
-            ))}
-          </select>
+      {/* ── Send ─────────────────────────────────────────────────────────── */}
+      <div className="flex flex-col gap-5 border-t border-line pt-10">
+        {formError && (
+          <p role="alert" className="border border-accent/50 bg-accent/[0.06] p-4 text-sm text-bone">
+            {formError}
+          </p>
+        )}
+
+        {/* Honeypot. Off-screen rather than display:none — some bots skip
+            hidden inputs, and none of them skip an off-screen one. */}
+        <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] opacity-0">
+          <label htmlFor="website_hp">Leave this empty</label>
+          <input id="website_hp" name="website_hp" tabIndex={-1} autoComplete="off" />
         </div>
 
-        <Label index={13} htmlFor="message">
-          What do you need filmed? *
-        </Label>
-        {/*
-          Renamed from "Message".
-          ────────────────────────────────────────────────────────────────────
-          A field called Message invites a greeting; this one has to come back
-          with the thing being filmed, because a quote cannot be written
-          without it. Asking the actual question is the whole change — the
-          placeholder then covers the rest, so a custom enquiry arrives with
-          everything a number can be built from in one field.
-        */}
-        <textarea
-          id="message"
-          name="message"
-          required
-          rows={5}
-          placeholder="What does your business do, who are you trying to reach, and where will the content run — website, social, paid ads? Your site or Instagram handle helps too."
-          className={cn(fieldBase, "resize-none")}
-          aria-invalid={Boolean(errors.message)}
-        />
-        <FieldError message={errors.message} />
-      </div>
-
-      {/*
-        No file upload.
-        ─────────────────────────────────────────────────────────────────────
-        Bookings post into a Google Form, and a Google Form's file question
-        forces the visitor to sign into a Google account before it will accept
-        anything. Putting that in front of a booking would cost more enquiries
-        than reference images are worth. The message field asks for links
-        instead, which anyone can paste.
-      */}
-
-      {formError && (
-        <p
-          role="alert"
-          className="border border-accent/40 bg-accent/8 px-5 py-4 text-sm text-accent"
-        >
-          {formError}
-        </p>
-      )}
-
-      <div className="flex flex-col items-start gap-5 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
-        <p className="max-w-sm text-[0.72rem] leading-relaxed text-faint">
-          Your details go straight to me — never shared, never added to a list.
+        <p className="text-[0.78rem] leading-relaxed text-faint">
+          Your details come straight to me — never shared, never added to a list.
         </p>
 
-        {/*
-          The acknowledgement.
-          ────────────────────────────────────────────────────────────────────
-          Sits directly above the button, not buried in fine print, because it
-          is the one thing a client can misread expensively: assuming the date
-          is held the moment they hit send. Required, and written as an
-          understanding rather than a waiver.
-        */}
         <label
           htmlFor="acknowledged"
           className="flex cursor-pointer items-start gap-3.5 border border-line bg-ink-2 p-5 text-[0.84rem] leading-relaxed text-mute transition-colors duration-400 hover:border-line-strong"
@@ -629,27 +391,24 @@ export function BookingForm() {
             id="acknowledged"
             name="acknowledged"
             type="checkbox"
-            required
             className="mt-0.5 h-[1.15rem] w-[1.15rem] shrink-0 accent-accent"
             aria-invalid={Boolean(errors.acknowledged)}
           />
           <span>
-            I understand that submitting this form is a booking{" "}
-            <span className="text-bone">request</span> and does not guarantee
-            the date until 508 Filmzz confirms it.
+            I understand this is an{" "}
+            <span className="text-bone">enquiry</span>, and that nothing is
+            booked or charged until 508 Filmzz and I agree on a proposal.
           </span>
         </label>
         <FieldError message={errors.acknowledged} />
 
         {/*
           Text-message consent, kept deliberately separate from the box above.
-          ────────────────────────────────────────────────────────────────────
-          Two rules shape this and neither is styling. It must be unchecked
-          when the page loads — a pre-ticked box is not consent — and it must
-          be its own decision rather than a clause inside the required
+          It must be unchecked on load — a pre-ticked box is not consent — and
+          it must be its own decision rather than a clause inside the required
           acknowledgement, or the consent is not express. Everything carriers
-          look for is stated in the label itself: who is texting, what about,
-          that frequency varies, that rates apply, and how to stop.
+          look for is in the label: who is texting, about what, that frequency
+          varies, that rates apply, and how to stop.
         */}
         <label
           htmlFor="smsConsent"
@@ -662,11 +421,9 @@ export function BookingForm() {
             className="mt-0.5 h-[1.15rem] w-[1.15rem] shrink-0 accent-accent"
           />
           <span>
-            <span className="text-mute">
-              Text me about my booking (optional).
-            </span>{" "}
+            <span className="text-mute">Text me about this enquiry (optional).</span>{" "}
             I agree to receive text messages from 508 Filmzz about this request
-            and my shoot. Message frequency varies. Message and data rates may
+            and my project. Message frequency varies. Message and data rates may
             apply. Reply STOP to opt out or HELP for help. Consent is not a
             condition of purchase.
           </span>
@@ -683,9 +440,20 @@ export function BookingForm() {
               Sending
             </>
           ) : (
-            "Book My Shoot"
+            "Request a Custom Quote"
           )}
         </button>
+
+        <p className="text-[0.78rem] text-faint">
+          Rather talk it through? Call or text{" "}
+          <a
+            href={`tel:${site.phoneE164}`}
+            className="text-mute underline underline-offset-4 transition-colors duration-300 hover:text-accent"
+          >
+            {site.phone}
+          </a>
+          .
+        </p>
       </div>
     </form>
   );

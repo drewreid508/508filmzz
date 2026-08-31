@@ -8,13 +8,13 @@ import { Reveal } from "@/components/motion/reveal";
 import { SectionHeader } from "@/components/ui/section";
 import { Magnetic } from "@/components/ui/magnetic";
 import { site, advantages, faqs } from "@/data/site";
-import { PROJECT_TYPES } from "@/lib/inquiry";
+import { SERVICE_INTERESTS } from "@/lib/inquiry";
 import { pad } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Start Your Project",
+  title: "Talk About Your Marketing",
   description:
-    "Start a commercial video or advertising project with 508 Filmzz — business video production, social content, motion graphics and drone, serving Greenville, Piedmont and Upstate South Carolina.",
+    "Talk about your marketing with 508 Filmzz — marketing strategy, social media marketing, Meta advertising, lead generation, video production and ad creative, serving Greenville, Piedmont and Upstate South Carolina.",
   alternates: { canonical: "/contact" },
 };
 
@@ -112,8 +112,8 @@ export default function ContactPage() {
         <SectionHeader
           id="book-heading"
           index="02"
-          eyebrow="Start Your Project"
-          title="Tell me about your project."
+          eyebrow="Start a Project"
+          title="Tell me about your business."
         />
 
         <div className="mt-14 grid gap-16 md:grid-cols-12 md:gap-20">
@@ -124,9 +124,9 @@ export default function ContactPage() {
           <aside className="md:col-span-4">
             <Reveal>
               <div className="border-t border-line pt-7">
-                <p className="eyebrow mb-5">Project Types</p>
+                <p className="eyebrow mb-5">What I Can Run</p>
                 <ul className="flex flex-col gap-3">
-                  {PROJECT_TYPES.map((type) => (
+                  {SERVICE_INTERESTS.filter((t) => t !== "Not Sure").map((type) => (
                     <li key={type} className="flex items-center gap-3 text-sm text-mute">
                       <Check
                         size={13}
@@ -273,7 +273,7 @@ export default function ContactPage() {
           </div>
           <div className="flex flex-col gap-4">
             <Magnetic href="#book" variant="solid">
-              Start Your Project
+              Start a Project
             </Magnetic>
             <Magnetic href="/pricing" variant="outline">
               Request a Quote

@@ -34,6 +34,16 @@ export type Project = {
     label: string;
   };
   featured?: boolean;
+  /*
+    Curated: shown in the public grids.
+
+    The portfolio is an argument that this business can handle a dealership or
+    a construction firm, and every extra piece that does not make that argument
+    weakens it — a reel of everything ever shot reads as availability, not
+    standard. Uncurated projects are not deleted: their /work pages stay live
+    and linkable, they simply stop being surfaced in the grids and the gallery.
+  */
+  curated?: boolean;
 };
 
 export const categories: {
@@ -75,6 +85,7 @@ export const categories: {
 
 export const projects: Project[] = [
   {
+    curated: true,
     slug: "bratchers-power-washing",
     title: "Bratchers",
     subject: "Bratchers Power Washing",
@@ -97,6 +108,7 @@ export const projects: Project[] = [
     },
   },
   {
+    curated: true,
     slug: "nmf",
     title: "NMF",
     subject: "Naked Metal Fab",
@@ -119,6 +131,7 @@ export const projects: Project[] = [
     },
   },
   {
+    curated: true,
     slug: "blueworks",
     title: "BlueWorks",
     subject: "BlueWorks Dumpsters",
@@ -141,6 +154,7 @@ export const projects: Project[] = [
     },
   },
   {
+    curated: true,
     slug: "night-wash",
     title: "Night Wash",
     subject: "Bratchers Power Washing",
@@ -163,6 +177,7 @@ export const projects: Project[] = [
     },
   },
   {
+    curated: true,
     slug: "ram-2500",
     title: "RAM 2500",
     subject: "RAM 2500 on Forged Wheels",
@@ -185,6 +200,7 @@ export const projects: Project[] = [
     },
   },
   {
+    curated: true,
     slug: "g-class",
     title: "G-Class",
     subject: "Mercedes-Benz G-Class",
@@ -207,6 +223,7 @@ export const projects: Project[] = [
     },
   },
   {
+    curated: true,
     slug: "super-duty",
     title: "Super Duty",
     subject: "Lifted Ford F-250 / F-350 Program",
@@ -236,6 +253,7 @@ export const projects: Project[] = [
     ],
   },
   {
+    curated: true,
     slug: "deep-creek",
     title: "Deep Creek",
     subject: "Deep Creek Marine Customs",
@@ -288,6 +306,7 @@ export const projects: Project[] = [
     ],
   },
   {
+    curated: true,
     slug: "long-haul",
     title: "Long Haul",
     subject: "Owner-Operator Trucking",
@@ -310,6 +329,7 @@ export const projects: Project[] = [
     ],
   },
   {
+    curated: true,
     slug: "shop-floor",
     title: "Shop Floor",
     subject: "Performance Fabrication",
@@ -325,6 +345,7 @@ export const projects: Project[] = [
     gallery: ["pf_img_5860", "pf_img_5862", "pf_img_5863"],
   },
   {
+    curated: true,
     slug: "precision",
     title: "Precision",
     subject: "Machined Components",
@@ -371,6 +392,9 @@ export const projects: Project[] = [
   },
 ];
 
+/** The public portfolio: what gets shown, in order. */
+export const curatedProjects = projects.filter((p) => p.curated);
+
 export function projectsByCategory(id: CategoryId) {
   return projects.filter((p) => p.category === id);
 }
@@ -390,10 +414,17 @@ export function relatedProjects(project: Project, count = 3) {
 }
 
 /** Flat list of every image in the portfolio, for the gallery + lightbox. */
+/**
+ * Every frame behind the curated, non-film projects.
+ *
+ * Curated-only on purpose: the gallery used to flatten all fourteen projects
+ * into one wall, which is the "every photo I have ever taken" page this was
+ * meant to stop being.
+ */
 export function allGalleryItems() {
   const seen = new Set<string>();
   const items: { media: string; project: Project }[] = [];
-  for (const project of projects) {
+  for (const project of curatedProjects) {
     for (const media of project.gallery) {
       const key = `${project.slug}:${media}`;
       if (seen.has(key)) continue;

@@ -8,32 +8,27 @@ import { ReelPanel } from "@/components/home/reel-panel";
 import { ProjectCard } from "@/components/portfolio/project-card";
 import { ShowreelIntro } from "@/components/chrome/showreel-intro";
 import { Pipeline } from "@/components/home/pipeline";
-import { MonthlyCard } from "@/components/pricing/monthly-card";
 import { SectionHeader } from "@/components/ui/section";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Parallax } from "@/components/motion/parallax";
 import { Magnetic } from "@/components/ui/magnetic";
 import { Frame } from "@/components/ui/frame";
 import { ReviewsMarquee } from "@/components/reviews/reviews-marquee";
-import { projects, categories } from "@/data/projects";
+import { curatedProjects, projects, categories } from "@/data/projects";
 import { publicReviews } from "@/data/reviews";
 import {
-  packages,
   benefits,
   ownerPledge,
-  pipelineNote,
-  batchNote,
-  monthlyPackages,
-  monthlyNote,
+  growthPathNote,
+  customMarketing,
   industries,
   industriesNote,
   craft,
-  travel,
 } from "@/data/site";
 import { pad } from "@/lib/utils";
 
 export default function HomePage() {
-  const featured = projects.filter((p) => p.featured).slice(0, 6);
+  const featured = curatedProjects.slice(0, 6);
 
   return (
     <>
@@ -58,7 +53,7 @@ export default function HomePage() {
               id="about-heading"
               className="display text-[14vw] leading-[0.86] sm:text-[10vw] md:text-[5vw]"
             >
-              <TextReveal text="One Man." />
+              <TextReveal text="One Person." />
               <br />
               <TextReveal text="Every Step." delay={0.12} />
             </h2>
@@ -101,7 +96,7 @@ export default function HomePage() {
           id="why-heading"
           index="02"
           eyebrow="Why It Matters"
-          title="Good Content Is A Business Advantage."
+          title="More Than Just A Video."
           lead="Your customers are already comparing you to someone online. This is what decides which of you looks like the safer choice."
         />
 
@@ -241,8 +236,8 @@ export default function HomePage() {
         <SectionHeader
           id="getting-heading"
           index="05"
-          eyebrow="How It Works"
-          title="What You're Really Paying For"
+          eyebrow="How It Runs"
+          title="Strategy, Creative, Media, Advertising, Growth"
           lead="The video is the last step, not the job."
         />
 
@@ -252,7 +247,7 @@ export default function HomePage() {
 
         <Reveal delay={0.12}>
           <p className="display mt-12 max-w-3xl text-[7vw] leading-[1.02] text-balance sm:text-[4.2vw] md:text-[2.5vw]">
-            {pipelineNote}
+            {growthPathNote}
           </p>
         </Reveal>
       </section>
@@ -263,133 +258,56 @@ export default function HomePage() {
         to find out what it costs — so the numbers are here, and /pricing keeps
         the longer version with the terms.
       */}
-      <section className="shell pb-24 md:pb-36" aria-labelledby="monthly-heading">
-        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-          <SectionHeader
-            id="monthly-heading"
-            index="06"
-            eyebrow="Ongoing Content"
-            title="Monthly Content"
-            lead="A standing production slot, and a month of material out of it."
-          />
-          <Reveal delay={0.1}>
-            <Magnetic href="/pricing" variant="outline">
-              Full pricing
-            </Magnetic>
-          </Reveal>
-        </div>
+      {/* ── Custom marketing ───────────────────────────────────────────────
+        Where the package grid used to be.
 
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line md:grid-cols-2 xl:grid-cols-4">
-          {monthlyPackages.map((pkg, i) => (
-            <MonthlyCard key={pkg.id} pkg={pkg} index={i} />
-          ))}
-        </div>
-
-        {/* Why a schedule beats a one-off, for anyone still weighing the two. */}
-        <Reveal delay={0.1}>
-          <div className="mt-14 flex flex-col gap-6 border-y border-line py-12 md:flex-row md:items-start md:gap-16 md:py-14">
-            <h3 className="display max-w-md text-[8vw] leading-[0.98] text-balance sm:text-[5vw] md:w-1/2 md:shrink-0 md:text-[2.6vw]">
-              {batchNote.title}
-            </h3>
-            <p className="max-w-xl text-sm leading-relaxed text-mute md:pt-2 md:text-base">
-              {batchNote.body}
-            </p>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-faint">
-            {monthlyNote}
-          </p>
-        </Reveal>
-      </section>
-
-      {/* ── One-time projects ──────────────────────────────────────────────
-        Kept separate and after the tiers, for businesses not ready for a
-        schedule. Deliberately lighter than the monthly cards: this is the
-        smaller commitment and should look like it.
+        A published figure invites a business to decide whether it can afford
+        this before it has said what it needs, and it invites the wrong
+        comparison — rate against rate rather than what the work brings back.
+        The four factors on /pricing say what actually moves a number, so the
+        absence reads as a position rather than an evasion.
       */}
-      <section className="shell pb-24 md:pb-36" aria-labelledby="onetime-heading">
+      <section className="shell pb-24 md:pb-36" aria-labelledby="custom-heading">
         <SectionHeader
-          id="onetime-heading"
-          index="07"
-          eyebrow="Project Work"
-          title="Single Productions"
-          lead="Not ready for a monthly schedule? Book one production and use it everywhere."
+          id="custom-heading"
+          index="06"
+          eyebrow={customMarketing.eyebrow}
+          title={customMarketing.title}
+          lead={customMarketing.body}
         />
 
-        <div className="mt-14 grid gap-px border-t border-l border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {packages.map((pkg, i) => (
-            <Reveal key={pkg.id} delay={(i % 4) * 0.06} className="flex flex-col justify-between bg-ink p-7 md:p-8">
-              <div>
-                <h3 className="display text-2xl leading-tight md:text-[1.7rem]">
-                  {pkg.name}
-                </h3>
-                {pkg.price ? (
-                  <>
-                    <p className="mt-5 text-[0.56rem] tracking-[0.22em] text-faint uppercase">
-                      Starting at
-                    </p>
-                    <p className="display mt-1 text-4xl leading-none text-bone md:text-5xl">
-                      {pkg.price}
-                    </p>
-                  </>
-                ) : (
-                  <p className="display mt-5 text-3xl leading-none text-bone md:text-4xl">
-                    Custom quote
-                  </p>
-                )}
-                <p className="mt-5 text-[0.82rem] leading-relaxed text-mute">
-                  {pkg.summary}
-                </p>
-              </div>
-              <div className="mt-7">
+        <Reveal delay={0.08}>
+          <div className="relative mt-14 overflow-hidden border border-accent/45 bg-accent/[0.055] p-8 md:p-11">
+            <span aria-hidden="true" className="absolute top-0 left-0 h-px w-full bg-accent" />
+
+            <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between md:gap-14">
+              <p className="body-lg max-w-2xl text-balance">
+                {customMarketing.detail}
+              </p>
+
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
                 <Magnetic
                   href="/book"
-                  variant="outline"
-                  wrapperClassName="w-full"
-                  className="w-full"
+                  variant="solid"
+                  wrapperClassName="w-full sm:w-auto"
+                  className="w-full sm:w-auto"
                 >
-                  Get a Quote
+                  {customMarketing.cta}
+                </Magnetic>
+                <Magnetic
+                  href="/pricing"
+                  variant="outline"
+                  wrapperClassName="w-full sm:w-auto"
+                  className="w-full sm:w-auto"
+                >
+                  How It Works
                 </Magnetic>
               </div>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Travel, stated before anyone has to ask. Folded in under the
-            tiers rather than given its own section: it is a term of the
-            quote, not a chapter of the pitch. */}
-        <Reveal delay={0.1}>
-          <div className="mt-14 border-t border-line pt-12 md:pt-14">
-            <div className="grid gap-9 md:grid-cols-12 md:gap-14">
-              <div className="md:col-span-5">
-                <p className="eyebrow mb-4 text-accent">{travel.eyebrow}</p>
-                <h3 className="display text-[8vw] leading-[0.98] text-balance sm:text-[4.8vw] md:text-[2.4vw]">
-                  {travel.title}
-                </h3>
-                <p className="mt-5 max-w-md text-sm leading-relaxed text-mute">
-                  {travel.lead}
-                </p>
-              </div>
-              <dl className="flex flex-col gap-7 md:col-span-6 md:col-start-7">
-                {travel.points.map((point) => (
-                  <div key={point.title} className="border-l border-line pl-5">
-                    <dt className="text-[0.7rem] tracking-[0.16em] text-bone uppercase">
-                      {point.title}
-                    </dt>
-                    <dd className="mt-2 text-sm leading-relaxed text-mute">
-                      {point.body}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
             </div>
           </div>
         </Reveal>
       </section>
 
-      {/* ── Selected work ─────────────────────────────────────────────────── */}
       <section className="shell py-10 md:py-16" aria-labelledby="work-heading">
 
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
@@ -397,7 +315,7 @@ export default function HomePage() {
             id="work-heading"
             index="08"
             eyebrow="Selected Work"
-            title="Real Businesses. Real Content."
+            title="Real Businesses. Real Results."
             lead="Work made for businesses that needed to look like the best option in their market."
           />
           <Reveal delay={0.1}>
@@ -515,7 +433,7 @@ export default function HomePage() {
           <Reveal delay={0.12}>
             <div className="mt-11 flex flex-wrap justify-center gap-4">
               <Magnetic href="/book" variant="solid">
-                Start Your Project
+                Start a Project
               </Magnetic>
               <Magnetic href="/pricing" variant="outline">
                 Request a Quote

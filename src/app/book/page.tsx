@@ -7,9 +7,9 @@ import { Reveal } from "@/components/motion/reveal";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Start Your Project",
+  title: "Request a Custom Quote",
   description:
-    "Start a project with 508 Filmzz — commercial advertising, social content, motion graphics, drone production and monthly content for businesses across Greenville and Upstate South Carolina.",
+    "Request a custom marketing proposal from 508 Filmzz — marketing strategy, social media marketing, Meta advertising, lead generation, video production and ad creative for automotive dealerships, construction companies, builders and established businesses across South Carolina.",
   alternates: { canonical: "/book" },
 };
 
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  * the form with nothing above it to scroll past.
  *
  * That matters most on the journey this site was built for: a business owner
- * scans a card, taps Start Your Project, and should land on the form itself rather
+ * scans a card, taps Request a Custom Quote, and should land on the form itself rather
  * than on a page about how to make contact.
  *
  * The form is the same component either page renders — one form, one
@@ -33,7 +33,7 @@ const REASSURANCE = [
   {
     icon: Clock,
     title: "A reply, not an auto-responder",
-    body: "Every enquiry comes to me directly — not a form queue. You will hear back about availability and a real number, usually the same day.",
+    body: "Every enquiry comes to me directly — not to a queue somebody else reads. You will hear back with a real answer, usually the same day.",
   },
   {
     icon: MapPin,
@@ -43,7 +43,7 @@ const REASSURANCE = [
   {
     icon: Phone,
     title: "Rather just talk?",
-    body: "Call or text. For anything complicated a two-minute conversation beats a form every time.",
+    body: "Call or text. For anything involved, a ten-minute conversation tells me more than any form can.",
   },
 ];
 
@@ -52,9 +52,9 @@ export default function BookPage() {
     <>
       <PageHero
         index="01"
-        eyebrow="Start a Project"
-        title="Start Your Project"
-        lead="Tell me about your business and what you want the content to do. The more you share — what you do, who you are trying to reach, where it needs to run — the more useful the quote I send back. No obligation, and nothing is charged through this form."
+        eyebrow="Custom Marketing"
+        title="Request a Custom Quote"
+        lead="Tell me about your business, what you are trying to accomplish, and where you are currently struggling. I will review it and come back with the approach I think is right and what it takes to run it. No obligation, and nothing is charged through this form."
       />
 
       {/* ── What happens next ─────────────────────────────────────────────── */}
@@ -85,7 +85,7 @@ export default function BookPage() {
       {/* ── The form ──────────────────────────────────────────────────────── */}
       <section className="shell pb-20 md:pb-28" aria-labelledby="form-heading">
         <h2 id="form-heading" className="sr-only">
-          Booking request form
+          Custom quote request form
         </h2>
         <BookingForm />
       </section>

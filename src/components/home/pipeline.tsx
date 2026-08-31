@@ -1,8 +1,8 @@
 import { Reveal } from "@/components/motion/reveal";
-import { contentPipeline } from "@/data/site";
+import { growthPath } from "@/data/site";
 
 /**
- * The chain between hiring me and having something to post.
+ * Strategy → Creative → Media → Advertising → Growth.
  *
  * ── Why it reads down on a phone and across on a desktop ───────────────────
  * Five stages side by side at 375px gives each one about sixty pixels, which
@@ -11,15 +11,17 @@ import { contentPipeline } from "@/data/site";
  * is supposed to do — say "and then". The markup is one list either way; only
  * the direction of the flex and the rotation of the marker change.
  *
- * The final stage is the accent colour because it is the only one the customer
- * actually receives. The four before it are what they are paying for without
- * ever seeing, which is the entire point of showing the chain at all.
+ * The last stage carries the accent because it is the only one a business
+ * actually wants. The four before it are the work that produces it, and showing
+ * the whole order is the argument: most companies buy the middle — media with
+ * no strategy behind it and no advertising in front of it — and then judge the
+ * result by how it looked.
  */
 export function Pipeline() {
   return (
     <ol className="flex flex-col items-stretch gap-0 sm:flex-row sm:items-center">
-      {contentPipeline.map((stage, i) => {
-        const last = i === contentPipeline.length - 1;
+      {growthPath.map((stage, i) => {
+        const last = i === growthPath.length - 1;
         return (
           <Reveal
             key={stage}

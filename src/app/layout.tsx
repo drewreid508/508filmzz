@@ -6,7 +6,6 @@ import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { Preloader } from "@/components/chrome/preloader";
 import { PageTransition } from "@/components/chrome/page-transition";
 import { Cursor } from "@/components/chrome/cursor";
-import { PromoModal } from "@/components/chrome/promo-modal";
 import { Header } from "@/components/chrome/header";
 import { Footer } from "@/components/chrome/footer";
 import { StickyCta } from "@/components/chrome/sticky-cta";
@@ -35,23 +34,30 @@ export const metadata: Metadata = {
     /*
       The market belongs in the home title.
       ────────────────────────────────────────────────────────────────────────
-      Local search weighs the title heavily, and this is the page that ranks
-      for "videographer greenville sc". Kept to one place name rather than a
-      list: a title reading like a service area is the thing that looks like
-      keyword stuffing to a reader and to Google alike.
+      Local search weighs the title heavily, and this is the page that has to
+      rank for "marketing agency greenville sc" now rather than for
+      "videographer". Kept to one place name rather than a list: a title
+      reading like a service area is the thing that looks like keyword
+      stuffing to a reader and to Google alike.
     */
-    default: `${site.name} | Commercial Video Production in Greenville, SC`,
+    default: `${site.name} | Marketing Agency in Greenville, SC`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
   keywords: [
-    "commercial videographer Greenville SC",
-    "business video production Greenville SC",
+    "marketing agency Greenville SC",
+    "marketing services Greenville SC",
+    "digital marketing agency South Carolina",
+    "social media marketing",
+    "video marketing",
     "commercial video production",
-    "business advertising video",
-    "social media video production",
-    "drone video production",
-    "motion graphics",
+    "content marketing",
+    "Meta advertising",
+    "lead generation",
+    "automotive marketing",
+    "dealership marketing",
+    "construction marketing",
+    "business marketing",
     "508 Filmzz",
   ],
   authors: [{ name: site.name, url: site.url }],
@@ -59,14 +65,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
-    title: `${site.name} | Commercial Video & Advertising, Greenville SC`,
+    title: `${site.name} | Marketing • Media • Growth, Greenville SC`,
     description: site.description,
     url: site.url,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} | Commercial Video & Advertising, Greenville SC`,
+    title: `${site.name} | Marketing • Media • Growth, Greenville SC`,
     description: site.description,
   },
   robots: robotsMeta,
@@ -116,8 +122,6 @@ export default function RootLayout({
         <SmoothScroll>
           <Preloader />
           <Cursor />
-          {/* Opens only on a Pricing click, once per visit. Never on load. */}
-          <PromoModal />
           <Header />
           <PageTransition>
             <main id="main">{children}</main>

@@ -1,54 +1,84 @@
 import { z } from "zod";
 
-/*
-  The service list, named the way the site names them.
-
-  "Automotive" became "Automotive Cinematography" to match the Services page —
-  a dropdown that uses different words from the page it was reached from makes
-  a visitor stop and check they are in the right place.
-
-  Drone, editing and product launches fold into Other rather than getting their
-  own rows: nine options is a menu, six is a choice, and the project
-  description says what Other means far better than a label would.
-*/
 /**
- * The option that switches the booking form to its monthly branch.
+ * ── EDIT ME: THE QUALIFICATION FORM ────────────────────────────────────────
+ * What a marketing enquiry has to answer before a proposal can be written.
  *
- * Exported, and compared against by identity rather than retyped, because it
- * was retyped once: the form checked for "Monthly Content" while the option
- * read "Monthly Content Package", so the monthly panel never appeared and no
- * one could select a package or see the introductory rate. A string that has
- * to match another string in a different file will eventually stop matching.
+ * This is not a contact form with extra rows. No price appears anywhere on the
+ * site, which means the brief has to carry everything a number is built from —
+ * the industry, the goal, what is going wrong now, the budget range and when
+ * they want to start. A reply that begins "what's your budget?" wastes the
+ * first exchange and reads like a quote about to be reverse-engineered.
+ *
+ * Two rules shaped the field list. Every question either changes the proposal
+ * or is not asked. And nothing asks for a precise figure: budget is a range,
+ * because a business owner who does not have an exact number yet will abandon
+ * a form rather than guess one, and the range is all that is needed to know
+ * whether this is a fit.
  */
-export const MONTHLY_PROJECT_TYPE = "Monthly Content Package";
 
-export const PROJECT_TYPES = [
-  "Commercial / Advertisement",
-  "Social Content",
-  "Product or Service Video",
-  "Content Campaign",
-  "Automotive / Dealership",
-  MONTHLY_PROJECT_TYPE,
+/** What they want help with. Multi-select — most enquiries want more than one. */
+export const SERVICE_INTERESTS = [
+  "Marketing Strategy",
+  "Social Media",
+  "Video Production",
+  "Photography",
+  "Meta Advertising",
+  "Ad Creative",
+  "Website / Landing Page",
+  "Lead Generation",
+  "Full-Service Marketing",
+  "Not Sure",
+] as const;
+
+/**
+ * The industries this is built for.
+ *
+ * Listed rather than left as free text because it is the fastest signal of
+ * whether an enquiry is a fit, and because a business owner picking their own
+ * industry off a list reads as "he works with people like me" — which is the
+ * job of every field above the fold.
+ */
+export const INDUSTRIES = [
+  "Automotive Dealership",
+  "Automotive / Performance",
+  "Construction",
+  "Builder / Developer",
+  "Real Estate",
+  "Luxury / Premium Brand",
+  "Marine & Powersports",
+  "Home Services",
+  "Manufacturing / Fabrication",
+  "Professional Services",
   "Other",
 ] as const;
 
 /**
- * When, roughly.
+ * Budget, as a range.
  *
- * Windows rather than a clock: an automotive shoot is booked against light,
- * not against a minute, and "golden hour" is a more useful answer than 6:47pm.
- * A short dropdown also beats a native time picker on a phone.
+ * Ranges rather than a number, and "Not sure" is a real option rather than an
+ * escape hatch — a business that has never bought marketing genuinely does not
+ * know, and forcing a figure out of them produces a made-up one that then has
+ * to be walked back.
  */
-export const TIME_WINDOWS = [
-  "Morning",
-  "Midday",
-  "Afternoon",
-  "Golden hour",
-  "Evening / night",
-  "Flexible",
+export const BUDGETS = [
+  "Under $1,000",
+  "$1,000 – $2,500",
+  "$2,500 – $5,000",
+  "$5,000 – $10,000",
+  "$10,000+",
+  "Not sure",
 ] as const;
 
-/** Where the enquiry came from. Plain options — this is a lead source, not a survey. */
+/** When they want to start. Windows, because a date this early is a guess. */
+export const START_WINDOWS = [
+  "As soon as possible",
+  "Within a month",
+  "1–3 months",
+  "Just planning ahead",
+] as const;
+
+/** Where the enquiry came from. Plain options — a lead source, not a survey. */
 export const REFERRAL_SOURCES = [
   "Instagram",
   "TikTok",
@@ -59,97 +89,77 @@ export const REFERRAL_SOURCES = [
   "Other",
 ] as const;
 
-/**
- * How often, for ongoing work.
- *
- * Only asked on the monthly branch, and kept to ranges a shoot schedule can
- * actually be built from. A Custom enquiry that does not answer this is a
- * quote that cannot be written without a phone call first, which is the one
- * thing the form exists to avoid.
- */
-export const SHOOT_FREQUENCIES = [
-  "Once a month",
-  "Twice a month",
-  "Weekly",
-  "A few times a year",
-  "Not sure yet — advise me",
-] as const;
-
-export const BUDGETS = [
-  "$750 – $1,500",
-  "$1,500 – $3,000",
-  "$3,000 – $5,000",
-  "$5,000 – $10,000",
-  "$10,000+",
-  "Monthly retainer",
-  "Not sure yet — advise me",
-] as const;
-
 export const inquirySchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(120),
-  businessName: z.string().trim().max(160).optional().or(z.literal("")),
-  email: z.email("Please enter a valid email address").max(180),
-  phone: z.string().trim().min(7, "Please enter a contact number").max(40),
-  projectType: z.enum(PROJECT_TYPES, { message: "Choose a project type" }),
-  /** ISO date (yyyy-mm-dd) from the date input, or empty when flexible. */
-  shootDate: z
+  businessName: z
     .string()
     .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Use the date picker")
-    .optional()
-    .or(z.literal("")),
-  location: z.string().trim().max(180).optional().or(z.literal("")),
+    .min(2, "Please enter your business name")
+    .max(160),
+  email: z.email("Please enter a valid email address").max(180),
+  phone: z.string().trim().min(7, "Please enter a contact number").max(40),
+
+  /*
+    Website is optional and deliberately not validated as a URL. People type
+    "acmebuilders.com" without a scheme far more often than they type a valid
+    one, and rejecting that is rejecting a lead over a formatting rule.
+  */
+  website: z.string().trim().max(200).optional().or(z.literal("")),
+
+  industry: z.enum(INDUSTRIES, { message: "Choose the closest industry" }),
+
+  /*
+    At least one service. Sent as an array from a checkbox group, so an empty
+    submission is a real state rather than an impossible one.
+  */
+  interests: z
+    .array(z.enum(SERVICE_INTERESTS))
+    .min(1, "Choose at least one — pick Not Sure if you'd rather talk it through"),
+
+  goal: z
+    .string()
+    .trim()
+    .min(10, "A sentence is enough — what would success look like?")
+    .max(1000),
+
+  challenges: z
+    .string()
+    .trim()
+    .min(10, "What isn't working right now? A sentence is enough")
+    .max(2000),
+
+  budget: z.enum(BUDGETS, { message: "Choose a budget range" }),
+  startWindow: z.enum(START_WINDOWS, { message: "Choose a rough start window" }),
+
   referral: z.string().trim().max(80).optional().or(z.literal("")),
-  shootTime: z.string().trim().max(40).optional().or(z.literal("")),
-  frequency: z.string().trim().max(40).optional().or(z.literal("")),
-  social: z.string().trim().max(80).optional().or(z.literal("")),
+  details: z.string().trim().max(4000).optional().or(z.literal("")),
+
   /*
     The acknowledgement. Required, and phrased as an understanding rather than
-    a waiver — it protects the date from being treated as held, which is the
-    one misunderstanding that costs a shoot.
+    a waiver — it protects against the one misunderstanding that costs a
+    relationship: that sending a brief has booked something.
   */
   acknowledged: z.literal("on", {
-    message: "Please confirm you understand this is a request",
+    message: "Please confirm you understand this is an enquiry",
   }),
+
   /*
     Text-message consent. Optional, and it has to stay that way.
 
     Under the TCPA this is express written consent to be texted, which is only
     valid if it is a separate, affirmative act — so it is its own unchecked box
-    rather than folded into the acknowledgement above, and a booking submits
+    rather than folded into the acknowledgement above, and an enquiry submits
     perfectly well without it. Making it required would make every consent on
     file worthless, because a box you cannot submit without is not a choice.
   */
   smsConsent: z.literal("on").optional().or(z.literal("")),
-  budget: z.enum(BUDGETS, { message: "Choose a budget range" }),
-  message: z
-    .string()
-    .trim()
-    .min(20, "Tell me a bit more — 20 characters minimum")
-    .max(4000),
+
   /**
    * Honeypot: bots fill this, humans never see it. Deliberately NOT validated —
-   * the route accepts the submission and silently drops it, so a bot never
-   * learns which field gave it away.
+   * the submission is accepted and silently dropped, so a bot never learns
+   * which field gave it away.
    */
-  website: z.string().optional(),
+  website_hp: z.string().optional(),
 });
 
 export type Inquiry = z.infer<typeof inquirySchema>;
-
-/** Everything the notification channels need, after validation. */
-export type Lead = Omit<Inquiry, "website"> & {
-  receivedAt: string;
-};
-
-export function formatShootDate(iso: string | undefined) {
-  if (!iso) return "Flexible";
-  const [y, m, d] = iso.split("-").map(Number);
-  // Build in local time so the label matches what the client picked.
-  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}

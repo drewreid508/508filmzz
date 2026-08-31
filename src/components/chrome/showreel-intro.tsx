@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play } from "lucide-react";
 
 import { asset } from "@/lib/asset";
-import { capabilities } from "@/data/site";
+import { disciplines } from "@/data/site";
 import { Magnetic } from "@/components/ui/magnetic";
 
 const SEEN_KEY = "508-reel-seen";
@@ -271,7 +271,7 @@ export function ShowreelIntro() {
                     transition={{ duration: 0.5 }}
                     className="flex flex-col gap-1.5"
                   >
-                    {capabilities.map((line, i) => (
+                    {disciplines.map((line, i) => (
                       <motion.li
                         key={line}
                         initial={{ opacity: 0, x: -12 }}
@@ -314,7 +314,7 @@ export function ShowreelIntro() {
                   className="w-full"
                   onClick={dismiss}
                 >
-                  Start Your Project
+                  Start a Project
                 </Magnetic>
               </div>
 

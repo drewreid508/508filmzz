@@ -1,12 +1,11 @@
 import { SITE_URL } from "@/lib/site-url";
-import { MINIMUM_MONTHS } from "@/lib/offer";
 
 export const site = {
   name: "508 Filmzz",
   legalName: "508 Filmzz",
-  tagline: "Cinematic Media. Built To Move.",
+  tagline: "Marketing • Media • Growth",
   positioning:
-    "Commercial video, advertising creative and social content for businesses across Greenville and Upstate South Carolina.",
+    "A marketing and media studio for ambitious businesses — strategy, creative, content and advertising, run by one person who works with every client directly.",
   /**
    * The canonical origin — where the site actually answers.
    *
@@ -21,7 +20,7 @@ export const site = {
    */
   url: SITE_URL,
   description:
-    "Commercial video production and advertising creative in Greenville, SC. Business video, social media content, motion graphics and drone production for contractors, dealerships, and established local businesses across Upstate South Carolina.",
+    "508 Filmzz is a marketing agency and creative studio in Greenville, SC. Marketing strategy, social media marketing, Meta advertising, lead generation, commercial video production and content marketing for automotive dealerships, construction companies, builders, real estate and established businesses across South Carolina.",
   owner: "Drew Reid",
   email: "508filmz@gmail.com",
   phone: "(864) 915-4071",
@@ -111,9 +110,17 @@ export const closedDays = ["Sunday"] as const;
  */
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Portfolio", href: "/portfolio" },
+  { label: "Work", href: "/portfolio" },
   { label: "Services", href: "/services" },
-  { label: "Pricing", href: "/pricing" },
+  /*
+    The route stays /pricing even though no price appears on it.
+
+    Business owners search "pricing" and type it into a URL bar, and the page
+    does answer the question — the answer is that the number comes from the
+    brief rather than a menu. Renaming the path would break that search
+    behaviour and every link already pointing at it to gain nothing.
+  */
+  { label: "Custom Marketing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -137,213 +144,120 @@ export const nav = [
   applies, as the line that separates Essential from Growth and Partner.
 */
 
-export type Service = {
+export type ServiceCategory = {
   id: string;
+  /** MARKETING / MEDIA / CREATIVE. */
   title: string;
+  /** One line on what this discipline is actually for. */
   blurb: string;
-  /** Everything included. Shown as a checklist on the services page. */
-  points: string[];
+  /** The individual capabilities inside it. */
+  items: string[];
   /** Optional: the media id used as the card's backdrop. */
   image?: string;
 };
 
 /**
- * ── EDIT ME ────────────────────────────────────────────────────────────────
- * The service catalogue. Drives the home page grid, the /services page, the
- * footer list, and the JSON-LD offer catalogue — change it here only.
+ * ── EDIT ME: THE THREE DISCIPLINES ─────────────────────────────────────────
+ * Marketing, Media and Creative — the whole catalogue, grouped.
  *
- * `image` is a key from src/data/portfolio.generated.json (run `npm run
- * portfolio` after dropping new photos in) or media.generated.json.
+ * Grouped rather than listed flat on purpose. A flat list of twenty services
+ * reads as a menu, and a menu invites a client to order one item and judge the
+ * result on its own. These three are the parts of one engagement: the strategy
+ * decides what to make, the media makes it, the creative puts it in front of
+ * people. Which parts a business actually needs is the outcome of looking at
+ * the business, which is why nothing here carries a price.
+ *
+ * Photography and drone live inside MEDIA. They are things a campaign uses,
+ * not products sold on their own.
  */
-export const services: Service[] = [
+export const services: ServiceCategory[] = [
   {
-    id: "commercial-advertising",
-    title: "Commercial Advertising",
+    id: "marketing",
+    title: "Marketing",
     blurb:
-      "The ad itself — a polished commercial built to sell one service to one kind of customer, ready to run wherever you spend money.",
-    points: [
-      "Business commercials",
-      "Paid social ad creative",
-      "Website hero videos",
-      "Service promotions",
-      "Seasonal campaigns",
+      "The part that decides what gets made and why. Who you are talking to, what they need to hear, where it runs, and what it is supposed to bring back.",
+    items: [
+      "Marketing strategy",
+      "Content strategy",
+      "Social media strategy",
+      "Social media management",
+      "Meta advertising",
+      "Lead generation",
+      "Campaign strategy",
     ],
     image: "poster-blueworks",
   },
   {
-    id: "social-content",
-    title: "Social Content",
+    id: "media",
+    title: "Media",
     blurb:
-      "Short-form video made for the feed — the first two seconds earn the rest, and every cut is built for a phone held vertically.",
-    points: [
-      "Instagram Reels",
-      "TikTok",
-      "YouTube Shorts",
-      "Before and after",
-      "Behind the scenes",
-    ],
-    image: "poster-nmf",
-  },
-  {
-    id: "motion-graphics",
-    title: "Motion Graphics",
-    blurb:
-      "Animated titles, logo stings, callouts and on-screen text that make your offer land — the layer most local video is missing.",
-    points: [
-      "Animated logo and brand stings",
-      "Offer and pricing callouts",
-      "Service and product breakdowns",
-      "On-screen captions",
-      "Lower thirds and end cards",
-    ],
-    image: "poster-bratchers",
-  },
-  {
-    id: "product-service",
-    title: "Product & Service Videos",
-    blurb:
-      "Show a customer exactly what they get before they call. The video that answers the questions your phone keeps ringing about.",
-    points: [
-      "Service explainers",
-      "Process walkthroughs",
-      "Product features",
-      "Facility and shop tours",
-      "Team and owner intros",
-    ],
-    image: "poster-night-wash",
-  },
-  {
-    id: "campaigns",
-    title: "Content Campaigns",
-    blurb:
-      "One production, a month of material. A single shoot cut into a commercial, a set of social videos, and stills you can use everywhere.",
-    points: [
-      "One shoot, many deliverables",
-      "A commercial plus social cutdowns",
-      "Stills from the same session",
-      "One consistent look across all of it",
-      "Planned before anyone shows up",
+      "The footage and photography the strategy runs on. Filmed properly, finished to a standard that holds up next to a national brand in the same feed.",
+    items: [
+      "Cinematic video",
+      "Commercials",
+      "Short-form video",
+      "Photography",
+      "Drone",
+      "Automotive content",
+      "Brand content",
     ],
     image: "poster-ram",
   },
+  {
+    id: "creative",
+    title: "Creative",
+    blurb:
+      "What turns the footage into something that sells — the ads, the graphics, the pages people land on when the ad does its job.",
+    items: [
+      "Ad creative",
+      "Social graphics",
+      "Motion graphics",
+      "Campaign creative",
+      "Landing pages",
+      "Website and marketing creative",
+    ],
+    image: "poster-nmf",
+  },
 ];
+
+/** The line that sits under the three disciplines. */
+export const servicesNote =
+  "Very few businesses need all of this, and almost none need it in the same order. I look at where you actually are — what you are already doing, what is working, what is costing you — and build the approach around that. You are hiring an approach, not picking items off a list.";
 
 /*
-  The service names, for the marquee, the footer list, the showreel captions and
-  the JSON-LD.
+  The scrolling capability list — marquee, footer, showreel captions, JSON-LD.
 
-  Derived from `services` rather than written out again. It was a second copy,
-  and a second copy of a list is a list that goes stale: it was still
-  advertising a standalone Drone Production service after that had been removed
-  from the catalogue above, in the footer of every page and in the structured
-  data Google reads. Now there is one place to edit and nowhere for the two to
-  disagree.
+  Flattened out of the three disciplines rather than written again, so it can
+  never advertise something the catalogue no longer offers. It was a hand-kept
+  second copy once and drifted, still selling a service that had been removed.
 */
-export const capabilities = services.map((service) => service.title);
+export const capabilities = services.flatMap((service) => service.items);
 
-/**
- * ── EDIT ME: PRICING ───────────────────────────────────────────────────────
- * Every price is a starting point, so raising them later is a one-line change
- * and never makes a published number wrong.
- *
- *   price     the headline figure, e.g. "$1,250"
- *   featured  highlights one card — keep it to a single tier
- *
- * Nothing else in the codebase hardcodes a price.
- */
-export type Package = {
-  id: string;
-  name: string;
-  /** null renders as "Custom quote" — the Custom project has no figure to start from. */
-  price: string | null;
-  summary: string;
-  includes: string[];
-  featured?: boolean;
-};
+/*
+  The three words, for anywhere a list of twenty will not fit.
 
-export const packages: Package[] = [
-  {
-    id: "social",
-    name: "Social Media Reel",
-    price: "$200+",
-    summary:
-      "Professionally filmed and edited short-form content ready for social media.",
-    includes: [
-      "Filmed on location",
-      "Edited vertical reel",
-      "Captions and music",
-      "Ready to post",
-    ],
-  },
-  {
-    id: "automotive",
-    name: "Automotive Video",
-    price: "$300+",
-    summary:
-      "Cinematic automotive content for vehicles, builds, dealerships, detail shops, and events.",
-    includes: [
-      "Rolling and static coverage",
-      "Detail and hero frames",
-      "Full edit, colour grade and sound",
-      "Vertical cutdowns included",
-    ],
-    featured: true,
-  },
-  {
-    id: "commercial",
-    name: "Commercial Video",
-    price: "$500+",
-    summary:
-      "Professional promotional video content for businesses, products, and services.",
-    includes: [
-      "Planned before the shoot",
-      "Full production day",
-      "Full edit, colour grade and sound",
-      "Master plus vertical cutdowns",
-    ],
-  },
-  {
-    id: "custom-project",
-    name: "Custom Project",
-    price: null,
-    summary:
-      "Anything outside the three above — a bigger production, an event, or a one-off idea.",
-    includes: [
-      "Scoped around the job",
-      "Quoted before anything is booked",
-    ],
-  },
-];
+  The showreel overlay animates one line at a time over twelve seconds of
+  footage — twenty of them is ninety seconds of captions and a wall of text on
+  a phone. This is what the intro and any other fixed-height surface uses.
+*/
+export const disciplines = services.map((service) => service.title);
 
-
-/**
- * ── EDIT ME: WHY A BUSINESS PAYS FOR THIS ──────────────────────────────────
- * Four reasons, in the language a business owner already uses. This is the
- * homepage answer to "why is a video worth money", and it sits before any
- * price on the page, because a figure means nothing until the reader knows
- * what it is for.
- *
- * Every line describes the work or what it is built to do. Nothing here
- * promises customers, sales, followers or growth — those are outcomes no
- * filmmaker controls, and a business owner who has been sold one before stops
- * believing the rest of the page the moment they read it.
- */
 export const benefits = [
   {
-    title: "Look established",
-    body: "Most local businesses still look local online. Professional video is the fastest way to look like the bigger option in your market.",
+    title: "Get attention",
+    body: "Work that stops the scroll and looks like it came from a business worth taking seriously — because that judgement gets made in about a second.",
   },
   {
-    title: "Earn the click",
-    body: "Content built to stop a thumb, not fill a feed. The first two seconds do the work everything after them depends on.",
+    title: "Reach the right people",
+    body: "Meta advertising and content aimed at the customers you actually want, in the market you actually serve, rather than everyone with a phone.",
   },
   {
-    title: "Show the work",
-    body: "Customers buy what they can see. Real footage of your crew, your process and your finished jobs beats anything you can say about them.",
+    title: "Generate leads",
+    body: "Campaigns built to end in something measurable — a call, a form, a booking — instead of a view count nobody can spend.",
   },
   {
-    title: "Give your ads something to run",
-    body: "Ad spend is only as good as the creative behind it. This is the piece most businesses are missing when their ads underperform.",
+    title: "Look like the obvious choice",
+    body: "A consistent brand across your ads, your feed and your website, so a customer comparing you to three competitors already has a favourite.",
   },
 ];
 
@@ -354,267 +268,92 @@ export const benefits = [
  * cards raise: yes, but who does all that? One person, and not you.
  */
 export const ownerPledge = {
-  lines: ["You run the business.", "I'll handle the content."],
-  body: "Planning, production, editing and delivery, handled end to end. You show up, do what you already do well, and get back a month of material you can actually use.",
-  cta: "Start Your Project",
+  lines: ["You run the business.", "I'll run the marketing."],
+  body: "I plan the strategy, direct the creative, film and edit the media, and build the campaigns behind it. You deal with me directly, start to finish — there is no account manager between us.",
+  cta: "Talk About Your Marketing",
 };
 
 /**
- * ── EDIT ME: WHAT THE MONEY ACTUALLY BUYS ──────────────────────────────────
- * The stages between hiring me and having something to post. It exists because
- * the thing being sold looks, from outside, like a thirty-second video — and a
- * thirty-second video sounds like thirty seconds of work.
+ * ── EDIT ME: HOW THE WORK RUNS ─────────────────────────────────────────────
+ * Strategy → Creative → Media → Advertising → Growth.
  *
- * Kept to single words. This is a chain to be glanced at, not read; the moment
- * a stage needs a sentence it stops working as a diagram. `process` below
- * carries the same four middle stages with the detail, for anyone who wants it.
+ * The order is the argument. Most businesses buying video start in the middle:
+ * they commission media with no strategy behind it and no advertising in front
+ * of it, then judge the result by how it looked. Showing the whole sequence is
+ * what separates a marketing engagement from a shoot.
+ *
+ * Single words, because it is a chain to be glanced at rather than read. The
+ * detail lives in `process` below for anyone who wants it.
  */
-export const contentPipeline = [
+export const growthPath = [
   "Strategy",
-  "Planning",
-  "Production",
-  "Post",
-  "Content you can publish",
+  "Creative",
+  "Media",
+  "Advertising",
+  "Growth",
 ];
 
-/** The point of the chain above, in one line. No numbers, nothing promised. */
-export const pipelineNote =
-  "One production day becomes a commercial, a month of social content, and stills you can use everywhere.";
+/** The line that sits under the chain. No promised numbers — see `benefits`. */
+export const growthPathNote =
+  "Most businesses buy the middle of this and wonder why it did not work. A video with no strategy behind it and no advertising in front of it is a nice video.";
 
 /**
- * Why a schedule beats a one-off, for anyone weighing the monthly tiers.
- */
-export const batchNote = {
-  title: "One production. A month of material.",
-  body: "Everything is planned and shot in batches, so you get a commercial, a set of social videos and stills out of the same day — and you are never the one deciding what to post this week.",
-};
-
-
-/**
- * ── EDIT ME: MONTHLY CONTENT ───────────────────────────────────────────────
- * The recurring side of the business, kept deliberately separate from
- * `packages` above. A one-off is a project; this is a partnership, and mixing
- * the two in one grid makes a monthly figure look like a single shoot's price.
+ * ── EDIT ME: CUSTOM MARKETING ──────────────────────────────────────────────
+ * What sits where a price list used to.
  *
- *   price     the headline figure, or null for "Custom quote"
- *   featured  highlights one card — keep it to a single tier
+ * No figure appears anywhere on this site, and that is a positioning decision
+ * rather than an oversight. A published number invites a business to work out
+ * whether it can afford you before it has told you what it needs, and the
+ * businesses worth working with are the ones comparing outcomes, not rates.
  */
-export type MonthlyPackage = {
-  id: string;
-  name: string;
-  /** Shown as its own line so a buyer can compare tiers without reading lists. */
-  bestFor?: string;
-  /*
-    Bare numerals, with the unit carried by the card's label.
-
-    They are set at display size in a half-width box: "1 shoot / month" wrapped
-    onto two lines at 375px and overlapped its own caption. A numeral cannot
-    wrap, so the box can never overflow however many tiers are added.
-  */
-  shoots?: string;
-  reels?: string;
-  /*
-    Drone is the upgrade reason, so it is a field rather than a bullet buried in
-    `includes`. A card can then say YES or NO in the same place on every tier,
-    which is what makes the difference between Bronze and Silver read instantly.
-  */
-  drone?: boolean;
-  /*
-    Photos included, as a count rather than a yes/no.
-
-    Every tier gets some, so a boolean would answer "yes" three times and tell
-    a buyer nothing. The number is what separates them, which is why it sits
-    beside reels and shoots as a figure rather than in the checklist.
-  */
-  photos?: string;
-  /** Shown as the standout ribbon. One tier only, or it stops meaning anything. */
-  popular?: boolean;
-  /** null renders as "Custom quote" with no "Starting at" or "/month" label. */
-  price: string | null;
-  summary: string;
-  includes: string[];
-  featured?: boolean;
-};
-
-/*
-  ── EDIT ME: THE MONTHLY LADDER ────────────────────────────────────────────
-  Priced off shoot days, not off reel counts.
-
-  A production day is the expensive thing here — it is the one input that costs
-  a whole morning whatever else happens — so the ladder is built to hold
-  revenue per shoot day flat at $500 across all three tiers. Bronze at one day,
-  Silver at two, Gold at three. Move a client up and the day rate does not
-  soften, which is the difference between selling more and simply working more.
-
-  Editing scales far more cheaply than filming, so that is where the buyer's
-  incentive to climb lives: reels go 4 -> 9 -> 14 and photos 5 -> 12 -> 20, so
-  each step up buys proportionally more than the step in price. Per reel that
-  is $125 -> $111 -> $107, a volume discount small enough to stay honest and
-  visible enough to be worth taking.
-
-  Drone is the one hard yes/no, and it is what Bronze is missing.
-*/
-export const monthlyPackages: MonthlyPackage[] = [
-  {
-    id: "bronze",
-    name: "Bronze",
-    price: "$500",
-    bestFor: "Businesses starting to post consistently",
-    shoots: "1",
-    reels: "4",
-    photos: "5",
-    drone: false,
-    summary: "One filming day a month, edited and ready to post.",
-    includes: [
-      "4 professionally edited reels",
-      "1 batch filming session",
-      "5 photos you can use in ads and posts",
-      "Captions + music",
-      "Content planning",
-      "1 revision round",
-      "Ready-to-post vertical videos",
-    ],
-  },
-  {
-    id: "silver",
-    name: "Silver",
-    price: "$1,000",
-    bestFor: "Businesses staying active on social all month",
-    shoots: "2",
-    reels: "9",
-    photos: "12",
-    drone: true,
-    summary: "Twice the filming, more than twice the content — and drone included.",
-    includes: [
-      "9 professionally edited reels",
-      "2 batch filming sessions",
-      "12 photos you can use in ads and posts",
-      "Drone content included",
-      "Captions + music",
-      "Content planning",
-      "1 revision round",
-      "Ready-to-post vertical videos",
-    ],
-    featured: true,
-    popular: true,
-  },
-  {
-    id: "gold",
-    name: "Gold",
-    price: "$1,500",
-    bestFor: "Businesses that want a brand, not just posts",
-    shoots: "3",
-    reels: "14",
-    photos: "20",
-    drone: true,
-    summary: "The most filming days, the most content, and first pick of the calendar.",
-    includes: [
-      "14 professionally edited reels",
-      "3 batch filming sessions",
-      "20 photos you can use in ads and posts",
-      "Drone content included",
-      "Priority scheduling",
-      "Captions + music",
-      "Content planning",
-      "1 revision round",
-      "Ready-to-post vertical videos",
-    ],
-  },
-  {
-    id: "custom",
-    name: "Custom",
-    price: null,
-    bestFor: "Built around your business",
-    summary:
-      "For businesses that need a custom amount of content, special projects, different shoot schedules, or something outside the standard packages.",
-    includes: [
-      "Custom number of videos",
-      "Custom shoot schedule",
-      "Custom deliverables",
-    ],
-  },
-];
-
-
-/**
- * Terms for the monthly packages only — never shown against the one-off tiers,
- * which carry no commitment at all.
- *
- * Written as a term of the partnership rather than a restriction. A minimum is
- * only worth stating because it is what makes the work compound: a single month
- * buys footage, a couple of months start building a library and a look.
- */
-export const monthlyCommitment = {
-  label: "2-Month Minimum",
-  body: "Monthly packages run on a two-month minimum. That is not a lock-in — it is how long it takes for a content library and a consistent look to be worth anything. After that they continue month to month unless your agreement says otherwise.",
-  custom: "Custom packages may carry different terms, set by the scope of the work.",
-};
-
-/**
- * The introductory offer for new monthly clients.
- *
- * Framed as a first-month rate rather than a sale. The reason the discount can
- * exist at all is that a monthly client books once and shoots repeatedly, so
- * the copy points at that rather than at the saving — a studio that discounts
- * to win work invites being asked to discount again.
- *
- * The percentage and the arithmetic live in src/lib/offer.ts. Nothing here
- * states a reduced figure, so raising a package price cannot leave a stale one.
- */
-export const newClientOffer = {
-  eyebrow: "New Monthly Clients",
-  label: "Your first month, reduced",
-  body: "Start a monthly content package and your first month is billed at a reduced rate. The rest of the term runs at the standard quoted price, and the package continues month to month after that.",
-  terms: [
-    "New monthly clients only",
-    "Applies to the first month of a package",
-    `Requires the ${MINIMUM_MONTHS}-month minimum`,
-    "Your exact rate comes from your quote",
+export const customMarketing = {
+  eyebrow: "Custom Marketing",
+  title: "No packages. A plan built around your business.",
+  body: "Every business has different goals, audiences, and opportunities. I don't believe in one-size-fits-all marketing packages.",
+  detail:
+    "Tell me about your business, what you're trying to accomplish, and where you're currently struggling. I'll review your needs and build a custom proposal around your goals.",
+  cta: "Request a Custom Quote",
+  /** What actually moves a number, said plainly so the absence of one reads as deliberate. */
+  factors: [
+    {
+      title: "What you already have",
+      body: "A business with a working brand and a dead social account needs something different from one starting with nothing.",
+    },
+    {
+      title: "What you are trying to do",
+      body: "Filling a calendar, launching a location, moving specific inventory and building long-term brand are four different jobs.",
+    },
+    {
+      title: "How much of it I run",
+      body: "Some businesses want the media and will handle the rest. Others want the strategy, the content and the ad account managed.",
+    },
+    {
+      title: "How often",
+      body: "A single campaign and a standing monthly engagement are priced on completely different terms.",
+    },
   ],
-  cta: "Start Your Monthly Content",
 };
-
-/**
- * Longer commitments, better monthly rate.
- *
- * `saving` is a fraction so the copy and the arithmetic cannot drift — the
- * label under each term is generated from it, not typed alongside it.
- *
- * Billing is monthly in every case. That is stated on the block itself because
- * "12 months" next to a price reads as a figure due today, and a client who
- * thinks they are being asked for a year up front stops reading.
- */
-export const commitmentTiers = [
-  { term: "2 months", saving: 0, note: "The standard minimum on every monthly package." },
-  { term: "6 months", saving: 0.05, note: "A half-year of consistent output, at a preferred rate." },
-  { term: "12 months", saving: 0.1, note: "A full year of coverage, at the best monthly rate offered." },
-];
-
-/** Shown under the monthly grid, same job as `pricingNote` above. */
-export const monthlyNote =
-  "Every monthly package is quoted around your business — how often we shoot, how many locations are involved, and what needs to be delivered each month.";
-
-/** Shown under the pricing grid so the numbers are never mistaken for quotes. */
-export const pricingNote =
-  "These are starting points, not a menu. What a project actually costs comes down to production time, locations, how far the shoot is, how much editing and motion graphics it needs, and how much is being delivered. Tell me what you have in mind and you get a real number in writing.";
-
 
 export const process = [
   {
-    step: "Plan",
-    body: "We agree what the video has to do and who it is talking to before anything gets filmed. No guessing on the day.",
+    step: "Strategy",
+    body: "I look at what you sell, who buys it, what your competitors are doing, and where the gap is. Everything after this is decided here, which is why it is not an optional extra.",
   },
   {
-    step: "Film",
-    body: "A planned production day, run properly. Every setup is there because it earns its place in the finished piece.",
+    step: "Creative",
+    body: "The angle, the message and the offer, worked out before a camera comes out of the bag. What a customer should think, and what they should do about it.",
   },
   {
-    step: "Edit",
-    body: "Cut for pace, finished with motion graphics and sound, and built around the one thing you want a customer to do next.",
+    step: "Media",
+    body: "A planned production. Cinematic video, short-form, photography and drone — shot in batches so one day produces a campaign rather than a clip.",
   },
   {
-    step: "Deliver",
-    body: "Everything labelled and sized for where it runs — your website, your social, your ads — ready to publish the day it lands.",
+    step: "Advertising",
+    body: "The creative built for where it runs and put behind paid distribution, so it reaches the people you want instead of whoever happens to follow you.",
+  },
+  {
+    step: "Growth",
+    body: "What performed, what did not, and what changes next. Marketing is a loop, and the second month should be better informed than the first.",
   },
 ];
 
@@ -632,65 +371,46 @@ export const stats: { value: number; suffix: string; label: string }[] = [];
 /** "Why work with 508 Filmzz" — the booking-page trust block. */
 export const advantages = [
   {
+    title: "You Work With Me Directly",
+    body: "The person you brief is the person who builds the strategy, runs the camera and cuts the edit. Nothing is passed to a junior and nothing is lost in a handover.",
+  },
+  {
+    title: "Marketing, Not Just Media",
+    body: "Most production companies hand over a file and leave. I care what the file is supposed to do, where it runs, and whether it brought anything back.",
+  },
+  {
     title: "Work That Holds Up Anywhere",
-    body: "Content finished to a standard that looks right on your homepage, in a paid ad, and next to a national brand in the same feed.",
-  },
-  {
-    title: "Drone Coverage",
-    body: "Aerial coverage of properties, roofs and job sites — included on Growth and Partner, and available on any production where it adds something.",
-  },
-  {
-    title: "Creative Direction Included",
-    body: "You are not handed a shot list to fill in. The angle, the message and the hook are worked out before production starts.",
-  },
-  {
-    title: "Fast Turnaround",
-    body: "Most projects are delivered within 3–7 business days.",
+    body: "Finished to a standard that looks right on your homepage, inside a paid ad, and next to a national brand in the same feed.",
   },
   {
     title: "Built For Where It Runs",
-    body: "Every piece is finished more than once — a wide version for your site, vertical cutdowns for social, and versions sized for paid ads.",
+    body: "Every piece is delivered sized and cut for its destination — the wide master, the vertical, the ad, the stills — not one file you have to make work everywhere.",
   },
   {
-    title: "One-on-One Communication",
-    body: "You talk to the person holding the camera. No account managers, no handoffs.",
+    title: "Straight Answers",
+    body: "If a campaign is the wrong move for your business I will say so before you spend on it. A client who wasted a budget does not come back.",
   },
   {
     title: "Greenville & Upstate South Carolina",
-    body: "Based in Piedmont, minutes from Greenville, working with businesses across the Upstate. Projects further out are quoted with travel included.",
+    body: "Based in Piedmont, working across South Carolina and the surrounding states. Travel is quoted with the project.",
   },
 ];
 
-/**
- * ── EDIT ME: WHO THIS IS FOR ───────────────────────────────────────────────
- * The industries the studio actually wants enquiries from.
- *
- * It is on the page for one reason: a roofing company that lands on a site
- * full of car videos assumes it is not for them and leaves. Naming the trades
- * outright is what stops that, and it quietly filters out the people looking
- * for a fifty-pound favour at the same time.
- *
- * Kept to industries where video demonstrably changes how a customer chooses:
- * visible work, considered purchase, local competition.
- */
 export const industries = [
-  "Roofing",
-  "HVAC",
+  "Automotive Dealerships",
+  "Automotive & Performance",
   "Construction",
-  "Remodeling",
-  "Auto Dealerships",
-  "Detailing & Automotive",
-  "Landscaping",
-  "Pressure Washing",
+  "Builders & Developers",
   "Real Estate",
-  "Med Spas",
-  "Dental Practices",
+  "Luxury & Premium Brands",
+  "Marine & Powersports",
   "Home Services",
+  "Manufacturing & Fabrication",
+  "Professional Services",
 ];
 
-/** The line that sits over the industry list. */
 export const industriesNote =
-  "If your work looks good in person, it should look good online. These are the businesses where that gap costs the most — and where professional content closes it fastest.";
+  "Businesses where the product is expensive, the decision is considered, and the customer is comparing you to two or three others before they call. That is where marketing earns its money — and where looking like the obvious choice is worth the most.";
 
 /**
  * ── EDIT ME: MORE THAN JUST VIDEO ──────────────────────────────────────────
@@ -702,33 +422,46 @@ export const industriesNote =
  * buying all of them at once. Deliberately no tools, software or gear named:
  * a client is buying the result, not the kit that produced it.
  */
+/**
+ * ── EDIT ME: WHAT ONE PERSON ACTUALLY DOES ─────────────────────────────────
+ * The disciplines behind an engagement, in the client's language.
+ *
+ * This exists to answer the quiet objection behind every proposal at this
+ * level: "why not use an agency, or my nephew with a camera?" The answer is
+ * that six separate jobs go into marketing that works, most businesses are
+ * only ever sold one of them, and here they are not split across three vendors
+ * who never speak to each other.
+ *
+ * Deliberately no tools, platforms or software named: a business is buying the
+ * outcome, not the kit that produced it.
+ */
 export const craft = {
-  title: "More Than Just Video",
-  lead: "A finished piece of advertising is not one skill. It is six, and most businesses are only ever sold one of them.",
+  title: "Six Jobs, One Person",
+  lead: "Marketing that works is not one skill. It is six, and most businesses are sold one of them at a time by people who never talk to each other.",
   disciplines: [
     {
-      title: "Cinematography",
-      body: "Knowing where to put the camera, and what to light, so an ordinary job site looks like the best one in the market.",
+      title: "Strategy",
+      body: "Who you are actually competing with, what a customer is weighing when they choose, and where the opening is. Everything else is decided here.",
     },
     {
       title: "Creative Direction",
-      body: "Deciding what the video is actually saying, who it is saying it to, and what you want them to do about it.",
+      body: "What the campaign is saying, who it is saying it to, and what you want them to do about it — settled before anything gets made.",
     },
     {
-      title: "Editing",
-      body: "Pace and structure. The difference between footage of your business and something a stranger watches to the end.",
+      title: "Cinematography",
+      body: "Knowing where to put the camera, and what to light, so an ordinary job site or forecourt looks like the best one in the market.",
     },
     {
-      title: "Motion Graphics",
-      body: "Animated titles, offers, callouts and branding — the layer that turns a nice video into an actual advertisement.",
+      title: "Editing & Motion",
+      body: "Pace, structure, titles and offers. The difference between footage of your business and something a stranger watches to the end.",
     },
     {
-      title: "Sound Design",
-      body: "The part nobody notices until it is missing. Music and mix are most of why something feels expensive.",
+      title: "Paid Advertising",
+      body: "Creative built for where it runs, put behind budget, and aimed at the people you want rather than whoever already follows you.",
     },
     {
-      title: "Advertising Storytelling",
-      body: "Built to sell, not just to look good. Every piece is made around one service, one customer, and one next step.",
+      title: "Measurement",
+      body: "What performed, what did not, and what changes next month. Marketing is a loop, not a delivery.",
     },
   ],
 };
@@ -768,23 +501,39 @@ export const travel = {
 
 export const faqs = [
   {
-    q: "How much does a project cost?",
-    a: "Projects start at $750, commercials at $1,250, and campaigns at $2,000. The final number depends on production time, locations, how much is being delivered, and how far the shoot is — you get it in writing before anything is booked.",
+    q: "Is 508 Filmzz a video company or a marketing company?",
+    a: "Marketing, with the media made in house. Most businesses hire a production company for footage and an agency for everything around it. I do both, which means the strategy and the thing being filmed are decided together rather than handed between two companies.",
   },
   {
-    q: "How long until I get the videos?",
-    a: "Most projects are delivered within 3–7 business days of the production day. Larger campaigns are scheduled with a delivery date agreed up front.",
+    q: "How much does it cost?",
+    a: "There are no package prices, because there are no packages. What an engagement costs depends on what you already have, what you are trying to do, how much of it I run, and how often. Send a brief and you get a written proposal built around it.",
+  },
+  {
+    q: "Do I have to take the whole thing?",
+    a: "No. Some businesses want the full strategy, content and ad account run. Others have marketing handled and want the media done properly. I will tell you which parts I think are worth paying for and which are not.",
+  },
+  {
+    q: "Who actually does the work?",
+    a: "I do. 508 Filmzz is one person — I build the strategy, direct the creative, run the camera and cut the edit. You deal with me from the first call to delivery, with no account manager in between.",
+  },
+  {
+    q: "What kind of businesses do you work with?",
+    a: "Dealerships and automotive companies, construction firms and builders, real estate, and established businesses with a real marketing budget. The common thread is a considered purchase and a customer comparing two or three options before they call.",
+  },
+  {
+    q: "Do you run Meta ads, or just make the creative?",
+    a: "Both. Creative built for paid distribution and the campaigns behind it — audiences, testing, and what changes next month based on what performed.",
   },
   {
     q: "Do you travel?",
-    a: "Greenville and the Upstate are covered as standard. Further out is no problem — travel is simply factored into the quote so the production day is worth doing properly, and anything outside the usual service area is quoted individually.",
+    a: "Yes. Based in Piedmont, working across South Carolina and the surrounding states. Travel is quoted with the project.",
   },
   {
-    q: "Do you offer drone footage?",
-    a: "Yes, as part of a production rather than on its own. It is included on Growth and Partner, and can be added to any project where an aerial actually adds something — a roof, a property, a job site.",
+    q: "How long does production take?",
+    a: "Most media is delivered within 3–7 business days of the shoot. Strategy and campaign work runs on its own schedule, agreed before anything starts.",
   },
   {
-    q: "Can I use the videos anywhere?",
-    a: "Yes. Everything is delivered ready for your website, Instagram, Facebook, TikTok and YouTube, and cleared to run as paid ad creative.",
+    q: "Can I use the content anywhere?",
+    a: "Yes. Everything is delivered ready for your website, your social channels and your ad account, sized for each.",
   },
 ];

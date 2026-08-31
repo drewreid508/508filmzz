@@ -1,27 +1,19 @@
 import { inquirySchema } from "@/lib/inquiry";
 import { FORM_ENDPOINT, FIELD_IDS, BLANK_PLACEHOLDERS } from "@/lib/google-form";
-import { monthlyPackages, packages } from "@/data/site";
-import {
-  discountedPrice,
-  DISCOUNT_LABEL,
-  MINIMUM_MONTHS,
-  PROMO_CODE,
-  isPromoCode,
-  discountBreakdown,
-} from "@/lib/offer";
 
 export { FORM_ENDPOINT };
 
 export type SubmitResult =
-  | { ok: true; confirmationEmailed: boolean }
+  | { ok: true }
   | { ok: false; fieldErrors?: Record<string, string>; error?: string };
 
 /**
- * Validates and submits a booking.
+ * Validates and submits an enquiry.
  *
  * Validation runs here because a static site has no server to do it, and it is
- * the *only* validation there is — see the delivery note below. Everything the
- * studio needs must be right before the request leaves the browser.
+ * the *only* validation there is — see the delivery note at the bottom. What
+ * leaves the browser has to be right, because nothing downstream will tell us
+ * if it was not.
  */
 export async function submitLead(form: FormData): Promise<SubmitResult> {
   const raw = {
@@ -29,108 +21,20 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     businessName: String(form.get("businessName") ?? ""),
     email: String(form.get("email") ?? ""),
     phone: String(form.get("phone") ?? ""),
-    projectType: String(form.get("projectType") ?? ""),
-    shootDate: String(form.get("shootDate") ?? ""),
-    location: String(form.get("location") ?? ""),
+    website: String(form.get("website") ?? ""),
+    industry: String(form.get("industry") ?? ""),
+    // A checkbox group: every ticked box arrives under the same key.
+    interests: form.getAll("interests").map(String),
+    goal: String(form.get("goal") ?? ""),
+    challenges: String(form.get("challenges") ?? ""),
     budget: String(form.get("budget") ?? ""),
+    startWindow: String(form.get("startWindow") ?? ""),
     referral: String(form.get("referral") ?? ""),
-    shootTime: String(form.get("shootTime") ?? ""),
-    frequency: String(form.get("frequency") ?? ""),
-    social: String(form.get("social") ?? ""),
+    details: String(form.get("details") ?? ""),
     acknowledged: String(form.get("acknowledged") ?? ""),
     smsConsent: String(form.get("smsConsent") ?? ""),
-    message: String(form.get("message") ?? ""),
-    website: String(form.get("website") ?? ""),
+    website_hp: String(form.get("website_hp") ?? ""),
   };
-
-  /*
-    Monthly terms travel inside the project details.
-
-    The Google Form has no question for a package or a rate, and adding one
-    means editing the form and re-reading its field ids. Appending labelled
-    lines captures the same information today, survives a form edit, and is
-    what the Apps Script reads back to fill the contract. The labels are the
-    contract's parser, so they are written once and not reworded casually.
-  */
-  /*
-    The promo code travels with the booking so the quote can honour it and the
-    Sheet can record who claimed it. Eligibility is not decided here: a static
-    page has no way to know whether someone has booked before, and a check that
-    cannot actually check is worse than none — it would confirm to a returning
-    client that the code still works.
-  */
-  /*
-    Lead source rides in the project details, like the other fields the Google
-    Form has no question for. Worth capturing: it is the only thing that tells
-    Drew whether the business cards are actually working.
-  */
-  /*
-    Time, handle and lead source ride in the project details, like everything
-    else the Google Form has no question for. The labels are what the Apps
-    Script parses back out for the text and the email, so they are fixed
-    wording rather than prose.
-  */
-  const extras: string[] = [];
-  const shootTime = String(form.get("shootTime") ?? "").trim();
-  const social = String(form.get("social") ?? "").trim();
-  const referral = String(form.get("referral") ?? "").trim();
-  if (shootTime) extras.push(`Preferred time: ${shootTime}`);
-  if (social) extras.push(`Social: ${social}`);
-  const frequency = String(form.get("frequency") ?? "").trim();
-  if (frequency) extras.push(`Shooting frequency: ${frequency}`);
-  if (referral) extras.push(`Heard about 508 Filmzz via: ${referral}`);
-  /*
-    Consent is recorded on every booking, including the refusals.
-
-    A row that says nothing about texting is indistinguishable from one where
-    the box was never rendered, and if a complaint ever lands the only useful
-    record is the one that says which answer this person actually gave. So it
-    is written either way, in fixed wording the Apps Script can read back.
-  */
-  extras.push(
-    `SMS consent: ${String(form.get("smsConsent") ?? "") === "on" ? "Yes" : "No"}`
-  );
-  if (extras.length) raw.message = `${raw.message}\n\n${extras.join("\n")}`;
-
-  const promoRaw = String(form.get("promoCode") ?? "").trim();
-  const promoValid = promoRaw ? isPromoCode(promoRaw) : false;
-
-  const oneOffId = String(form.get("oneOffPackage") ?? "");
-  const oneOff = packages.find((p) => p.id === oneOffId);
-
-  const monthlyId = String(form.get("monthlyPackage") ?? "");
-  const chosen = monthlyPackages.find((p) => p.id === monthlyId);
-  if (chosen) {
-    const first = discountedPrice(chosen.price);
-    const terms = [
-      `Monthly package: ${chosen.name}`,
-      chosen.price
-        ? `Standard rate: ${chosen.price}/mo`
-        : "Standard rate: quoted per brand",
-      first ? `First month (${DISCOUNT_LABEL} off): ${first}` : null,
-      `Minimum term: ${MINIMUM_MONTHS} months`,
-    ].filter(Boolean);
-    raw.message = `${raw.message}\n\n${terms.join("\n")}`;
-  } else if (oneOff) {
-    raw.message = `${raw.message}\n\nPackage: ${oneOff.name}\nListed rate: ${oneOff.price}`;
-  }
-
-  if (promoRaw) {
-    const applied = promoValid ? discountBreakdown((chosen ?? oneOff)?.price ?? null) : null;
-    const lines = [
-      `Promo code used: ${promoValid ? PROMO_CODE : promoRaw}`,
-      `First-time discount: ${promoValid ? "Yes" : "No — code not recognised"}`,
-    ];
-    if (applied) {
-      lines.push(
-        `Discount (${DISCOUNT_LABEL}): -${applied.saving}`,
-        chosen
-          ? `First month total: ${applied.total} (months 2-${MINIMUM_MONTHS} at ${applied.original})`
-          : `Discounted total: ${applied.total}`
-      );
-    }
-    raw.message = `${raw.message}\n\n${lines.join("\n")}`;
-  }
 
   const parsed = inquirySchema.safeParse(raw);
   if (!parsed.success) {
@@ -143,17 +47,51 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
   }
 
   // Honeypot tripped — report success so the bot learns nothing.
-  if (parsed.data.website) return { ok: true, confirmationEmailed: false };
+  if (parsed.data.website_hp) return { ok: true };
 
   if (!FORM_ENDPOINT) {
     return {
       ok: false,
       error:
-        "The booking form isn't connected yet. Please call or email — both work right now.",
+        "The enquiry form isn't connected yet. Please call or email — both work right now.",
     };
   }
 
   const lead = parsed.data;
+
+  /*
+    ── Mapping eleven answers onto nine Google Form questions ────────────────
+    The backing form's question ids are fixed; new questions cannot be added
+    from here. Seven fields map one-to-one. The rest are composed into the free
+    text question below under fixed labels, which is the same approach the form
+    has always used for anything the backing form has no slot for.
+
+    The labels are a parser, not prose: the Apps Script that builds the text
+    alert and the proposal reads them back out. Reword them and the alert
+    silently starts arriving with blanks in it.
+  */
+  const brief = [
+    `Industry: ${lead.industry}`,
+    `Interested in: ${lead.interests.join(", ")}`,
+    `Website: ${lead.website || "(not given)"}`,
+    "",
+    "Main marketing goal:",
+    lead.goal,
+    "",
+    "Current challenges:",
+    lead.challenges,
+  ];
+
+  if (lead.details) brief.push("", "Additional information:", lead.details);
+  if (lead.referral) brief.push("", `Heard about 508 Filmzz via: ${lead.referral}`);
+
+  /*
+    Consent is recorded on every enquiry, including the refusals. A row that
+    says nothing about texting is indistinguishable from one where the box was
+    never rendered, and if a complaint ever lands the only useful record is the
+    one saying which answer this person actually gave.
+  */
+  brief.push("", `SMS consent: ${lead.smsConsent === "on" ? "Yes" : "No"}`);
 
   /*
    * Never send an empty string. A Required question that arrives blank rejects
@@ -166,11 +104,13 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     [FIELD_IDS.businessName]: lead.businessName || BLANK_PLACEHOLDERS.businessName,
     [FIELD_IDS.email]: lead.email,
     [FIELD_IDS.phone]: lead.phone,
-    [FIELD_IDS.projectType]: lead.projectType,
+    // Repurposed slots. The values were verified against the live form: both
+    // questions accept free text, so the new vocabulary is not rejected.
+    [FIELD_IDS.projectType]: lead.interests.join(", "),
     [FIELD_IDS.budget]: lead.budget,
-    [FIELD_IDS.shootDate]: formatShootDateForSheet(lead.shootDate),
-    [FIELD_IDS.location]: lead.location || BLANK_PLACEHOLDERS.location,
-    [FIELD_IDS.message]: lead.message,
+    [FIELD_IDS.shootDate]: lead.startWindow,
+    [FIELD_IDS.location]: lead.website || BLANK_PLACEHOLDERS.location,
+    [FIELD_IDS.message]: brief.join("\n"),
   });
 
   /*
@@ -178,7 +118,7 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
    * Google Forms sends no CORS headers, so the browser refuses to hand us the
    * response. `no-cors` lets the request through and returns an opaque result:
    * `res.status` is always 0 and `res.ok` always false, whether Google recorded
-   * the booking or rejected it.
+   * the enquiry or rejected it.
    *
    * So there is nothing to check. `fetch` still rejects when the request never
    * left the machine — offline, DNS failure, connection refused — and that is
@@ -203,19 +143,5 @@ export async function submitLead(form: FormData): Promise<SubmitResult> {
     };
   }
 
-  // No confirmation email exists on this path: Google notifies the studio, not
-  // the customer. The success page says so rather than promising one.
-  return { ok: true, confirmationEmailed: false };
-}
-
-/** A shoot date the Sheet can be read at a glance, not an ISO string. */
-function formatShootDateForSheet(iso: string | undefined): string {
-  if (!iso) return BLANK_PLACEHOLDERS.shootDate;
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return { ok: true };
 }

@@ -8,15 +8,22 @@ import { pad } from "@/lib/utils";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
- * Service grid. Hovering lifts the row and floods it with a soft blue wash —
- * the "glass hover" treatment used consistently across interactive surfaces.
+ * The three disciplines — Marketing, Media, Creative.
+ *
+ * Three columns rather than six tiles, because the count is the message. Six
+ * services read as a menu to order from; three read as the parts of one
+ * engagement, which is what they are. `servicesNote` under the grid says the
+ * rest: which parts a business needs is the outcome of looking at the business.
+ *
+ * Hovering lifts the row and floods it with a soft blue wash — the "glass
+ * hover" treatment used consistently across interactive surfaces.
  */
 export function Services() {
   const [hovered, setHovered] = useState<string | null>(null);
   const reduced = useReducedMotion();
 
   return (
-    <div className="grid border-t border-line md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid border-t border-line md:grid-cols-3">
       {services.map((service, i) => {
         const isActive = hovered === service.id;
         return (
@@ -27,7 +34,7 @@ export function Services() {
             initial={reduced ? false : { opacity: 0, y: 26 }}
             whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10% 0px" }}
-            transition={{ duration: 0.8, ease: EASE, delay: (i % 3) * 0.08 }}
+            transition={{ duration: 0.8, ease: EASE, delay: i * 0.08 }}
             className="group relative border-r border-b border-line p-8 md:p-10 lg:p-12"
           >
             {/* Glass wash */}
@@ -58,7 +65,7 @@ export function Services() {
               <p className="mt-4 text-sm leading-relaxed text-mute">{service.blurb}</p>
 
               <ul className="mt-7 flex flex-col gap-2">
-                {service.points.map((point) => (
+                {service.items.map((point) => (
                   <li
                     key={point}
                     className="flex items-center gap-3 text-[0.7rem] tracking-[0.14em] text-faint uppercase"
