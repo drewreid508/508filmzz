@@ -199,20 +199,6 @@ export const services: Service[] = [
     image: "poster-bratchers",
   },
   {
-    id: "drone",
-    title: "Drone Production",
-    blurb:
-      "Aerial coverage where it earns its place — showing the size of a property, a roof, a job site, or a finished project from above.",
-    points: [
-      "Property and job-site aerials",
-      "Roof and exterior coverage",
-      "Before and after from above",
-      "Establishing shots",
-      "Aerial stills",
-    ],
-    image: "poster-g-wagon",
-  },
-  {
     id: "product-service",
     title: "Product & Service Videos",
     blurb:
@@ -273,46 +259,43 @@ export type Package = {
 
 export const packages: Package[] = [
   {
-    id: "content",
-    name: "Content",
-    price: "$750",
+    id: "social",
+    name: "Social Media Reel",
+    price: "$200+",
     summary:
-      "A focused production for businesses that need professional video to post, publish and keep using.",
+      "Professionally filmed and edited short-form content ready for social media.",
     includes: [
-      "Planned around one clear goal",
-      "Half-day production on location",
-      "A set of finished vertical videos",
-      "Captions, music and sound",
-      "Delivered ready to publish",
+      "Filmed on location",
+      "Edited vertical reel",
+      "Captions and music",
+      "Ready to post",
     ],
   },
   {
-    id: "advertising",
-    name: "Advertising",
-    price: "$1,250",
+    id: "automotive",
+    name: "Automotive Video",
+    price: "$300+",
     summary:
-      "A finished commercial built to sell one service — the piece that runs on your homepage and behind your ad spend.",
+      "Cinematic automotive content for vehicles, builds, dealerships, detail shops, and events.",
     includes: [
-      "Concept and script before the shoot",
-      "Full production day",
-      "Motion graphics and on-screen offer",
-      "Wide master plus vertical cutdowns",
-      "Built to run as paid ad creative",
+      "Rolling and static coverage",
+      "Detail and hero frames",
+      "Full edit, colour grade and sound",
+      "Vertical cutdowns included",
     ],
     featured: true,
   },
   {
-    id: "campaign",
-    name: "Campaign",
-    price: "$2,000+",
+    id: "commercial",
+    name: "Commercial Video",
+    price: "$500+",
     summary:
-      "One production, a month of marketing material. The commercial, the social cutdowns and the stills, all from a single day.",
+      "Professional promotional video content for businesses, products, and services.",
     includes: [
-      "Full production day, planned end to end",
-      "A commercial plus a set of social videos",
-      "Motion graphics package",
-      "Drone coverage where it adds something",
-      "Photography from the same session",
+      "Planned before the shoot",
+      "Full production day",
+      "Full edit, colour grade and sound",
+      "Master plus vertical cutdowns",
     ],
   },
   {
@@ -320,10 +303,10 @@ export const packages: Package[] = [
     name: "Custom Project",
     price: null,
     summary:
-      "Multi-location work, ongoing programmes, events, or anything that needs to be built around your business rather than fitted into a package.",
+      "Anything outside the three above — a bigger production, an event, or a one-off idea.",
     includes: [
       "Scoped around the job",
-      "Quoted in writing before anything is booked",
+      "Quoted before anything is booked",
     ],
   },
 ];
@@ -429,11 +412,17 @@ export type MonthlyPackage = {
   /*
     Drone is the upgrade reason, so it is a field rather than a bullet buried in
     `includes`. A card can then say YES or NO in the same place on every tier,
-    which is what makes the difference between Essential and Growth read instantly.
+    which is what makes the difference between Bronze and Silver read instantly.
   */
   drone?: boolean;
-  /** Photo stills, the second thing Essential does not get. Same reasoning as drone. */
-  stills?: boolean;
+  /*
+    Photos included, as a count rather than a yes/no.
+
+    Every tier gets some, so a boolean would answer "yes" three times and tell
+    a buyer nothing. The number is what separates them, which is why it sits
+    beside reels and shoots as a figure rather than in the checklist.
+  */
+  photos?: string;
   /** Shown as the standout ribbon. One tier only, or it stops meaning anything. */
   popular?: boolean;
   /** null renders as "Custom quote" with no "Starting at" or "/month" label. */
@@ -443,69 +432,88 @@ export type MonthlyPackage = {
   featured?: boolean;
 };
 
+/*
+  ── EDIT ME: THE MONTHLY LADDER ────────────────────────────────────────────
+  Priced off shoot days, not off reel counts.
+
+  A production day is the expensive thing here — it is the one input that costs
+  a whole morning whatever else happens — so the ladder is built to hold
+  revenue per shoot day flat at $500 across all three tiers. Bronze at one day,
+  Silver at two, Gold at three. Move a client up and the day rate does not
+  soften, which is the difference between selling more and simply working more.
+
+  Editing scales far more cheaply than filming, so that is where the buyer's
+  incentive to climb lives: reels go 4 -> 9 -> 14 and photos 5 -> 12 -> 20, so
+  each step up buys proportionally more than the step in price. Per reel that
+  is $125 -> $111 -> $107, a volume discount small enough to stay honest and
+  visible enough to be worth taking.
+
+  Drone is the one hard yes/no, and it is what Bronze is missing.
+*/
 export const monthlyPackages: MonthlyPackage[] = [
   {
-    id: "essential",
-    name: "Essential",
-    price: "$1,500",
-    bestFor: "Businesses that want to stay visible every month",
+    id: "bronze",
+    name: "Bronze",
+    price: "$500",
+    bestFor: "Businesses starting to post consistently",
     shoots: "1",
-    reels: "8",
+    reels: "4",
+    photos: "5",
     drone: false,
-    stills: false,
-    summary: "A standing production day and a month of content, without running it yourself.",
+    summary: "One filming day a month, edited and ready to post.",
     includes: [
-      "8 finished videos every month",
-      "1 production day per month",
-      "Captions, music and sound",
-      "Motion graphics on every video",
-      "Content planned before the shoot",
+      "4 professionally edited reels",
+      "1 batch filming session",
+      "5 photos you can use in ads and posts",
+      "Captions + music",
+      "Content planning",
       "1 revision round",
+      "Ready-to-post vertical videos",
     ],
   },
   {
-    id: "growth",
-    name: "Growth",
-    price: "$2,500",
-    bestFor: "Businesses running ads and posting all month",
+    id: "silver",
+    name: "Silver",
+    price: "$1,000",
+    bestFor: "Businesses staying active on social all month",
     shoots: "2",
-    reels: "14",
+    reels: "9",
+    photos: "12",
     drone: true,
-    stills: true,
-    summary: "Enough content to stay in front of customers, plus the ad creative to put behind it.",
+    summary: "Twice the filming, more than twice the content — and drone included.",
     includes: [
-      "14 finished videos every month",
-      "2 production days per month",
-      "Ad creative built for paid campaigns",
-      "Drone coverage included",
-      "Photography from every session",
-      "Motion graphics on every video",
-      "Content planned before the shoot",
+      "9 professionally edited reels",
+      "2 batch filming sessions",
+      "12 photos you can use in ads and posts",
+      "Drone content included",
+      "Captions + music",
+      "Content planning",
       "1 revision round",
+      "Ready-to-post vertical videos",
     ],
     featured: true,
     popular: true,
   },
   {
-    id: "partner",
-    name: "Partner",
-    price: "$4,000",
-    bestFor: "Businesses that want a content operation, not a posting schedule",
+    id: "gold",
+    name: "Gold",
+    price: "$1,500",
+    bestFor: "Businesses that want a brand, not just posts",
     shoots: "3",
-    reels: "20",
+    reels: "14",
+    photos: "20",
     drone: true,
-    stills: true,
-    summary: "The most output, first pick of the calendar, and a look that runs across everything you publish.",
+    summary: "The most filming days, the most content, and first pick of the calendar.",
     includes: [
-      "20 finished videos every month",
-      "3 production days per month",
-      "A commercial refreshed each quarter",
-      "Ad creative built for paid campaigns",
-      "Drone coverage included",
-      "Photography from every session",
+      "14 professionally edited reels",
+      "3 batch filming sessions",
+      "20 photos you can use in ads and posts",
+      "Drone content included",
       "Priority scheduling",
-      "Quarterly planning session",
-      "2 revision rounds",
+      "Captions + music",
+      "Content planning",
+      "1 revision round",
+      "Ready-to-post vertical videos",
     ],
   },
   {
@@ -514,10 +522,10 @@ export const monthlyPackages: MonthlyPackage[] = [
     price: null,
     bestFor: "Built around your business",
     summary:
-      "Multi-location businesses, franchises, or anything that needs a different volume, schedule or set of deliverables than the tiers above.",
+      "For businesses that need a custom amount of content, special projects, different shoot schedules, or something outside the standard packages.",
     includes: [
-      "Custom volume and schedule",
-      "Multi-location coverage",
+      "Custom number of videos",
+      "Custom shoot schedule",
       "Custom deliverables",
     ],
   },
@@ -530,11 +538,11 @@ export const monthlyPackages: MonthlyPackage[] = [
  *
  * Written as a term of the partnership rather than a restriction. A minimum is
  * only worth stating because it is what makes the work compound: a single month
- * buys footage, three months start building a library and a recognisable look.
+ * buys footage, a couple of months start building a library and a look.
  */
 export const monthlyCommitment = {
-  label: "3-Month Minimum",
-  body: "Monthly packages run on a three-month minimum. That is not a lock-in — it is how long it takes for a content library and a consistent look to be worth anything. After that they continue month to month unless your agreement says otherwise.",
+  label: "2-Month Minimum",
+  body: "Monthly packages run on a two-month minimum. That is not a lock-in — it is how long it takes for a content library and a consistent look to be worth anything. After that they continue month to month unless your agreement says otherwise.",
   custom: "Custom packages may carry different terms, set by the scope of the work.",
 };
 
@@ -573,7 +581,7 @@ export const newClientOffer = {
  * thinks they are being asked for a year up front stops reading.
  */
 export const commitmentTiers = [
-  { term: "3 months", saving: 0, note: "The standard minimum on every monthly package." },
+  { term: "2 months", saving: 0, note: "The standard minimum on every monthly package." },
   { term: "6 months", saving: 0.05, note: "A half-year of consistent output, at a preferred rate." },
   { term: "12 months", saving: 0.1, note: "A full year of coverage, at the best monthly rate offered." },
 ];

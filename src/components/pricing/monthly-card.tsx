@@ -16,14 +16,14 @@ import type { MonthlyPackage } from "@/data/site";
  * one answer.
  *
  * ── The ten-second rule ────────────────────────────────────────────────────
- * A business owner should be able to tell Essential from Growth without reading.
- * That is what the two big figures near the top are for — reels and shoots, the
- * two numbers that actually change — and what the Drone and Photo stills rows
- * are for below them: the same question answered in the same place on every
- * card, so the eye can run down the row instead of hunting through three lists
- * of different lengths. An included line is the accent colour; a missing one
- * still gets a line, because an omission reads as an oversight where a stated
- * "Not included" reads as a decision, and gives a reason to look at Growth.
+ * A business owner should be able to tell Bronze from Silver without reading.
+ * That is what the three figures near the top are for — reels, shoots and
+ * photos, the only things that change between tiers — and what the Drone row
+ * below them is for: one question answered in the same place on every card, so
+ * the eye can run across the row instead of hunting through three checklists of
+ * different lengths. An included line is the accent colour; a missing one still
+ * gets a line, because an omission reads as an oversight where a stated "Not
+ * included" reads as a decision, and gives a reason to look at Silver.
  */
 export function MonthlyCard({
   pkg,
@@ -85,11 +85,21 @@ export function MonthlyCard({
           </p>
         )}
 
-        {/* The two numbers that actually separate the tiers. */}
+        {/*
+          The three numbers that separate the tiers, read across in one glance.
+          The unit is stated once underneath rather than repeated in each label,
+          which is what keeps three columns legible at 335px.
+        */}
         {pkg.reels && pkg.shoots && (
-          <div className="mt-6 grid grid-cols-2 gap-px border border-line bg-line">
-            <Stat value={pkg.reels} label="Reels / month" />
-            <Stat value={pkg.shoots} label="Shoots / month" />
+          <div className="mt-6">
+            <div className="grid grid-cols-3 gap-px border border-line bg-line">
+              <Stat value={pkg.reels} label="Reels" />
+              <Stat value={pkg.shoots} label="Shoots" />
+              {pkg.photos && <Stat value={pkg.photos} label="Photos" />}
+            </div>
+            <p className="mt-2 text-[0.58rem] tracking-[0.18em] text-faint uppercase">
+              Every month
+            </p>
           </div>
         )}
 
@@ -112,18 +122,16 @@ export function MonthlyCard({
         </ul>
 
         {/*
-          Drone and photo stills, answered in the same place on every priced
-          tier. Undefined on Custom, where the honest answer is "depends on the
-          quote" and a hard yes or no would be a promise nobody has made yet.
+          Drone: the one hard yes/no, answered in the same place on every priced
+          tier. Photos used to sit here too, but every tier includes them now,
+          so the row said "yes" three times and told a buyer nothing — it earns
+          its place as a figure above instead. Undefined on Custom, where the
+          honest answer is "depends on the quote" and a hard yes would be a
+          promise nobody has made yet.
         */}
-        {(pkg.drone !== undefined || pkg.stills !== undefined) && (
+        {pkg.drone !== undefined && (
           <dl className="mt-6 flex flex-col gap-px border border-line bg-line">
-            {pkg.drone !== undefined && (
-              <UpgradeRow label="Drone" included={pkg.drone} />
-            )}
-            {pkg.stills !== undefined && (
-              <UpgradeRow label="Photo stills" included={pkg.stills} />
-            )}
+            <UpgradeRow label="Drone" included={pkg.drone} />
           </dl>
         )}
       </div>
@@ -150,8 +158,8 @@ export function MonthlyCard({
 /** One of the two figures that actually separate the tiers. */
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="bg-ink px-4 py-4">
-      <p className="display text-3xl leading-none text-bone md:text-4xl">{value}</p>
+    <div className="bg-ink px-3 py-4">
+      <p className="display text-3xl leading-none text-bone">{value}</p>
       <p className="mt-2 text-[0.56rem] tracking-[0.18em] text-faint uppercase">
         {label}
       </p>
