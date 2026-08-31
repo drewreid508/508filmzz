@@ -228,14 +228,18 @@ export const services: Service[] = [
   },
 ];
 
-export const capabilities = [
-  "Commercial Advertising",
-  "Social Content",
-  "Motion Graphics",
-  "Drone Production",
-  "Product & Service Videos",
-  "Content Campaigns",
-];
+/*
+  The service names, for the marquee, the footer list, the showreel captions and
+  the JSON-LD.
+
+  Derived from `services` rather than written out again. It was a second copy,
+  and a second copy of a list is a list that goes stale: it was still
+  advertising a standalone Drone Production service after that had been removed
+  from the catalogue above, in the footer of every page and in the structured
+  data Google reads. Now there is one place to edit and nowhere for the two to
+  disagree.
+*/
+export const capabilities = services.map((service) => service.title);
 
 /**
  * ── EDIT ME: PRICING ───────────────────────────────────────────────────────
